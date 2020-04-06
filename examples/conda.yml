@@ -1,0 +1,14 @@
+name: rxn4chemistry_examples
+channels:
+  - https://conda.anaconda.org/rdkit
+dependencies:
+  - rdkit=2020.03.1
+  - python>=3.6,<3.8
+  - pip>=19.1
+  - pip:
+    - pandas==1.0.3
+    - xlrd==1.2.0
+    - jupyter==1.0.0
+    # rxn4chemistry
+    - -r ../requirements.txt
+    - -e ../
