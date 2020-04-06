@@ -12,3 +12,4 @@ dependencies:
     # rxn4chemistry
     - -r ../requirements.txt
     - -e ../
+
