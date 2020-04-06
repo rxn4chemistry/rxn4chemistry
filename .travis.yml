@@ -14,3 +14,15 @@ before_script:
 
 script:
   - python -c "import rxn4chemistry"
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - pip install twine
+    - python setup.py sdist
+    - twine upload dist/*
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^master$
+

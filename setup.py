@@ -17,6 +17,7 @@ setup(
     py_modules=['RXN4Chemistry'],
     description='Python wrapper for IBM RXN for Chemistry',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     license='MIT',
     requirements=[
         'requests==2.23.0'
