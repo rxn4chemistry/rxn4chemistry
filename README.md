@@ -1,5 +1,7 @@
 # Python wrapper for the IBM RXN for Chemistry API
 
+[![Build Status](https://travis-ci.org/rxn4chemistry/rxn4chemistry.svg?branch=master)](https://travis-ci.org/rxn4chemistry/rxn4chemistry)
+
 ![logo](./docs_source/_static/logo.jpg)
 
 A python wrapper to access the API of the IBM RXN for Chemistry [website](https://rxn.res.ibm.com/rxn/).
