@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 if os.path.exists('README.md'):
@@ -11,7 +11,7 @@ else:
 
 setup(
     name='RXN4Chemistry',
-    version='0.1.1',
+    version='0.1.2',
     author='RXN for Chemistry team',
     author_email='phs@zurich.ibm.com, tte@zurich.ibm.com',
     py_modules=['RXN4Chemistry'],
@@ -22,6 +22,7 @@ setup(
     requirements=[
         'requests==2.23.0'
     ],
+    packages=find_packages(),
     url='https://github.com/rxn4chemistry/rxn4chemistry',
     classifiers=[
         'Intended Audience :: Developers',
@@ -32,3 +33,4 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
 )
+
