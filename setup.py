@@ -11,7 +11,7 @@ else:
 
 setup(
     name='RXN4Chemistry',
-    version='0.1.0',
+    version='0.1.1',
     author='RXN for Chemistry team',
     author_email='phs@zurich.ibm.com, tte@zurich.ibm.com',
     py_modules=['RXN4Chemistry'],
