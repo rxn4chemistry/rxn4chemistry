@@ -21,7 +21,7 @@ setup(
     requirements=[
         'requests==2.23.0'
     ],
-    url='https://github.com/rxn4chemistry/rxn4chemistry'
+    url='https://github.com/rxn4chemistry/rxn4chemistry',
     classifiers=[
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
