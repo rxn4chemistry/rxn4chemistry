@@ -43,4 +43,5 @@ An example on how to predict retrosynthesis for COVID19 candidates [here](./exam
 
 ## Documentation
 
-The documentation is hosted on GitHub pages.
+The documentation is hosted [here](https://rxn4chemistry.github.io/rxn4chemistry/) using GitHub pages.
+
