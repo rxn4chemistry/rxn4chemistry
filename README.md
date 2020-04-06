@@ -51,7 +51,7 @@ print(results['payload']['attempts'][0]['smiles'])
 
 ## Examples
 
-An example on how to predict retrosynthesis for COVID19 candidates [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb).
+To learn more see the [examples](./examples). 
 
 ## Documentation
 
