@@ -1,6 +1,8 @@
 # Python wrapper for the IBM RXN for Chemistry API
 
 [![Build Status](https://travis-ci.org/rxn4chemistry/rxn4chemistry.svg?branch=master)](https://travis-ci.org/rxn4chemistry/rxn4chemistry)
+[![PyPI version](https://badge.fury.io/py/RXN4Chemistry.svg)](https://badge.fury.io/py/RXN4Chemistry)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![logo](./docs_source/_static/logo.jpg)
 
