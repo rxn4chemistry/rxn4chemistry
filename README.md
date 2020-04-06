@@ -7,7 +7,7 @@ A python wrapper to access the API of the IBM RXN for Chemistry [website](https:
 ## Install
 
 ```console
-pip install https://github.com/rxn4chemistry/rxn4chemistry.git
+pip install git+https://github.com/rxn4chemistry/rxn4chemistry.git
 ```
 
 ## Usage
