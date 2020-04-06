@@ -113,9 +113,6 @@ ENV/
 # swap files
 *swp
 
-# shell scripts
-*.sh
-
 # custom files
 sandbox.py
 examples/data.xlsx
