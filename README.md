@@ -46,7 +46,7 @@ response = rxn4chemistry_wrapper.predict_reaction(
 results = rxn4chemistry_wrapper.get_predict_reaction_results(
     response['prediction_id']
 )
-print(results['payload']['attempts'][0]['smiles'])
+print(results['response']['payload']['attempts'][0]['smiles'])
 ```
 
 ## Examples
