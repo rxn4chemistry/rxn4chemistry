@@ -19,7 +19,7 @@ pip install rxn4chemistry
 Or directly from the repo:
 
 ```console
-git+https://github.com/rxn4chemistry/rxn4chemistry.git
+pip install git+https://github.com/rxn4chemistry/rxn4chemistry.git
 ```
 
 ## Usage
