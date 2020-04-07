@@ -443,14 +443,14 @@ class RXN4ChemistryWrapper:
         Examples:
             Get actions from a paragraph.
 
-            >>> response_dict = rxn4chemistry_wrapper.paragraph_to_actions(
+            >>> results = rxn4chemistry_wrapper.paragraph_to_actions(
                 'To a stirred solution of '
                 '7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, '
                 '0.42 mmol) in methanol (4 mL) was added sodium borohydride '
                 '(24 mg, 0.62 mmol). The reaction mixture was stirred at '
                 'ambient temperature for 1 hour. '
             )
-            >>> response_dict['actions']
+            >>> results['actions']
             ['MAKESOLUTION with 7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, 0.42 mmol) and methanol (4 mL)',
             'ADD SLN',
             'ADD sodium borohydride (24 mg, 0.62 mmol)',

@@ -24,6 +24,8 @@ pip install git+https://github.com/rxn4chemistry/rxn4chemistry.git
 
 ## Usage
 
+### Create a project
+
 Get your API key from [here](https://rxn.res.ibm.com/rxn/user/profile) and build the wrapper:
 
 ```python
@@ -37,7 +39,9 @@ rxn4chemistry_wrapper.create_project('test_wrapper')
 print(rxn4chemistry_wrapper.project_id)
 ```
 
-Run a reaction prediction is as simple as:
+### Reaction prediction
+
+Running a reaction prediction is as simple as:
 
 ```python
 response = rxn4chemistry_wrapper.predict_reaction(
@@ -48,6 +52,39 @@ results = rxn4chemistry_wrapper.get_predict_reaction_results(
 )
 print(results['response']['payload']['attempts'][0]['smiles'])
 ```
+
+### Extracting actions from a paragraph describing a recipe
+
+Extract the actions from a recipe:
+
+```python
+results = rxn4chemistry_wrapper.paragraph_to_actions(
+    'To a stirred solution of '
+    '7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, '
+    '0.42 mmol) in methanol (4 mL) was added sodium borohydride '
+    '(24 mg, 0.62 mmol). The reaction mixture was stirred at '
+    'ambient temperature for 1 hour.'
+)
+print(results['actions'])
+```
+
+### Retrosynthesis prediction
+
+Predict a retrosynthetic pathway given a product:
+
+```python
+response = rxn4chemistry_wrapper.predict_automatic_retrosynthesis(
+    'Brc1c2ccccc2c(Br)c2ccccc12'
+)
+results = rxn4chemistry_wrapper.get_predict_automatic_retrosynthesis_results(
+    response['prediction_id']
+)
+print(results['status'])
+# NOTE: upon 'SUCCESS' you can inspect the predicted retrosynthetic paths.
+print(results['retrosynthetic_paths'][0])
+```
+
+See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb) for a more comprehensive example.
 
 ## Examples
 

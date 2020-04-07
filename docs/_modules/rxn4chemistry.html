@@ -171,7 +171,8 @@
 <dl class="function">
 <dt id="rxn4chemistry.callbacks.automatic_retrosynthesis_results_on_success">
 <code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">automatic_retrosynthesis_results_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.automatic_retrosynthesis_results_on_success" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process the successful response of get_predict_automatic_retrosynthesis_results.</p>
+<dd><p>Process the successful response of an automatic retrosyntesis result
+request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
@@ -203,10 +204,27 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="rxn4chemistry.callbacks.paragraph_to_actions_on_success">
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">paragraph_to_actions_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.paragraph_to_actions_on_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the successful response of a paragraph to actions request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary representing the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="rxn4chemistry.callbacks.prediction_id_on_success">
 <code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">prediction_id_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.prediction_id_on_success" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process the successful response of predict_reaction and
-predict_automatic_retrosynthesis.</p>
+<dd><p>Process the successful response of requests returning a prediction
+identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
@@ -360,6 +378,39 @@ ascending creation date. Defaults to True.</p></li>
 wrapper.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">list_all_projects</span><span class="p">()</span>
 <span class="go">{...}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.paragraph_to_actions">
+<code class="sig-name descname">paragraph_to_actions</code><span class="sig-paren">(</span><em class="sig-param">paragraph: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.paragraph_to_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the actions from a paragraph describing a recipe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>paragraph</strong> (<em>str</em>) – paragraph describing a recipe.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the actions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Get actions from a paragraph.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">paragraph_to_actions</span><span class="p">(</span>
+<span class="go">    &#39;To a stirred solution of &#39;</span>
+<span class="go">    &#39;7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, &#39;</span>
+<span class="go">    &#39;0.42 mmol) in methanol (4 mL) was added sodium borohydride &#39;</span>
+<span class="go">    &#39;(24 mg, 0.62 mmol). The reaction mixture was stirred at &#39;</span>
+<span class="go">    &#39;ambient temperature for 1 hour. &#39;</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;actions&#39;</span><span class="p">]</span>
+<span class="go">[&#39;MAKESOLUTION with 7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, 0.42 mmol) and methanol (4 mL)&#39;,</span>
+<span class="go">&#39;ADD SLN&#39;,</span>
+<span class="go">&#39;ADD sodium borohydride (24 mg, 0.62 mmol)&#39;,</span>
+<span class="go">&#39;STIR for 1 hour at ambient temperature&#39;]</span>
 </pre></div>
 </div>
 </dd></dl>
