@@ -18,3 +18,6 @@ RETROSYNTHESIS_PREDICTION_URL = os.path.join(RETROSYNTHESIS_URL, 'rs')
 RETROSYNTHESIS_PREDICTION_RESULTS_URL = os.path.join(
     RETROSYNTHESIS_URL, '{prediction_id}'
 )
+PARAGRAPH2ACTIONS_URL = os.path.join(
+    API_URL, 'paragraph-actions'
+)

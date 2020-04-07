@@ -51,9 +51,8 @@ print(results['payload']['attempts'][0]['smiles'])
 
 ## Examples
 
-To learn more see the [examples](./examples). 
+To learn more see the [examples](./examples).
 
 ## Documentation
 
 The documentation is hosted [here](https://rxn4chemistry.github.io/rxn4chemistry/) using GitHub pages.
-

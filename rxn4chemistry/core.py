@@ -9,12 +9,13 @@ from typing import Optional
 from .urls import (
     PROJECT_URL, ATTEMPTS_URL, REACTION_PREDICTION_URL,
     REACTION_PREDICTION_RESULTS_URL, RETROSYNTHESIS_PREDICTION_URL,
-    RETROSYNTHESIS_PREDICTION_RESULTS_URL
+    RETROSYNTHESIS_PREDICTION_RESULTS_URL, PARAGRAPH2ACTIONS_URL
 )
 from .decorators import ibm_rxn_api_limits, response_handling
 from .callbacks import (
     prediction_id_on_success, default_on_success,
-    automatic_retrosynthesis_results_on_success
+    automatic_retrosynthesis_results_on_success,
+    paragraph_to_actions_on_success
 )
 
 LOGGER = logging.getLogger('rxn4chemistry:core')
@@ -418,6 +419,48 @@ class RXN4ChemistryWrapper:
                 prediction_id=prediction_id
             ),
             headers=self.headers,
+            cookies={}
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200,
+        on_success=paragraph_to_actions_on_success
+    )
+    @ibm_rxn_api_limits
+    def paragraph_to_actions(
+        self, paragraph: str
+    ) -> requests.models.Response:
+        """
+        Get the actions from a paragraph describing a recipe.
+
+        Args:
+            paragraph (str): paragraph describing a recipe.
+
+        Returns:
+            dict: dictionary containing the actions.
+
+        Examples:
+            Get actions from a paragraph.
+
+            >>> response_dict = rxn4chemistry_wrapper.paragraph_to_actions(
+                'To a stirred solution of '
+                '7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, '
+                '0.42 mmol) in methanol (4 mL) was added sodium borohydride '
+                '(24 mg, 0.62 mmol). The reaction mixture was stirred at '
+                'ambient temperature for 1 hour. '
+            )
+            >>> response_dict['actions']
+            ['MAKESOLUTION with 7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, 0.42 mmol) and methanol (4 mL)',
+            'ADD SLN',
+            'ADD sodium borohydride (24 mg, 0.62 mmol)',
+            'STIR for 1 hour at ambient temperature']
+        """
+        data = {'paragraph': paragraph}
+        response = requests.post(
+            PARAGRAPH2ACTIONS_URL,
+            headers=self.headers,
+            data=json.dumps(data).encode(),
             cookies={}
         )
         return response

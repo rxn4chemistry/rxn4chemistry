@@ -11,7 +11,7 @@ else:
 
 setup(
     name='RXN4Chemistry',
-    version='0.1.3',
+    version='0.1.4',
     author='RXN for Chemistry team',
     author_email='phs@zurich.ibm.com, tte@zurich.ibm.com',
     py_modules=['RXN4Chemistry'],
@@ -20,7 +20,8 @@ setup(
     long_description_content_type='text/markdown',
     license='MIT',
     install_requires=[
-        'requests==2.23.0'
+        'requests==2.23.0',
+        'beautifulsoup4==4.9.0'
     ],
     packages=find_packages(),
     url='https://github.com/rxn4chemistry/rxn4chemistry',
@@ -33,4 +34,3 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
 )
-
