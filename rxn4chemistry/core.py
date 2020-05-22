@@ -9,12 +9,14 @@ from typing import Optional
 from .urls import (
     PROJECT_URL, ATTEMPTS_URL, REACTION_PREDICTION_URL,
     REACTION_PREDICTION_RESULTS_URL, RETROSYNTHESIS_PREDICTION_URL,
-    RETROSYNTHESIS_PREDICTION_RESULTS_URL, PARAGRAPH2ACTIONS_URL
+    RETROSYNTHESIS_PREDICTION_RESULTS_URL, RETROSYNTHESIS_SEQUENCE_PDF_URL,
+    PARAGRAPH2ACTIONS_URL
 )
 from .decorators import ibm_rxn_api_limits, response_handling
 from .callbacks import (
     prediction_id_on_success, default_on_success,
     automatic_retrosynthesis_results_on_success,
+    retrosynthesis_sequence_pdf,
     paragraph_to_actions_on_success
 )
 
@@ -417,6 +419,44 @@ class RXN4ChemistryWrapper:
         response = requests.get(
             RETROSYNTHESIS_PREDICTION_RESULTS_URL.format(
                 prediction_id=prediction_id
+            ),
+            headers=self.headers,
+            cookies={}
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200,
+        on_success=retrosynthesis_sequence_pdf
+    )
+    @ibm_rxn_api_limits
+    def get_retrosynthesis_sequence_pdf(
+        self, prediction_id: str, sequence_id: str
+    ) -> requests.models.Response:
+        """
+        Get the .pdf report for a given retrosynthesis sequence.
+
+        Args:
+            prediction_id (str): prediction identifier.
+            sequence_id (str): sequence identifier.
+
+        Returns:
+            dict: dictionary containing the .pdf report.
+
+        Examples:
+            Get a .pdf report providing the prediction identifier and a
+            sequence identifier.
+
+            >>> rxn4chemistry_wrapper.get_retrosynthesis_sequence_pdf(
+                response['response']['payload']['id'],
+                '5e788ae548260b770105ecf4'
+            )
+            {...}
+        """
+        response = requests.get(
+            RETROSYNTHESIS_SEQUENCE_PDF_URL.format(
+                prediction_id=prediction_id,
+                sequence_id=sequence_id
             ),
             headers=self.headers,
             cookies={}
