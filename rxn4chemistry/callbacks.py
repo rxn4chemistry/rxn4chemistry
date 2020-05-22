@@ -74,7 +74,7 @@ def retrosynthesis_sequence_pdf(response: requests.models.Response) -> dict:
     Returns:
         dict: dictionary representing the response.
     """
-    return {'conent': response.text}
+    return {'content': response.text}
 
 
 def paragraph_to_actions_on_success(
