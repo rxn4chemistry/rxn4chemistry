@@ -63,6 +63,20 @@ def automatic_retrosynthesis_results_on_success(
     }
 
 
+def retrosynthesis_sequence_pdf(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of .pdf retrosynthesis sequence report
+    retrieval.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    return {'conent': response.text}
+
+
 def paragraph_to_actions_on_success(
     response: requests.models.Response
 ) -> dict:

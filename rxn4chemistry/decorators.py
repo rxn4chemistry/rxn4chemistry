@@ -95,7 +95,7 @@ def response_handling(
     on_success: Callable = default_on_success
 ) -> Callable:
     """
-    Decorator to handle request responses. 
+    Decorator to handle request responses.
 
     Args:
         function (Callable): function to decorate.

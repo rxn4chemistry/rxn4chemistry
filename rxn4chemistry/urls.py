@@ -17,6 +17,12 @@ RETROSYNTHESIS_PREDICTION_URL = '{}/{}'.format(RETROSYNTHESIS_URL, 'rs')
 RETROSYNTHESIS_PREDICTION_RESULTS_URL = '{}/{}'.format(
     RETROSYNTHESIS_URL, '{prediction_id}'
 )
+RETROSYNTHESIS_PREDICTION_RESULTS_URL = '{}/{}'.format(
+    RETROSYNTHESIS_URL, '{prediction_id}'
+)
+RETROSYNTHESIS_SEQUENCE_PDF_URL = '{}/sequences/{}/download-pdf'.format(
+    RETROSYNTHESIS_PREDICTION_RESULTS_URL, '{sequence_id}'
+)
 PARAGRAPH2ACTIONS_URL = '{}/{}'.format(
     API_URL, 'paragraph-actions'
 )
