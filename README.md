@@ -84,6 +84,26 @@ print(results['status'])
 print(results['retrosynthetic_paths'][0])
 ```
 
+### Create a synthesis and start it on Robot (or Simulator)
+```python
+# Each retrosynthetic path predicted has a unique sequence_id that can
+# be used to create a new synthesis
+response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
+    sequence_id=results['retrosynthetic_paths'][0]['sequence_id']
+)
+print(response['synthesis_id'])
+
+synthesis_status_result = rxn4chemistry_wrapper.start_synthesis_on_robot(
+    synthesis_id=response['synthesis_id']
+)
+print(synthesis_status_result['status'])
+
+synthesis_status_result = rxn4chemistry_wrapper.get_synthesis_status(
+    synthesis_id=response['synthesis_id']
+)
+print(synthesis_status_result['status'])
+```
+
 See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb) for a more comprehensive example.
 
 ## Examples

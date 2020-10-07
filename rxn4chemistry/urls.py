@@ -26,3 +26,8 @@ RETROSYNTHESIS_SEQUENCE_PDF_URL = '{}/sequences/{}/download-pdf'.format(
 PARAGRAPH2ACTIONS_URL = '{}/{}'.format(
     API_URL, 'paragraph-actions'
 )
+SYNTHESIS_URL = '{}/{}'.format(API_URL, 'synthesis')
+SYNTHESIS_CREATION_FROM_SEQUENCE_URL = '{}/{}'.format(SYNTHESIS_URL, 'create-from-sequence')
+SYNTHESIS_START_URL = '{}/{}/{}'.format(SYNTHESIS_URL, '{synthesis_id}', 'start')
+SYNTHESIS_STATUS_URL = '{}/{}'.format(SYNTHESIS_URL, '{synthesis_id}')
+

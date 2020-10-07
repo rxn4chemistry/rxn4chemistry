@@ -10,15 +10,15 @@ from .urls import (
     PROJECT_URL, ATTEMPTS_URL, REACTION_PREDICTION_URL,
     REACTION_PREDICTION_RESULTS_URL, RETROSYNTHESIS_PREDICTION_URL,
     RETROSYNTHESIS_PREDICTION_RESULTS_URL, RETROSYNTHESIS_SEQUENCE_PDF_URL,
-    PARAGRAPH2ACTIONS_URL
-)
+    PARAGRAPH2ACTIONS_URL,
+    SYNTHESIS_CREATION_FROM_SEQUENCE_URL, SYNTHESIS_STATUS_URL, SYNTHESIS_START_URL)
 from .decorators import ibm_rxn_api_limits, response_handling
 from .callbacks import (
     prediction_id_on_success, default_on_success,
     automatic_retrosynthesis_results_on_success,
     retrosynthesis_sequence_pdf,
-    paragraph_to_actions_on_success
-)
+    paragraph_to_actions_on_success,
+    synthesis_id_on_success, synthesis_status_on_success)
 
 LOGGER = logging.getLogger('rxn4chemistry:core')
 
@@ -501,6 +501,120 @@ class RXN4ChemistryWrapper:
             PARAGRAPH2ACTIONS_URL,
             headers=self.headers,
             data=json.dumps(data).encode(),
+            cookies={}
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200, on_success=synthesis_id_on_success
+    )
+    @ibm_rxn_api_limits
+    def create_synthesis_from_sequence(
+        self,
+        sequence_id: str
+    ) -> requests.models.Response:
+        """
+        Create a new synthesis from a sequence id. A sequence id
+        can be retrieved from the results of an automated retrosynthesis
+        prediction.
+
+        Args:
+            sequence_id (str): a sequence id returned by
+                predict_automatic_retrosynthesis_results.
+
+        Returns:
+            dict: dictionary containing the synthesis identifier and the
+            response.
+
+        Examples:
+            Create a synthesis by providing the desired sequence id.
+
+            >>> response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
+                '5dd273618sid4897af'
+            )
+        """
+        if self.project_id is None:
+            raise ValueError('Project identifier has to be set first.')
+        data = {
+            'sequenceId': sequence_id
+        }
+        response = requests.post(
+            SYNTHESIS_CREATION_FROM_SEQUENCE_URL,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={}
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200,
+        on_success=synthesis_status_on_success
+    )
+    @ibm_rxn_api_limits
+    def get_synthesis_status(
+            self, synthesis_id: str
+    ) -> requests.models.Response:
+        """
+        Get the status of a given synthesis based on its id. The
+        provided synthesis id can be obtained as a previous step
+        by calling the create_synthesis_from_sequence() method
+
+        Args:
+            synthesis_id (str): a synthesis id returned by
+                create_synthesis_from_sequence() method.
+
+        Returns:
+            dict: dictionary containing the the
+            response.
+
+        Examples:
+            Create a synthesis by providing the desired sequence id.
+
+            >>> response = rxn4chemistry_wrapper.get_synthesis_status(
+                '5dd273618sid4897af'
+            )
+        """
+        response = requests.get(
+            SYNTHESIS_STATUS_URL.format(
+                synthesis_id=synthesis_id
+            ),
+            headers=self.headers,
+            cookies={}
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200, on_success=synthesis_status_on_success
+    )
+    @ibm_rxn_api_limits
+    def start_synthesis_on_robot(
+        self,
+        synthesis_id: str
+    ) -> requests.models.Response:
+        """
+        Start a synthesis on either on the robot or on the
+        simulator. A robot (or simulator) key must be active in the
+        user account in order for the query to be successful. The
+        provided synthesis id can be obtained as a previous step
+        by calling the create_synthesis_from_sequence() method
+
+        Args:
+            synthesis_id (str): a synthesis id returned by
+                create_synthesis_from_sequence() method.
+
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Create a synthesis by providing the desired sequence id.
+
+            >>> response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
+                '5dd273618sid4897af'
+            )
+        """
+        response = requests.post(
+            SYNTHESIS_START_URL.format(synthesis_id=synthesis_id),
+            headers=self.headers,
             cookies={}
         )
         return response
