@@ -95,6 +95,20 @@ def retrosynthesis_sequence_pdf(response: requests.models.Response) -> dict:
     return {'content': response.text}
 
 
+def synthesis_analysis_report_pdf(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of .pdf spectrometer report
+    retrieval.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    return {'content': response.text}
+
+
 def paragraph_to_actions_on_success(
     response: requests.models.Response
 ) -> dict:
@@ -133,6 +147,8 @@ def synthesis_status_on_success(response: requests.models.Response) -> dict:
         dict: dictionary representing the response.
     """
     response_dict = response.json()
+    response_dict['payload'].pop('user')
+
     return {
         'status': response_dict['payload']['status'],
         'response': response_dict
