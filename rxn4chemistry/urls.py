@@ -17,9 +17,6 @@ RETROSYNTHESIS_PREDICTION_URL = '{}/{}'.format(RETROSYNTHESIS_URL, 'rs')
 RETROSYNTHESIS_PREDICTION_RESULTS_URL = '{}/{}'.format(
     RETROSYNTHESIS_URL, '{prediction_id}'
 )
-RETROSYNTHESIS_PREDICTION_RESULTS_URL = '{}/{}'.format(
-    RETROSYNTHESIS_URL, '{prediction_id}'
-)
 RETROSYNTHESIS_SEQUENCE_PDF_URL = '{}/sequences/{}/download-pdf'.format(
     RETROSYNTHESIS_PREDICTION_RESULTS_URL, '{sequence_id}'
 )
@@ -29,5 +26,5 @@ PARAGRAPH2ACTIONS_URL = '{}/{}'.format(
 SYNTHESIS_URL = '{}/{}'.format(API_URL, 'synthesis')
 SYNTHESIS_CREATION_FROM_SEQUENCE_URL = '{}/{}'.format(SYNTHESIS_URL, 'create-from-sequence')
 SYNTHESIS_START_URL = '{}/{}/{}'.format(SYNTHESIS_URL, '{synthesis_id}', 'start')
-SYNTHESIS_STATUS_URL = '{}/{}'.format(SYNTHESIS_URL, '{synthesis_id}')
-
+SYNTHESIS_SPECTROMETER_REPORT_URL = '{}/{}/node/{}/action/{}/spectrometer-report'.format(
+    SYNTHESIS_URL, '{synthesis_id}', '{node_id}', '{action_index}')

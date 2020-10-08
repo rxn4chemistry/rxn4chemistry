@@ -2,10 +2,12 @@
 from __future__ import (
     absolute_import, division, print_function, unicode_literals
 )
+
+import copy
 import logging
 import requests
 import json
-from typing import Optional
+from typing import Optional, List, Dict, Tuple
 from .urls import (
     PROJECT_URL, ATTEMPTS_URL, REACTION_PREDICTION_URL,
     REACTION_PREDICTION_RESULTS_URL, RETROSYNTHESIS_PREDICTION_URL,
@@ -606,10 +608,10 @@ class RXN4ChemistryWrapper:
             dict: dictionary containing the response.
 
         Examples:
-            Create a synthesis by providing the desired sequence id.
+            Start the synthesis with a given id.
 
-            >>> response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
-                '5dd273618sid4897af'
+            >>> response = rxn4chemistry_wrapper.start_synthesis(
+                synthesis_id='5dd273618sid4897af'
             )
         """
         response = requests.post(
@@ -618,3 +620,53 @@ class RXN4ChemistryWrapper:
             cookies={}
         )
         return response
+
+    def get_synthesis_plan(self, synthesis_id: str) -> Tuple[Dict, List]:
+        """
+        Return the synthesis tree for the given synthesis_id.
+        This is a simplified version of get_synthesis_status
+        which only includes synthesis related information and
+        no meta data. It also returns a flattened list of all
+        the actions involved in every step of the sequence.
+
+
+        Args:
+            synthesis_id (str): a synthesis id returned by
+                create_synthesis_from_sequence() method.
+
+        Returns:
+            Tuple[Dict, List]: A dictionary representation of the
+                synthesis tree and a flattened list containing all
+                actions of the entire synthesis represented as
+                dictionaries.
+
+        Examples:
+            Return the flattened list of actions for the given synthesis id
+
+            >>> result = rxn4chemistry_wrapper.get_tree_and_actions(
+                synthesis_id='5dd273618sid4897af'
+            )
+        """
+
+        response = self.get_synthesis_status(synthesis_id=synthesis_id)
+        tree: Dict = copy.deepcopy(response['response']['payload']['sequences'][0]['tree'])
+
+        def post_order_tree_traversal(tree: Dict) -> List[Dict]:
+            result = []
+            if 'children' in tree:
+                for child in tree['children']:
+                    result.extend(post_order_tree_traversal(child))
+            if tree:
+                result.append(tree)
+            return result
+
+        ordered_tree_nodes = post_order_tree_traversal(tree=tree)
+
+        keys_to_keep = ['id', 'smiles', 'initialActions', 'children']
+        flattened_actions = []
+
+        for node in ordered_tree_nodes:
+            [node.pop(key) for key in list(node.keys()) if key not in keys_to_keep]
+            flattened_actions.extend(node['initialActions'])
+
+        return tree, flattened_actions
