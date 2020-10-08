@@ -94,7 +94,7 @@ response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
 print(response['synthesis_id'])
 
 # get the entire list of actions for the entire synthesis, as well as a tree representation
-list_of_actions, synthesis_tree = rxn4chemistry_wapper.get_synthesis_plan(
+synthesis_tree, ordered_tree_nodes, list_of_actions = rxn4chemistry_wapper.get_synthesis_plan(
     synthesis_id=response['synthesis_id']
 )
 for action in list_of_actions:
