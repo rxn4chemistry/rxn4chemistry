@@ -587,7 +587,7 @@ class RXN4ChemistryWrapper:
         success_status_code=200, on_success=synthesis_status_on_success
     )
     @ibm_rxn_api_limits
-    def start_synthesis_on_robot(
+    def start_synthesis(
         self,
         synthesis_id: str
     ) -> requests.models.Response:

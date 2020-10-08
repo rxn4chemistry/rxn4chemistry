@@ -93,7 +93,7 @@ response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
 )
 print(response['synthesis_id'])
 
-synthesis_status_result = rxn4chemistry_wrapper.start_synthesis_on_robot(
+synthesis_status_result = rxn4chemistry_wrapper.start_synthesis(
     synthesis_id=response['synthesis_id']
 )
 print(synthesis_status_result['status'])
