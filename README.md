@@ -109,6 +109,20 @@ synthesis_status_result = rxn4chemistry_wrapper.get_synthesis_status(
     synthesis_id=response['synthesis_id']
 )
 print(synthesis_status_result['status'])
+
+# NOTE: upon 'SUCCESS' you can download any analysis reports that are available as pdf
+# The pdf contents are returned as text
+analysis_actions = rxn4chemistry_wrapper.get_synthesis_actions_with_spectrometer_pdf(
+    synthesis_id=response['synthesis_id']
+)
+pdfs = []
+for action in analysis_actions:
+    pdfs.append(
+        rxn4chemistry_wrapper.get_synthesis_analysis_report_pdf(
+            **action
+        )
+    )
+print(pdfs[0])
 ```
 
 See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb) for a more comprehensive example.
