@@ -24,6 +24,24 @@ def prediction_id_on_success(response: requests.models.Response) -> dict:
     }
 
 
+def synthesis_id_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a synthesis
+    identifier.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    return {
+        'synthesis_id': response_dict['payload']['id'],
+        'response': response_dict
+    }
+
+
 def default_on_success(response: requests.models.Response) -> dict:
     """
     Process the successful response.
@@ -77,6 +95,20 @@ def retrosynthesis_sequence_pdf(response: requests.models.Response) -> dict:
     return {'content': response.text}
 
 
+def synthesis_analysis_report_pdf(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of .pdf spectrometer report
+    retrieval.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    return {'content': response.text}
+
+
 def paragraph_to_actions_on_success(
     response: requests.models.Response
 ) -> dict:
@@ -99,5 +131,25 @@ def paragraph_to_actions_on_success(
             ).find_all('li')
             for action in element.text.split(';')
         ],
+        'response': response_dict
+    }
+
+
+def synthesis_status_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a synthesis
+    identifier.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    response_dict['payload'].pop('user')
+
+    return {
+        'status': response_dict['payload']['status'],
         'response': response_dict
     }
