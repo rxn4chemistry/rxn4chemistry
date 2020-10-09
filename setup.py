@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 
+import io
 import os
-from setuptools import setup, find_packages
+import re
 
+from setuptools import setup, find_packages
+version_match = re.search(
+    r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+    io.open('rxn4chemistry/__init__.py', encoding='utf_8_sig').read()
+)
+if version_match is None:
+    raise ValueError('Version could not be determined')
+__version__ = version_match.group(1)
 
 if os.path.exists('README.md'):
     long_description = open('README.md').read()
@@ -11,7 +20,7 @@ else:
 
 setup(
     name='RXN4Chemistry',
-    version='0.1.7',
+    version=__version__,
     author='RXN for Chemistry team',
     author_email='phs@zurich.ibm.com, tte@zurich.ibm.com',
     py_modules=['RXN4Chemistry'],
