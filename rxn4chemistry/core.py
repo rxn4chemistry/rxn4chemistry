@@ -516,8 +516,9 @@ class RXN4ChemistryWrapper:
         sequence_id: str
     ) -> requests.models.Response:
         """
-        Create a new synthesis from a sequence id. A sequence id
-        can be retrieved from the results of an automated retrosynthesis
+        Create a new synthesis from a sequence id.
+
+        A sequence id can be retrieved from the results of an automated retrosynthesis
         prediction.
 
         Args:
@@ -557,8 +558,9 @@ class RXN4ChemistryWrapper:
             self, synthesis_id: str
     ) -> requests.models.Response:
         """
-        Get the status of a given synthesis based on its id. The
-        provided synthesis id can be obtained as a previous step
+        Get the status of a given synthesis based on its id.
+
+        The provided synthesis id can be obtained as a previous step
         by calling the create_synthesis_from_sequence() method
 
         Args:
@@ -594,8 +596,9 @@ class RXN4ChemistryWrapper:
         synthesis_id: str
     ) -> requests.models.Response:
         """
-        Start a synthesis on either on the robot or on the
-        simulator. A robot (or simulator) key must be active in the
+        Start a synthesis on either on the robot or on the simulator.
+
+        A robot (or simulator) key must be active in the
         user account in order for the query to be successful. The
         provided synthesis id can be obtained as a previous step
         by calling the create_synthesis_from_sequence() method
@@ -624,6 +627,7 @@ class RXN4ChemistryWrapper:
     def get_synthesis_plan(self, synthesis_id: str) -> Tuple[Dict, List, List]:
         """
         Return the synthesis tree for the given synthesis_id.
+        
         This is a simplified version of get_synthesis_status
         which only includes synthesis related information and
         no meta data. It also returns a flattened list of all
@@ -676,8 +680,7 @@ class RXN4ChemistryWrapper:
         synthesis_id: str
     ) -> List[Dict]:
         """
-        Get a list of actions which have a spectrometer
-        pdf ready for download.
+        Get a list of actions which have a spectrometer pdf ready for download.
 
         Args:
             synthesis_id (str): synthesis identifier.
@@ -722,8 +725,7 @@ class RXN4ChemistryWrapper:
         action_index: int
     ) -> requests.models.Response:
         """
-        Get the spectrometer .pdf report for a given synthesis id,
-        node id and action index.
+        Get the spectrometer .pdf report for a given synthesis id, node id and action index.
 
         Args:
             synthesis_id (str): id of the synthesis
@@ -757,3 +759,4 @@ class RXN4ChemistryWrapper:
         )
 
         return response
+
