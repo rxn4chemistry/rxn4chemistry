@@ -33,7 +33,7 @@ release = '0.2.0'
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.coverage',
     'sphinx.ext.napoleon', 'sphinx.ext.todo',
-    'sphinx.ext.githubpages',
+    'sphinx.ext.githubpages'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

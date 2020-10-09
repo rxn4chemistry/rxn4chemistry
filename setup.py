@@ -22,7 +22,7 @@ setup(
     name='RXN4Chemistry',
     version=__version__,
     author='RXN for Chemistry team',
-    author_email='phs@zurich.ibm.com, tte@zurich.ibm.com',
+    author_email='phs@zurich.ibm.com, tte@zurich.ibm.com, obc@zurich.ibm.com',
     py_modules=['RXN4Chemistry'],
     description='Python wrapper for IBM RXN for Chemistry',
     long_description=long_description,
