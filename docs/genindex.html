@@ -1,7 +1,9 @@
 
 
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,29 +13,27 @@
   
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> rxn4chemistry
+            <a href="index.html" class="icon icon-home"> rxn4chemistry
           
 
           
@@ -75,7 +75,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -92,7 +91,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -131,7 +129,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
       <li>Index</li>
     
@@ -160,7 +158,6 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
- | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -180,6 +177,10 @@
       <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.create_project">create_project() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.create_synthesis_from_sequence">create_synthesis_from_sequence() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
@@ -195,9 +196,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_automatic_retrosynthesis_results">get_predict_automatic_retrosynthesis_results() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
 </li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_reaction_results">get_predict_reaction_results() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_retrosynthesis_sequence_pdf">get_retrosynthesis_sequence_pdf() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_reaction_results">get_predict_reaction_results() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_actions_with_spectrometer_pdf">get_synthesis_actions_with_spectrometer_pdf() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_analysis_report_pdf">get_synthesis_analysis_report_pdf() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_plan">get_synthesis_plan() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_status">get_synthesis_status() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -219,27 +230,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.list_all_projects">list_all_projects() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
 </li>
-  </ul></td>
-</tr></table>
-
-<h2 id="M">M</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    module
-
-      <ul>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry">rxn4chemistry</a>
-</li>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.callbacks">rxn4chemistry.callbacks</a>
-</li>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.core">rxn4chemistry.core</a>
-</li>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.decorators">rxn4chemistry.decorators</a>
-</li>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.urls">rxn4chemistry.urls</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -270,43 +260,20 @@
 </li>
       <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.decorators.response_handling">response_handling() (in module rxn4chemistry.decorators)</a>
 </li>
-      <li>
-    rxn4chemistry
-
-      <ul>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry">module</a>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.callbacks.retrosynthesis_sequence_pdf">retrosynthesis_sequence_pdf() (in module rxn4chemistry.callbacks)</a>
 </li>
-      </ul></li>
-      <li>
-    rxn4chemistry.callbacks
-
-      <ul>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.callbacks">module</a>
+      <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry">rxn4chemistry (module)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    rxn4chemistry.core
-
-      <ul>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.core">module</a>
+      <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.callbacks">rxn4chemistry.callbacks (module)</a>
 </li>
-      </ul></li>
-      <li>
-    rxn4chemistry.decorators
-
-      <ul>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.decorators">module</a>
+      <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.core">rxn4chemistry.core (module)</a>
 </li>
-      </ul></li>
-      <li>
-    rxn4chemistry.urls
-
-      <ul>
-        <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.urls">module</a>
+      <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.decorators">rxn4chemistry.decorators (module)</a>
 </li>
-      </ul></li>
+      <li><a href="_modules/rxn4chemistry.html#module-rxn4chemistry.urls">rxn4chemistry.urls (module)</a>
+</li>
       <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper">RXN4ChemistryWrapper (class in rxn4chemistry.core)</a>
 </li>
   </ul></td>
@@ -317,9 +284,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.set_api_key">set_api_key() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
 </li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.set_project">set_project() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.start_synthesis">start_synthesis() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.core.RXN4ChemistryWrapper.set_project">set_project() (rxn4chemistry.core.RXN4ChemistryWrapper method)</a>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.callbacks.synthesis_analysis_report_pdf">synthesis_analysis_report_pdf() (in module rxn4chemistry.callbacks)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.callbacks.synthesis_id_on_success">synthesis_id_on_success() (in module rxn4chemistry.callbacks)</a>
+</li>
+      <li><a href="_modules/rxn4chemistry.html#rxn4chemistry.callbacks.synthesis_status_on_success">synthesis_status_on_success() (in module rxn4chemistry.callbacks)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -336,19 +311,11 @@
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2020, RXN for Chemistry team
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -359,6 +326,7 @@
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

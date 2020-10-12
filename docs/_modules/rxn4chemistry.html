@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,29 +12,27 @@
   
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="rxn4chemistry" href="modules.html" /> 
@@ -50,7 +49,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> rxn4chemistry
+            <a href="../index.html" class="icon icon-home"> rxn4chemistry
           
 
           
@@ -76,7 +75,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -101,7 +99,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -140,7 +137,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../index.html">Docs</a> &raquo;</li>
         
           <li><a href="modules.html">rxn4chemistry</a> &raquo;</li>
         
@@ -171,9 +168,9 @@
 <div class="section" id="module-rxn4chemistry.callbacks">
 <span id="rxn4chemistry-callbacks-module"></span><h2>rxn4chemistry.callbacks module<a class="headerlink" href="#module-rxn4chemistry.callbacks" title="Permalink to this headline">¶</a></h2>
 <p>Callbacks for IBM RXN for Chemistry API.</p>
-<dl class="py function">
+<dl class="function">
 <dt id="rxn4chemistry.callbacks.automatic_retrosynthesis_results_on_success">
-<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">automatic_retrosynthesis_results_on_success</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span><span class="p">:</span> <span class="n">requests.models.Response</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.automatic_retrosynthesis_results_on_success" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">automatic_retrosynthesis_results_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.automatic_retrosynthesis_results_on_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the successful response of an automatic retrosyntesis result
 request.</p>
 <dl class="field-list simple">
@@ -189,9 +186,9 @@ request.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="rxn4chemistry.callbacks.default_on_success">
-<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">default_on_success</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span><span class="p">:</span> <span class="n">requests.models.Response</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.default_on_success" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">default_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.default_on_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the successful response.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -206,9 +203,9 @@ request.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="rxn4chemistry.callbacks.paragraph_to_actions_on_success">
-<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">paragraph_to_actions_on_success</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span><span class="p">:</span> <span class="n">requests.models.Response</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.paragraph_to_actions_on_success" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">paragraph_to_actions_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.paragraph_to_actions_on_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the successful response of a paragraph to actions request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -223,10 +220,82 @@ request.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="rxn4chemistry.callbacks.prediction_id_on_success">
-<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">prediction_id_on_success</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">response</span><span class="p">:</span> <span class="n">requests.models.Response</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.prediction_id_on_success" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">prediction_id_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.prediction_id_on_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the successful response of requests returning a prediction
+identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary representing the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rxn4chemistry.callbacks.retrosynthesis_sequence_pdf">
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">retrosynthesis_sequence_pdf</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.retrosynthesis_sequence_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the successful response of .pdf retrosynthesis sequence report
+retrieval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary representing the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rxn4chemistry.callbacks.synthesis_analysis_report_pdf">
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">synthesis_analysis_report_pdf</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.synthesis_analysis_report_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the successful response of .pdf spectrometer report
+retrieval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary representing the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rxn4chemistry.callbacks.synthesis_id_on_success">
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">synthesis_id_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.synthesis_id_on_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the successful response of requests returning a synthesis
+identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>response</strong> (<em>requests.models.Response</em>) – response from an API request.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary representing the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="rxn4chemistry.callbacks.synthesis_status_on_success">
+<code class="sig-prename descclassname">rxn4chemistry.callbacks.</code><code class="sig-name descname">synthesis_status_on_success</code><span class="sig-paren">(</span><em class="sig-param">response: requests.models.Response</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#rxn4chemistry.callbacks.synthesis_status_on_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the successful response of requests returning a synthesis
 identifier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -245,14 +314,14 @@ identifier.</p>
 <div class="section" id="module-rxn4chemistry.core">
 <span id="rxn4chemistry-core-module"></span><h2>rxn4chemistry.core module<a class="headerlink" href="#module-rxn4chemistry.core" title="Permalink to this headline">¶</a></h2>
 <p>Core IBM RXN for Chemistry API module.</p>
-<dl class="py class">
+<dl class="class">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">rxn4chemistry.core.</code><code class="sig-name descname">RXN4ChemistryWrapper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">logger</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>logging.Logger<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rxn4chemistry.core.</code><code class="sig-name descname">RXN4ChemistryWrapper</code><span class="sig-paren">(</span><em class="sig-param">api_key: str</em>, <em class="sig-param">logger: Optional[logging.Logger] = None</em>, <em class="sig-param">project_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Python wrapper for IBM RXN for Chemistry to access the REST API requests.</p>
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.create_project">
-<code class="sig-name descname">create_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">invitations</span><span class="p">:</span> <span class="n">list</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">set_project</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.create_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_project</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">invitations: list = []</em>, <em class="sig-param">set_project: bool = True</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.create_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new project on platform and set the project id,
 which is required to predict chemical reactions.</p>
 <dl class="field-list simple">
@@ -274,15 +343,46 @@ errors.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Create a project using the wrapper.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+<p>Create a project using the wrapper:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.create_synthesis_from_sequence">
+<code class="sig-name descname">create_synthesis_from_sequence</code><span class="sig-paren">(</span><em class="sig-param">sequence_id: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.create_synthesis_from_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new synthesis from a sequence identifier.</p>
+<p>A sequence id can be retrieved from the results of an automated retrosynthesis
+prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sequence_id</strong> (<em>str</em>) – a sequence identifier returned by
+predict_automatic_retrosynthesis_results.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dictionary containing the synthesis identifier and the</dt><dd><p>response.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create a synthesis by providing the desired sequence identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">create_synthesis_from_sequence</span><span class="p">(</span>
+<span class="go">    &#39;5dd273618sid4897af&#39;</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_automatic_retrosynthesis_results">
-<code class="sig-name descname">get_predict_automatic_retrosynthesis_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prediction_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_automatic_retrosynthesis_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_predict_automatic_retrosynthesis_results</code><span class="sig-paren">(</span><em class="sig-param">prediction_id: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_automatic_retrosynthesis_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the predict automatic retrosynthesis results for a prediction_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -297,8 +397,8 @@ errors.</p>
 </dl>
 <p class="rubric">Examples</p>
 <p>Get results from an automatic retrosynthesis prediction by
-providing the prediction identifier.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_predict_automatic_retrosynthesis_results</span><span class="p">(</span>
+providing the prediction identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_predict_automatic_retrosynthesis_results</span><span class="p">(</span>
 <span class="go">    response[&#39;response&#39;][&#39;payload&#39;][&#39;id&#39;]</span>
 <span class="go">    # or response[&#39;prediction_id&#39;]</span>
 <span class="go">)</span>
@@ -307,9 +407,9 @@ providing the prediction identifier.</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_reaction_results">
-<code class="sig-name descname">get_predict_reaction_results</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prediction_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_reaction_results" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_predict_reaction_results</code><span class="sig-paren">(</span><em class="sig-param">prediction_id: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_predict_reaction_results" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the predict reaction results for a prediction_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -324,8 +424,8 @@ providing the prediction identifier.</p>
 </dl>
 <p class="rubric">Examples</p>
 <p>Get results from a reaction prediction by providing the prediction
-identifier.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_predict_reaction_results</span><span class="p">(</span>
+identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_predict_reaction_results</span><span class="p">(</span>
 <span class="go">    response[&#39;response&#39;][&#39;payload&#39;][&#39;id&#39;]</span>
 <span class="go">    # or response[&#39;prediction_id&#39;]</span>
 <span class="go">)</span>
@@ -334,9 +434,163 @@ identifier.</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_retrosynthesis_sequence_pdf">
+<code class="sig-name descname">get_retrosynthesis_sequence_pdf</code><span class="sig-paren">(</span><em class="sig-param">prediction_id: str</em>, <em class="sig-param">sequence_id: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_retrosynthesis_sequence_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the .pdf report for a given retrosynthesis sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prediction_id</strong> (<em>str</em>) – prediction identifier.</p></li>
+<li><p><strong>sequence_id</strong> (<em>str</em>) – sequence identifier.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the .pdf report.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Get a .pdf report providing the prediction identifier and a
+sequence identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_retrosynthesis_sequence_pdf</span><span class="p">(</span>
+<span class="go">    response[&#39;response&#39;][&#39;payload&#39;][&#39;id&#39;],</span>
+<span class="go">    &#39;5e788ae548260b770105ecf4&#39;</span>
+<span class="go">)</span>
+<span class="go">{...}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_actions_with_spectrometer_pdf">
+<code class="sig-name descname">get_synthesis_actions_with_spectrometer_pdf</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_actions_with_spectrometer_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of actions which have a spectrometer pdf ready for download.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>synthesis_id</strong> (<em>str</em>) – synthesis identifier.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>a list of all actions in the synthesis which have a</dt><dd><p>spectrometer pdf ready for download</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Dict]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Get the list of actions which have a report pdf ready for download:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_synthesis_actions_with_spectrometer_pdf</span><span class="p">(</span>
+<span class="go">    &#39;5e788ae548260b770105ecf4&#39;</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_analysis_report_pdf">
+<code class="sig-name descname">get_synthesis_analysis_report_pdf</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em>, <em class="sig-param">node_id: str</em>, <em class="sig-param">action_index: int</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_analysis_report_pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the spectrometer .pdf report for a given synthesis identifier,
+node identifier and action index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>synthesis_id</strong> (<em>str</em>) – identifier of the synthesis.</p></li>
+<li><p><strong>node_id</strong> (<em>str</em>) – identifier of the node (corresponds to a reaction
+in the synthesis tree).</p></li>
+<li><p><strong>action_index</strong> (<em>int</em>) – corresponds to the index of the specific
+analysis action in the node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the .pdf report.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Get a .pdf report providing the synthesis identifier, node identifier and
+action index:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_synthesis_analysis_report_pdf</span><span class="p">(</span>
+<span class="go">    synthesis_id=&#39;5e788ae548260b770105ecf4&#39;,</span>
+<span class="go">    node_id=&#39;5ecb86cx6776vx1234fsd&#39;,</span>
+<span class="go">    action_index=5</span>
+<span class="go">)</span>
+<span class="go">{...}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_plan">
+<code class="sig-name descname">get_synthesis_plan</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em><span class="sig-paren">)</span> &#x2192; Tuple[Dict, List, List]<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_plan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the synthesis tree for the given synthesis_id.</p>
+<p>This is a simplified version of get_synthesis_status which only includes
+synthesis related information and no meta data.
+It also returns a flattened list of all the actions involved in every
+step of the sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>synthesis_id</strong> (<em>str</em>) – a synthesis identifier returned by
+create_synthesis_from_sequence() method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dictionary representation of the synthesis</dt><dd><p>tree and a flattened list containing all actions of the entire
+synthesis represented as dictionaries.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[Dict, List, List]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Return the flattened list of actions for the given synthesis identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_tree_and_actions</span><span class="p">(</span>
+<span class="go">    synthesis_id=&#39;5dd273618sid4897af&#39;</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_status">
+<code class="sig-name descname">get_synthesis_status</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the status of a given synthesis based on its identifier.</p>
+<p>The provided synthesis identifier can be obtained as a previous step
+by calling the create_synthesis_from_sequence() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>synthesis_id</strong> (<em>str</em>) – a synthesis identifier returned by
+create_synthesis_from_sequence() method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Create a synthesis by providing the desired sequence identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_synthesis_status</span><span class="p">(</span>
+<span class="go">    &#39;5dd273618sid4897af&#39;</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.list_all_attempts_in_project">
-<code class="sig-name descname">list_all_attempts_in_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">8</span></em>, <em class="sig-param"><span class="n">ascending_creation_order</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.list_all_attempts_in_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_all_attempts_in_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str = None</em>, <em class="sig-param">page: int = 0</em>, <em class="sig-param">size: int = 8</em>, <em class="sig-param">ascending_creation_order: bool = True</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.list_all_attempts_in_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all the attempts in the set project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -357,14 +611,14 @@ ascending creation date. Defaults to True.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Retrieve all the attempts for currently set project identifier.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">list_all_attempts_in_project</span><span class="p">()</span>
+<p>Retrieve all the attempts for currently set project identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">list_all_attempts_in_project</span><span class="p">()</span>
 <span class="go">{...}</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.list_all_projects">
 <code class="sig-name descname">list_all_projects</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.list_all_projects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all projects.</p>
@@ -378,16 +632,16 @@ ascending creation date. Defaults to True.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <p>Retrieve all the projects for the API key used to construct the
-wrapper.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">list_all_projects</span><span class="p">()</span>
+wrapper:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">list_all_projects</span><span class="p">()</span>
 <span class="go">{...}</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.paragraph_to_actions">
-<code class="sig-name descname">paragraph_to_actions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paragraph</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.paragraph_to_actions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">paragraph_to_actions</code><span class="sig-paren">(</span><em class="sig-param">paragraph: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.paragraph_to_actions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the actions from a paragraph describing a recipe.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -401,8 +655,8 @@ wrapper.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Get actions from a paragraph.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">paragraph_to_actions</span><span class="p">(</span>
+<p>Get actions from a paragraph:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">paragraph_to_actions</span><span class="p">(</span>
 <span class="go">    &#39;To a stirred solution of &#39;</span>
 <span class="go">    &#39;7-(difluoromethylsulfonyl)-4-fluoro-indan-1-one (110 mg, &#39;</span>
 <span class="go">    &#39;0.42 mmol) in methanol (4 mL) was added sodium borohydride &#39;</span>
@@ -418,9 +672,9 @@ wrapper.</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.predict_automatic_retrosynthesis">
-<code class="sig-name descname">predict_automatic_retrosynthesis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">product</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">availability_pricing_threshold</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">available_smiles</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_smiles</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_substructures</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_target_molecule</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">fap</span><span class="p">:</span> <span class="n">float</span> <span class="o">=</span> <span class="default_value">0.6</span></em>, <em class="sig-param"><span class="n">max_steps</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">3</span></em>, <em class="sig-param"><span class="n">nbeams</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">pruning_steps</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">2</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_automatic_retrosynthesis" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_automatic_retrosynthesis</code><span class="sig-paren">(</span><em class="sig-param">product: str</em>, <em class="sig-param">availability_pricing_threshold: int = 0</em>, <em class="sig-param">available_smiles: Optional[str] = None</em>, <em class="sig-param">exclude_smiles: Optional[str] = None</em>, <em class="sig-param">exclude_substructures: Optional[str] = None</em>, <em class="sig-param">exclude_target_molecule: bool = True</em>, <em class="sig-param">fap: float = 0.6</em>, <em class="sig-param">max_steps: int = 3</em>, <em class="sig-param">nbeams: int = 10</em>, <em class="sig-param">pruning_steps: int = 2</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_automatic_retrosynthesis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch automated retrosynthesis prediction given a product SMILES.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -467,17 +721,17 @@ response.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Predict a retrosynthesis by providing the product SMILES.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">predict_automatic_retrosynthesis</span><span class="p">(</span>
+<p>Predict a retrosynthesis by providing the product SMILES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">predict_automatic_retrosynthesis</span><span class="p">(</span>
 <span class="go">    &#39;Brc1c2ccccc2c(Br)c2ccccc12&#39;</span>
 <span class="go">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.predict_reaction">
-<code class="sig-name descname">predict_reaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">precursors</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">prediction_id</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_reaction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_reaction</code><span class="sig-paren">(</span><em class="sig-param">precursors: str</em>, <em class="sig-param">prediction_id: str = None</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_reaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch prediction given precursors SMILES.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -499,44 +753,72 @@ response.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Predict a reaction by providing the reaction SMILES.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">predict_reaction</span><span class="p">(</span>
+<p>Predict a reaction by providing the reaction SMILES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">predict_reaction</span><span class="p">(</span>
 <span class="go">    &#39;BrBr.c1ccc2cc3ccccc3cc2c1&#39;</span>
 <span class="go">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.set_api_key">
-<code class="sig-name descname">set_api_key</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.set_api_key" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the API key.
-This method also rebuilds the headers.</p>
+<code class="sig-name descname">set_api_key</code><span class="sig-paren">(</span><em class="sig-param">api_key: str</em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.set_api_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the API key.</p>
+<p>This method also rebuilds the headers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>api_key</strong> (<em>str</em>) – an API key to access the service.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Set an API key.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">set_api_key</span><span class="p">(</span><span class="s1">&#39;API_KEY&#39;</span><span class="p">)</span>
+<p>Set an API key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">set_api_key</span><span class="p">(</span><span class="s1">&#39;API_KEY&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.set_project">
-<code class="sig-name descname">set_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.set_project" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set project using the project id.
-The project_id can also be found in the url of the project.</p>
+<code class="sig-name descname">set_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.set_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set project using the project id.</p>
+<p>The project_id can also be found in the url of the project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>project_id</strong> (<em>str</em>) – project identifier.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Set a project for the wrapper instantiated.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">set_project</span><span class="p">(</span><span class="s1">&#39;PROJECT_ID&#39;</span><span class="p">)</span>
+<p>Set a project for the wrapper instantiated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">set_project</span><span class="p">(</span><span class="s1">&#39;PROJECT_ID&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.start_synthesis">
+<code class="sig-name descname">start_synthesis</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.start_synthesis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a synthesis on either on the robot or on the simulator.</p>
+<p>A robot (or simulator) key must be active in the user account in order
+for the query to be successful. The provided synthesis identifier can be
+obtained as a previous step by calling the create_synthesis_from_sequence() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>synthesis_id</strong> (<em>str</em>) – a synthesis identifier returned by
+create_synthesis_from_sequence() method.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the response.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Start the synthesis with a given identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">start_synthesis</span><span class="p">(</span>
+<span class="go">    synthesis_id=&#39;5dd273618sid4897af&#39;</span>
+<span class="go">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -547,23 +829,23 @@ The project_id can also be found in the url of the project.</p>
 <div class="section" id="module-rxn4chemistry.decorators">
 <span id="rxn4chemistry-decorators-module"></span><h2>rxn4chemistry.decorators module<a class="headerlink" href="#module-rxn4chemistry.decorators" title="Permalink to this headline">¶</a></h2>
 <p>Decorators for IBM RXN for Chemistry API.</p>
-<dl class="py exception">
+<dl class="exception">
 <dt id="rxn4chemistry.decorators.RequestTimeoutNotElapsed">
 <em class="property">exception </em><code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">RequestTimeoutNotElapsed</code><a class="headerlink" href="#rxn4chemistry.decorators.RequestTimeoutNotElapsed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></p>
 <p>Exception raised when the timeout between requests has not elapsed.</p>
 </dd></dl>
 
-<dl class="py exception">
+<dl class="exception">
 <dt id="rxn4chemistry.decorators.RequestsPerMinuteExceeded">
 <em class="property">exception </em><code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">RequestsPerMinuteExceeded</code><a class="headerlink" href="#rxn4chemistry.decorators.RequestsPerMinuteExceeded" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></p>
 <p>Exception raised when too many requests are sent in a minute.</p>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="rxn4chemistry.decorators.ibm_rxn_api_limits">
-<code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">ibm_rxn_api_limits</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">function</span><span class="p">:</span> <span class="n">Callable</span></em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#rxn4chemistry.decorators.ibm_rxn_api_limits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">ibm_rxn_api_limits</code><span class="sig-paren">(</span><em class="sig-param">function: Callable</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#rxn4chemistry.decorators.ibm_rxn_api_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to handle the limits in the RXN API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -584,7 +866,7 @@ The project_id can also be found in the url of the project.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="rxn4chemistry.decorators.response_handling">
 <code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">response_handling</code><span class="sig-paren">(</span><em class="sig-param">function: Callable = None</em>, <em class="sig-param">success_status_code: int = 200</em>, <em class="sig-param">on_success: Callable = &lt;function default_on_success&gt;</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#rxn4chemistry.decorators.response_handling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to handle request responses.</p>
@@ -634,19 +916,11 @@ The project_id can also be found in the url of the project.</p>
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2020, RXN for Chemistry team
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -657,6 +931,7 @@ The project_id can also be found in the url of the project.</p>
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {
