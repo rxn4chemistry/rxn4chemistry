@@ -133,7 +133,7 @@ class RXN4ChemistryWrapper:
     @ibm_rxn_api_limits
     def list_all_attempts_in_project(
         self,
-        project_id: str = None,
+        project_id: Optional[str] = None,
         page: int = 0,
         size: int = 8,
         ascending_creation_order: bool = True
@@ -220,7 +220,8 @@ class RXN4ChemistryWrapper:
     def predict_reaction(
         self,
         precursors: str,
-        prediction_id: str = None
+        prediction_id: Optional[str] = None,
+        ai_model: str = '2020-08-10'
     ) -> requests.models.Response:
         """
         Launch prediction given precursors SMILES.
@@ -229,6 +230,8 @@ class RXN4ChemistryWrapper:
             precursors (str): a reaction SMILES.
             prediction_id (str, optional): prediction identifier. Defaults to
                 None, a.k.a., run an independent prediction.
+            ai_model (str, optional): model release. Defaults to
+                '2020-08-10'.
 
         Returns:
             dict: dictionary containing the prediction identifier and the
@@ -246,10 +249,10 @@ class RXN4ChemistryWrapper:
         """
         if self.project_id is None:
             raise ValueError('Project identifier has to be set first.')
-        payload = {'projectId': self.project_id}
+        payload = {'projectId': self.project_id, 'aiModel': ai_model}
         if prediction_id is not None:
             payload['predictionId'] = prediction_id
-        data = {'reactants': precursors}
+        data = {'reactants': precursors, 'aiModel': ai_model}
         response = requests.post(
             REACTION_PREDICTION_URL,
             headers=self.headers,
@@ -307,7 +310,8 @@ class RXN4ChemistryWrapper:
         fap: float = 0.6,
         max_steps: int = 3,
         nbeams: int = 10,
-        pruning_steps: int = 2
+        pruning_steps: int = 2,
+        ai_model: str = '2020-07-01'
     ) -> requests.models.Response:
         """
         Launch automated retrosynthesis prediction given a product SMILES.
@@ -341,6 +345,8 @@ class RXN4ChemistryWrapper:
                 hyper-tree. Defaults to 10.
             pruning_steps (int, optional): number of interval steps to prune
                 the explored hyper-tree. Defaults to 2.
+            ai_model (str, optional): model release. Defaults to
+                '2020-07-01'.
 
         Returns:
             dict: dictionary containing the prediction identifier and the
@@ -358,8 +364,9 @@ class RXN4ChemistryWrapper:
         """
         if self.project_id is None:
             raise ValueError('Project identifier has to be set first.')
-        payload = {'projectId': self.project_id}
+        payload = {'projectId': self.project_id, 'aiModel': ai_model}
         data = {
+            'aiModel': ai_model,
             'isinteractive': False,
             'parameters':
                 {
