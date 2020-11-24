@@ -749,13 +749,13 @@ class RXN4ChemistryWrapper:
                         {
                             'name': 'add',
                             "content": {
-                                "atmosphere": null,
-                                "duration": null,
-                                "temperature": null,
+                                "atmosphere": None,
+                                "duration": None,
+                                "temperature": None,
                                 "dropwise": {
-                                  "value": false,
-                                  "quantity": null,
-                                  "unit": null
+                                  "value": False,
+                                  "quantity": None,
+                                  "unit": None
                                 },
                                 "material": {
                                   "value": "ethanol",
@@ -763,7 +763,7 @@ class RXN4ChemistryWrapper:
                                     "value": 10,
                                     "unit": "ml"
                                   },
-                                  "unit": null
+                                  "unit": None
                                 }
                             },
                         }
