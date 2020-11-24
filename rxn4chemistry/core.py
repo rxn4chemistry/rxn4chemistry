@@ -7,13 +7,14 @@ import copy
 import logging
 import requests
 import json
-from typing import Optional, List, Dict, Tuple
+from typing import Optional, List, Dict, Tuple, Any
 from .urls import (
     PROJECT_URL, ATTEMPTS_URL, REACTION_PREDICTION_URL,
     REACTION_PREDICTION_RESULTS_URL, RETROSYNTHESIS_PREDICTION_URL,
     RETROSYNTHESIS_PREDICTION_RESULTS_URL, RETROSYNTHESIS_SEQUENCE_PDF_URL,
     PARAGRAPH2ACTIONS_URL,
-    SYNTHESIS_CREATION_FROM_SEQUENCE_URL, SYNTHESIS_STATUS_URL, SYNTHESIS_START_URL, SYNTHESIS_SPECTROMETER_REPORT_URL)
+    SYNTHESIS_CREATION_FROM_SEQUENCE_URL, SYNTHESIS_STATUS_URL, SYNTHESIS_START_URL, SYNTHESIS_SPECTROMETER_REPORT_URL,
+    SYNTHESIS_PATCH_NODE_ACTIONS_URL)
 from .decorators import ibm_rxn_api_limits, response_handling
 from .callbacks import (
     prediction_id_on_success, default_on_success,
@@ -23,6 +24,16 @@ from .callbacks import (
     synthesis_id_on_success, synthesis_status_on_success, synthesis_analysis_report_pdf)
 
 LOGGER = logging.getLogger('rxn4chemistry:core')
+
+
+def post_order_tree_traversal(tree: Dict) -> List[Dict]:
+    result = []
+    if 'children' in tree:
+        for child in tree['children']:
+            result.extend(post_order_tree_traversal(child))
+    if tree:
+        result.append(tree)
+    return result
 
 
 class RXN4ChemistryWrapper:
@@ -659,15 +670,6 @@ class RXN4ChemistryWrapper:
         response = self.get_synthesis_status(synthesis_id=synthesis_id)
         tree: Dict = copy.deepcopy(response['response']['payload']['sequences'][0]['tree'])
 
-        def post_order_tree_traversal(tree: Dict) -> List[Dict]:
-            result = []
-            if 'children' in tree:
-                for child in tree['children']:
-                    result.extend(post_order_tree_traversal(child))
-            if tree:
-                result.append(tree)
-            return result
-
         ordered_tree_nodes = post_order_tree_traversal(tree=tree)
 
         keys_to_keep = ['id', 'smiles', 'actions', 'children']
@@ -677,6 +679,107 @@ class RXN4ChemistryWrapper:
             [node.pop(key) for key in list(node.keys()) if key not in keys_to_keep]
             flattened_actions.extend(node['actions'])
         return tree, ordered_tree_nodes, flattened_actions
+
+    def get_node_actions(self, synthesis_id: str, node_id: str) -> List[Dict]:
+        """
+        Return a list of dictionaries describing the actions for a specific node in
+        a synthesis tree. All the automatically generated fields are filtered out
+        and returns only the editable fields for each dictionary.
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+            node_id (str): the 'id' field of a specific node in the synthesis tree
+
+        Returns:
+            List[Dict]: List of dictionaries of all the actions in the specific
+                node, simplified to only include editable fields.
+
+        Examples:
+            Return the list of actions for the given synthesis and node identifier:
+
+            >>> result = rxn4chemistry_wrapper.get_node_actions(
+                synthesis_id='5dd273618sid4897af', node_id='5z7f6bgz6g95gcbh'
+            )
+        """
+        response = self.get_synthesis_status(synthesis_id=synthesis_id)
+        tree: Dict = copy.deepcopy(response['response']['payload']['sequences'][0]['tree'])
+
+        ordered_tree_nodes = post_order_tree_traversal(tree=tree)
+        node = [tree_node for tree_node in ordered_tree_nodes if tree_node['id'] == node_id]
+
+        if len(node) != 1:
+            raise KeyError('None or multiple nodes with id {} found inside the tree of synthesis with id {}. Result: {}'.format(synthesis_id, node_id, node))
+        node_actions = node[0]['actions']
+        simplified_actions = []
+        for action in node_actions:
+            simplified_actions.append({
+                'name': action['name'],
+                'content': action['content']
+            })
+
+        return simplified_actions
+
+    @response_handling(
+        success_status_code=200,
+        on_success=default_on_success
+    )
+    @ibm_rxn_api_limits
+    def update_node_actions(self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]])-> requests.models.Response:
+        """
+        Update the list of actions for a specific node. The given actions will completely replace
+        the existing actions for this node in the tree.
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+            node_id (str): the 'id' field of a specific node in the synthesis tree
+            actions (List[Dict[str, Any]): A list of actions which will completely replace
+                the existing actions for this node.
+
+        Returns:
+            dict: dictionary containing the .pdf report.
+        Examples:
+            Update the list of actions for the given synthesis and node identifier:
+
+            >>> result = rxn4chemistry_wrapper.get_node_actions(
+                    synthesis_id='5dd273618sid4897af',
+                    node_id='5z7f6bgz6g95gcbh',
+                    actions=[
+                        {
+                            'name': 'add',
+                            "content": {
+                                "atmosphere": null,
+                                "duration": null,
+                                "temperature": null,
+                                "dropwise": {
+                                  "value": false,
+                                  "quantity": null,
+                                  "unit": null
+                                },
+                                "material": {
+                                  "value": "ethanol",
+                                  "quantity": {
+                                    "value": 10,
+                                    "unit": "ml"
+                                  },
+                                  "unit": null
+                                }
+                            },
+                        }
+                    ]
+                )
+        """
+        response = requests.patch(
+            SYNTHESIS_PATCH_NODE_ACTIONS_URL.format(
+                synthesis_id=synthesis_id,
+                node_id=node_id
+            ),
+            headers=self.headers,
+            data=json.dumps({'actions': actions}),
+            cookies={}
+        )
+        return response
 
     def get_synthesis_actions_with_spectrometer_pdf(
         self,
@@ -729,21 +832,17 @@ class RXN4ChemistryWrapper:
         """
         Get the spectrometer .pdf report for a given synthesis identifier,
         node identifier and action index.
-
         Args:
             synthesis_id (str): identifier of the synthesis.
             node_id (str): identifier of the node (corresponds to a reaction
                 in the synthesis tree).
             action_index (int): corresponds to the index of the specific
                 analysis action in the node.
-
         Returns:
             dict: dictionary containing the .pdf report.
-
         Examples:
             Get a .pdf report providing the synthesis identifier, node identifier and
             action index:
-
             >>> rxn4chemistry_wrapper.get_synthesis_analysis_report_pdf(
                 synthesis_id='5e788ae548260b770105ecf4',
                 node_id='5ecb86cx6776vx1234fsd',

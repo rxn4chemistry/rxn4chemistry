@@ -28,4 +28,8 @@ SYNTHESIS_CREATION_FROM_SEQUENCE_URL = '{}/{}'.format(SYNTHESIS_URL, 'create-fro
 SYNTHESIS_START_URL = '{}/{}/{}'.format(SYNTHESIS_URL, '{synthesis_id}', 'start')
 SYNTHESIS_STATUS_URL = '{}/{}'.format(SYNTHESIS_URL, '{synthesis_id}')
 SYNTHESIS_SPECTROMETER_REPORT_URL = '{}/{}/node/{}/action/{}/spectrometer-report'.format(
-    SYNTHESIS_URL, '{synthesis_id}', '{node_id}', '{action_index}')
+    SYNTHESIS_URL, '{synthesis_id}', '{node_id}', '{action_index}'
+)
+SYNTHESIS_PATCH_NODE_ACTIONS_URL = '{}/{}/{}/{}'.format(
+    SYNTHESIS_URL, '{synthesis_id}', 'node', '{node_id}'
+)
