@@ -5,6 +5,9 @@ from bs4 import BeautifulSoup
 
 LOGGER = logging.getLogger('rxn4chemistry:callbacks')
 
+BORDER_COLOR_COMMERCIAL = "#28a30d"
+BORDER_COLOR_UNAVAILABLE = "#ce4e04"
+
 
 def prediction_id_on_success(response: requests.models.Response) -> dict:
     """
@@ -55,6 +58,31 @@ def default_on_success(response: requests.models.Response) -> dict:
     response_dict = response.json()
     return {'response': response_dict}
 
+def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
+    """
+    Postprocess retrosynthesis tree.
+
+    Args:
+        tree (dict): Retrosynthesis tree
+    Returns
+        dict: postprocessed retrosynthesis tree
+
+    Postprocessing actions:
+     * Correct `isCommercial` field based on metaData/borderColor
+    
+    """
+
+    # process children recursively
+    if 'children' in tree:
+        tree['children'] = [ _postprocess_retrosynthesis_tree(child) for child in tree['children'] ]
+
+    try:
+        tree['isCommercial'] = tree['metaData']['borderColor'] == BORDER_COLOR_COMMERCIAL
+    except KeyError:
+        pass
+
+    return tree
+
 
 def automatic_retrosynthesis_results_on_success(
     response: requests.models.Response
@@ -70,10 +98,11 @@ def automatic_retrosynthesis_results_on_success(
         dict: dictionary representing the response.
     """
     response_dict = response.json()
+
     return {
         'retrosynthetic_paths':
             [
-                sequence['tree']
+                _postprocess_retrosynthesis_tree(sequence['tree'])
                 for sequence in response_dict['payload']['sequences']
             ],
         'status': response_dict['payload']['status'],
