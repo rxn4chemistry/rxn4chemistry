@@ -58,18 +58,19 @@ def default_on_success(response: requests.models.Response) -> dict:
     response_dict = response.json()
     return {'response': response_dict}
 
+
 def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
     """
     Postprocess retrosynthesis tree.
+    
+    Postprocessing actions:
+    * Correct `isCommercial` field based on metaData/borderColor.
 
     Args:
         tree (dict): Retrosynthesis tree
-    Returns
-        dict: postprocessed retrosynthesis tree
 
-    Postprocessing actions:
-     * Correct `isCommercial` field based on metaData/borderColor
-    
+    Returns:
+        dict: postprocessed retrosynthesis tree
     """
 
     # process children recursively
