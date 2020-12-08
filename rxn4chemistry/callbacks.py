@@ -74,7 +74,7 @@ def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
 
     # process children recursively
     if 'children' in tree:
-        tree['children'] = [ _postprocess_retrosynthesis_tree(child) for child in tree['children'] ]
+        tree['children'] = [_postprocess_retrosynthesis_tree(child) for child in tree['children']]
 
     try:
         tree['isCommercial'] = tree['metaData']['borderColor'] == BORDER_COLOR_COMMERCIAL
