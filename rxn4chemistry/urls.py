@@ -2,8 +2,9 @@
 from __future__ import (
     absolute_import, division, print_function, unicode_literals
 )
+import os
 
-BASE_URL = 'https://rxn.res.ibm.com'
+BASE_URL = os.getenv('RXN4CHEMISTRY_BASE_URL', 'https://rxn.res.ibm.com')
 API_URL = '{}/{}'.format(BASE_URL, 'rxn/api/api/v1')
 PROJECT_URL = '{}/{}'.format(API_URL, 'projects')
 PREDICTIONS_URL = '{}/{}'.format(API_URL, 'predictions')
