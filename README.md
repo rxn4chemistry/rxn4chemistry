@@ -25,8 +25,9 @@ pip install git+https://github.com/rxn4chemistry/rxn4chemistry.git
 ## Usage
 
 By default, the wrapper connects to the `https://rxn.res.ibm.com` domain. This can be overriden by setting an environment variable.
-To set a different url, simply do
-```bash
+To set a different url, simply do:
+
+```console
 export RXN_BASE_URL="https://some.other.rxn.server"
 ```
 
