@@ -28,7 +28,7 @@ By default, the wrapper connects to the `https://rxn.res.ibm.com` domain. This c
 To set a different url, simply do:
 
 ```console
-export RXN_BASE_URL="https://some.other.rxn.server"
+export RXN4CHEMISTRY_BASE_URL="https://some.other.rxn.server"
 ```
 
 ### Create a project
