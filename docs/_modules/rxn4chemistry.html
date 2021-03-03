@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>rxn4chemistry package &mdash; rxn4chemistry 0.2.0 documentation</title>
+  <title>rxn4chemistry package &mdash; rxn4chemistry 0.4.0 documentation</title>
   
 
   
@@ -316,7 +316,7 @@ identifier.</p>
 <p>Core IBM RXN for Chemistry API module.</p>
 <dl class="class">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper">
-<em class="property">class </em><code class="sig-prename descclassname">rxn4chemistry.core.</code><code class="sig-name descname">RXN4ChemistryWrapper</code><span class="sig-paren">(</span><em class="sig-param">api_key: str</em>, <em class="sig-param">logger: Optional[logging.Logger] = None</em>, <em class="sig-param">project_id: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rxn4chemistry.core.</code><code class="sig-name descname">RXN4ChemistryWrapper</code><span class="sig-paren">(</span><em class="sig-param">api_key: str</em>, <em class="sig-param">logger: Optional[logging.Logger] = None</em>, <em class="sig-param">project_id: Optional[str] = None</em>, <em class="sig-param">base_url: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Python wrapper for IBM RXN for Chemistry to access the REST API requests.</p>
 <dl class="method">
@@ -375,6 +375,40 @@ predict_automatic_retrosynthesis_results.</p>
 <p>Create a synthesis by providing the desired sequence identifier:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">create_synthesis_from_sequence</span><span class="p">(</span>
 <span class="go">    &#39;5dd273618sid4897af&#39;</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_node_actions">
+<code class="sig-name descname">get_node_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_node_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of dictionaries describing the actions for a specific node in
+a synthesis tree. All the automatically generated fields are filtered out
+and returns only the editable fields for each dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>synthesis_id</strong> (<em>str</em>) – a synthesis identifier returned by
+create_synthesis_from_sequence() method.</p></li>
+<li><p><strong>node_id</strong> (<em>str</em>) – the ‘id’ field of a specific node in the synthesis tree</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of dictionaries of all the actions in the specific</dt><dd><p>node, simplified to only include editable fields.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Dict]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Return the list of actions for the given synthesis and node identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_node_actions</span><span class="p">(</span>
+<span class="go">    synthesis_id=&#39;5dd273618sid4897af&#39;, node_id=&#39;5z7f6bgz6g95gcbh&#39;</span>
 <span class="go">)</span>
 </pre></div>
 </div>
@@ -466,7 +500,7 @@ sequence identifier:</p>
 
 <dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_actions_with_spectrometer_pdf">
-<code class="sig-name descname">get_synthesis_actions_with_spectrometer_pdf</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em><span class="sig-paren">)</span> &#x2192; List[Dict]<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_actions_with_spectrometer_pdf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_synthesis_actions_with_spectrometer_pdf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_actions_with_spectrometer_pdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of actions which have a spectrometer pdf ready for download.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -496,16 +530,17 @@ sequence identifier:</p>
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_analysis_report_pdf">
 <code class="sig-name descname">get_synthesis_analysis_report_pdf</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em>, <em class="sig-param">node_id: str</em>, <em class="sig-param">action_index: int</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_analysis_report_pdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the spectrometer .pdf report for a given synthesis identifier,
-node identifier and action index.</p>
+node identifier and action index.
+:param synthesis_id: identifier of the synthesis.
+:type synthesis_id: str
+:param node_id: identifier of the node (corresponds to a reaction</p>
+<blockquote>
+<div><p>in the synthesis tree).</p>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>synthesis_id</strong> (<em>str</em>) – identifier of the synthesis.</p></li>
-<li><p><strong>node_id</strong> (<em>str</em>) – identifier of the node (corresponds to a reaction
-in the synthesis tree).</p></li>
-<li><p><strong>action_index</strong> (<em>int</em>) – corresponds to the index of the specific
-analysis action in the node.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>action_index</strong> (<em>int</em>) – corresponds to the index of the specific
+analysis action in the node.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>dictionary containing the .pdf report.</p>
@@ -516,20 +551,20 @@ analysis action in the node.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <p>Get a .pdf report providing the synthesis identifier, node identifier and
-action index:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_synthesis_analysis_report_pdf</span><span class="p">(</span>
-<span class="go">    synthesis_id=&#39;5e788ae548260b770105ecf4&#39;,</span>
-<span class="go">    node_id=&#39;5ecb86cx6776vx1234fsd&#39;,</span>
-<span class="go">    action_index=5</span>
-<span class="go">)</span>
-<span class="go">{...}</span>
-</pre></div>
-</div>
+action index:
+&gt;&gt;&gt; rxn4chemistry_wrapper.get_synthesis_analysis_report_pdf(</p>
+<blockquote>
+<div><p>synthesis_id=’5e788ae548260b770105ecf4’,
+node_id=’5ecb86cx6776vx1234fsd’,
+action_index=5</p>
+</div></blockquote>
+<p>)
+{…}</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_plan">
-<code class="sig-name descname">get_synthesis_plan</code><span class="sig-paren">(</span><em class="sig-param">synthesis_id: str</em><span class="sig-paren">)</span> &#x2192; Tuple[Dict, List, List]<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_plan" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_synthesis_plan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.get_synthesis_plan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the synthesis tree for the given synthesis_id.</p>
 <p>This is a simplified version of get_synthesis_status which only includes
 synthesis related information and no meta data.
@@ -590,7 +625,7 @@ create_synthesis_from_sequence() method.</p>
 
 <dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.list_all_attempts_in_project">
-<code class="sig-name descname">list_all_attempts_in_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str = None</em>, <em class="sig-param">page: int = 0</em>, <em class="sig-param">size: int = 8</em>, <em class="sig-param">ascending_creation_order: bool = True</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.list_all_attempts_in_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_all_attempts_in_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: Optional[str] = None</em>, <em class="sig-param">page: int = 0</em>, <em class="sig-param">size: int = 8</em>, <em class="sig-param">ascending_creation_order: bool = True</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.list_all_attempts_in_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of all the attempts in the set project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -674,7 +709,7 @@ wrapper:</p>
 
 <dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.predict_automatic_retrosynthesis">
-<code class="sig-name descname">predict_automatic_retrosynthesis</code><span class="sig-paren">(</span><em class="sig-param">product: str</em>, <em class="sig-param">availability_pricing_threshold: int = 0</em>, <em class="sig-param">available_smiles: Optional[str] = None</em>, <em class="sig-param">exclude_smiles: Optional[str] = None</em>, <em class="sig-param">exclude_substructures: Optional[str] = None</em>, <em class="sig-param">exclude_target_molecule: bool = True</em>, <em class="sig-param">fap: float = 0.6</em>, <em class="sig-param">max_steps: int = 3</em>, <em class="sig-param">nbeams: int = 10</em>, <em class="sig-param">pruning_steps: int = 2</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_automatic_retrosynthesis" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_automatic_retrosynthesis</code><span class="sig-paren">(</span><em class="sig-param">product: str</em>, <em class="sig-param">availability_pricing_threshold: int = 0</em>, <em class="sig-param">available_smiles: Optional[str] = None</em>, <em class="sig-param">exclude_smiles: Optional[str] = None</em>, <em class="sig-param">exclude_substructures: Optional[str] = None</em>, <em class="sig-param">exclude_target_molecule: bool = True</em>, <em class="sig-param">fap: float = 0.6</em>, <em class="sig-param">max_steps: int = 3</em>, <em class="sig-param">nbeams: int = 10</em>, <em class="sig-param">pruning_steps: int = 2</em>, <em class="sig-param">ai_model: str = '2020-07-01'</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_automatic_retrosynthesis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch automated retrosynthesis prediction given a product SMILES.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -707,6 +742,8 @@ Defaults to 3.</p></li>
 hyper-tree. Defaults to 10.</p></li>
 <li><p><strong>pruning_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of interval steps to prune
 the explored hyper-tree. Defaults to 2.</p></li>
+<li><p><strong>ai_model</strong> (<em>str</em><em>, </em><em>optional</em>) – model release. Defaults to
+‘2020-07-01’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -731,7 +768,7 @@ response.</p>
 
 <dl class="method">
 <dt id="rxn4chemistry.core.RXN4ChemistryWrapper.predict_reaction">
-<code class="sig-name descname">predict_reaction</code><span class="sig-paren">(</span><em class="sig-param">precursors: str</em>, <em class="sig-param">prediction_id: str = None</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_reaction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">predict_reaction</code><span class="sig-paren">(</span><em class="sig-param">precursors: str</em>, <em class="sig-param">prediction_id: Optional[str] = None</em>, <em class="sig-param">ai_model: str = '2020-08-10'</em><span class="sig-paren">)</span> &#x2192; requests.models.Response<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.predict_reaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch prediction given precursors SMILES.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -739,6 +776,8 @@ response.</p>
 <li><p><strong>precursors</strong> (<em>str</em>) – a reaction SMILES.</p></li>
 <li><p><strong>prediction_id</strong> (<em>str</em><em>, </em><em>optional</em>) – prediction identifier. Defaults to
 None, a.k.a., run an independent prediction.</p></li>
+<li><p><strong>ai_model</strong> (<em>str</em><em>, </em><em>optional</em>) – model release. Defaults to
+‘2020-08-10’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -776,6 +815,17 @@ response.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">set_api_key</span><span class="p">(</span><span class="s1">&#39;API_KEY&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.set_base_url">
+<code class="sig-name descname">set_base_url</code><span class="sig-paren">(</span><em class="sig-param">base_url: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.set_base_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set base url for the RXN for Chemistry service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>base_url</strong> (<em>str</em>) – base url for the service to set.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -823,7 +873,67 @@ create_synthesis_from_sequence() method.</p>
 </div>
 </dd></dl>
 
+<dl class="method">
+<dt id="rxn4chemistry.core.RXN4ChemistryWrapper.update_node_actions">
+<code class="sig-name descname">update_node_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.RXN4ChemistryWrapper.update_node_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the list of actions for a specific node. The given actions will completely replace
+the existing actions for this node in the tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>synthesis_id</strong> (<em>str</em>) – a synthesis identifier returned by
+create_synthesis_from_sequence() method.</p></li>
+<li><p><strong>node_id</strong> (<em>str</em>) – the ‘id’ field of a specific node in the synthesis tree</p></li>
+<li><p><strong>actions</strong> (<em>List</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – A list of actions which will completely replace
+the existing actions for this node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dictionary containing the .pdf report.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Update the list of actions for the given synthesis and node identifier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">rxn4chemistry_wrapper</span><span class="o">.</span><span class="n">get_node_actions</span><span class="p">(</span>
+<span class="go">        synthesis_id=&#39;5dd273618sid4897af&#39;,</span>
+<span class="go">        node_id=&#39;5z7f6bgz6g95gcbh&#39;,</span>
+<span class="go">        actions=[</span>
+<span class="go">            {</span>
+<span class="go">                &#39;name&#39;: &#39;add&#39;,</span>
+<span class="go">                &quot;content&quot;: {</span>
+<span class="go">                    &quot;atmosphere&quot;: None,</span>
+<span class="go">                    &quot;duration&quot;: None,</span>
+<span class="go">                    &quot;temperature&quot;: None,</span>
+<span class="go">                    &quot;dropwise&quot;: {</span>
+<span class="go">                      &quot;value&quot;: False,</span>
+<span class="go">                      &quot;quantity&quot;: None,</span>
+<span class="go">                      &quot;unit&quot;: None</span>
+<span class="go">                    },</span>
+<span class="go">                    &quot;material&quot;: {</span>
+<span class="go">                      &quot;value&quot;: &quot;ethanol&quot;,</span>
+<span class="go">                      &quot;quantity&quot;: {</span>
+<span class="go">                        &quot;value&quot;: 10,</span>
+<span class="go">                        &quot;unit&quot;: &quot;ml&quot;</span>
+<span class="go">                      },</span>
+<span class="go">                      &quot;unit&quot;: None</span>
+<span class="go">                    }</span>
+<span class="go">                },</span>
+<span class="go">            }</span>
+<span class="go">        ]</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="rxn4chemistry.core.post_order_tree_traversal">
+<code class="sig-prename descclassname">rxn4chemistry.core.</code><code class="sig-name descname">post_order_tree_traversal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.core.post_order_tree_traversal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-rxn4chemistry.decorators">
@@ -868,12 +978,12 @@ create_synthesis_from_sequence() method.</p>
 
 <dl class="function">
 <dt id="rxn4chemistry.decorators.response_handling">
-<code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">response_handling</code><span class="sig-paren">(</span><em class="sig-param">function: Callable = None</em>, <em class="sig-param">success_status_code: int = 200</em>, <em class="sig-param">on_success: Callable = &lt;function default_on_success&gt;</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#rxn4chemistry.decorators.response_handling" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rxn4chemistry.decorators.</code><code class="sig-name descname">response_handling</code><span class="sig-paren">(</span><em class="sig-param">function: Optional[Callable] = None</em>, <em class="sig-param">success_status_code: int = 200</em>, <em class="sig-param">on_success: Callable = &lt;function default_on_success&gt;</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#rxn4chemistry.decorators.response_handling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to handle request responses.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>function</strong> (<em>Callable</em>) – function to decorate.</p></li>
+<li><p><strong>function</strong> (<em>Callable</em><em>, </em><em>optional</em>) – function to decorate.</p></li>
 <li><p><strong>success_status_code</strong> (<em>int</em>) – status expected on success.</p></li>
 <li><p><strong>on_success</strong> (<em>Callable</em>) – function to call on success.</p></li>
 </ul>
@@ -891,6 +1001,27 @@ create_synthesis_from_sequence() method.</p>
 <div class="section" id="module-rxn4chemistry.urls">
 <span id="rxn4chemistry-urls-module"></span><h2>rxn4chemistry.urls module<a class="headerlink" href="#module-rxn4chemistry.urls" title="Permalink to this headline">¶</a></h2>
 <p>URL routes for IBM RXN for Chemistry API.</p>
+<dl class="class">
+<dt id="rxn4chemistry.urls.RXN4ChemistryRoutes">
+<em class="property">class </em><code class="sig-prename descclassname">rxn4chemistry.urls.</code><code class="sig-name descname">RXN4ChemistryRoutes</code><span class="sig-paren">(</span><em class="sig-param">base_url: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#rxn4chemistry.urls.RXN4ChemistryRoutes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Routes for RXN for Chemistry service.</p>
+<dl class="method">
+<dt id="rxn4chemistry.urls.RXN4ChemistryRoutes.base_url">
+<em class="property">property </em><code class="sig-name descname">base_url</code><a class="headerlink" href="#rxn4chemistry.urls.RXN4ChemistryRoutes.base_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the base url for the RXN for Chemistry service.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>base url for the service</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-rxn4chemistry">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rxn4chemistry" title="Permalink to this headline">¶</a></h2>

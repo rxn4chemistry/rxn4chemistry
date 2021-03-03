@@ -14,7 +14,6 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'rxn4chemistry'
@@ -22,8 +21,7 @@ copyright = '2020, RXN for Chemistry team'
 author = 'RXN for Chemistry team'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.0'
-
+release = '0.4.0'
 
 # -- General configuration ---------------------------------------------------
 
@@ -31,8 +29,7 @@ release = '0.2.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.coverage',
-    'sphinx.ext.napoleon', 'sphinx.ext.todo',
+    'sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.todo',
     'sphinx.ext.githubpages'
 ]
 
@@ -43,7 +40,6 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
 
 # -- Options for HTML output -------------------------------------------------
 

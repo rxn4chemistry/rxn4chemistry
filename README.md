@@ -24,11 +24,23 @@ pip install git+https://github.com/rxn4chemistry/rxn4chemistry.git
 
 ## Usage
 
-By default, the wrapper connects to the `https://rxn.res.ibm.com` domain. This can be overriden by setting an environment variable.
+By default, the wrapper connects to the [https://rxn.res.ibm.com](https://rxn.res.ibm.com) server. This can be overriden by setting an environment variable.
 To set a different url, simply do:
 
 ```console
 export RXN4CHEMISTRY_BASE_URL="https://some.other.rxn.server"
+```
+
+Or it can be directly set when instantiating the RXN4ChemistryWrapper:
+
+```python
+api_key = 'API_KEY'
+from rxn4chemistry import RXN4ChemistryWrapper
+
+rxn4chemistry_wrapper = RXN4ChemistryWrapper(api_key=api_key, base_url='https://some.other.rxn.server')
+# or set it afterwards
+# rxn4chemistry_wrapper = RXN4ChemistryWrapper(api_key=api_key)
+# rxn4chemistry_wrapper.set_base_url('https://some.other.rxn.server')
 ```
 
 ### Create a project
@@ -36,7 +48,7 @@ export RXN4CHEMISTRY_BASE_URL="https://some.other.rxn.server"
 Get your API key from [here](https://rxn.res.ibm.com/rxn/user/profile) and build the wrapper:
 
 ```python
-api_key='API_KEY'
+api_key = 'API_KEY'
 from rxn4chemistry import RXN4ChemistryWrapper
 
 rxn4chemistry_wrapper = RXN4ChemistryWrapper(api_key=api_key)
@@ -91,7 +103,12 @@ print(results['status'])
 print(results['retrosynthetic_paths'][0])
 ```
 
+See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb) for a more comprehensive example.
+
 ### Create a synthesis and start it on Robot (or Simulator)
+
+Create a synthesis from a retrosynthesis sequence:
+
 ```python
 # Each retrosynthetic path predicted has a unique sequence_id that can
 # be used to create a new synthesis
@@ -131,8 +148,6 @@ for action in analysis_actions:
     )
 print(pdfs[0])
 ```
-
-See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb) for a more comprehensive example.
 
 ## Examples
 

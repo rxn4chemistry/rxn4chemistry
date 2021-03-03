@@ -5,14 +5,14 @@ from __future__ import (
 import time
 import logging
 import threading
-from typing import Callable
+from typing import Optional, Callable
 from functools import wraps, partial
 
 from .callbacks import default_on_success
 
 LOGGER = logging.getLogger('rxn4chemistry:decorators')
-MAXIMUM_REQUESTS_PER_MINUTE = 5
-MININUM_TIMEOUT_BETWEEN_REQUESTS = 2  # expressed in seconds
+MAXIMUM_REQUESTS_PER_MINUTE = 1000
+MININUM_TIMEOUT_BETWEEN_REQUESTS = 0.1  # expressed in seconds
 LAST_REQUEST_TIME = int(time.time()) - 86400  # added a one day offset
 REQUEST_COUNT = 0
 
@@ -90,7 +90,7 @@ def ibm_rxn_api_limits(function: Callable) -> Callable:
 
 
 def response_handling(
-    function: Callable = None,
+    function: Optional[Callable] = None,
     success_status_code: int = 200,
     on_success: Callable = default_on_success
 ) -> Callable:
@@ -98,7 +98,7 @@ def response_handling(
     Decorator to handle request responses.
 
     Args:
-        function (Callable): function to decorate.
+        function (Callable, optional): function to decorate.
         success_status_code (int): status expected on success.
         on_success (Callable): function to call on success.
 
