@@ -31,7 +31,7 @@ To set a different url, simply do:
 export RXN4CHEMISTRY_BASE_URL="https://some.other.rxn.server"
 ```
 
-Or it can be directly set when instantiating the RXN4ChemistryWrapper:
+Or it can be directly set when instantiating the RXN4ChemistryWrapper (this will overwrite the environment variable):
 
 ```python
 api_key = 'API_KEY'
