@@ -144,7 +144,7 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.list_all_projects()
             {...}
         """
-        response = requests.get(self.routes.project_id, headers=self.headers, cookies={})
+        response = requests.get(self.routes.project_url, headers=self.headers, cookies={})
         return response
 
     @response_handling(success_status_code=200, on_success=default_on_success)
