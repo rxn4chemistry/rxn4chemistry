@@ -11,8 +11,8 @@ from functools import wraps, partial
 from .callbacks import default_on_success
 
 LOGGER = logging.getLogger('rxn4chemistry:decorators')
-MAXIMUM_REQUESTS_PER_MINUTE = 1000
-MININUM_TIMEOUT_BETWEEN_REQUESTS = 0.1  # expressed in seconds
+MAXIMUM_REQUESTS_PER_MINUTE = 1e5
+MININUM_TIMEOUT_BETWEEN_REQUESTS = 1e-5  # expressed in seconds
 LAST_REQUEST_TIME = int(time.time()) - 86400  # added a one day offset
 REQUEST_COUNT = 0
 
