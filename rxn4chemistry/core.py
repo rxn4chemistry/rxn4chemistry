@@ -8,13 +8,7 @@ import logging
 import requests
 import json
 from typing import Optional, List, Dict, Tuple, Any
-from .urls import (
-    PROJECT_URL, ATTEMPTS_URL, REACTION_PREDICTION_URL,
-    REACTION_PREDICTION_RESULTS_URL, RETROSYNTHESIS_PREDICTION_URL,
-    RETROSYNTHESIS_PREDICTION_RESULTS_URL, RETROSYNTHESIS_SEQUENCE_PDF_URL,
-    PARAGRAPH2ACTIONS_URL,
-    SYNTHESIS_CREATION_FROM_SEQUENCE_URL, SYNTHESIS_STATUS_URL, SYNTHESIS_START_URL, SYNTHESIS_SPECTROMETER_REPORT_URL,
-    SYNTHESIS_PATCH_NODE_ACTIONS_URL)
+from .urls import RXN4ChemistryRoutes
 from .decorators import ibm_rxn_api_limits, response_handling
 from .callbacks import (
     prediction_id_on_success, default_on_success,
@@ -45,7 +39,8 @@ class RXN4ChemistryWrapper:
         self,
         api_key: str,
         logger: Optional[logging.Logger] = None,
-        project_id: Optional[str] = None
+        project_id: Optional[str] = None,
+        base_url: Optional[str] = None
     ):
         """
         RXN4ChemistryWrapper constructor.
@@ -55,6 +50,8 @@ class RXN4ChemistryWrapper:
             logger (logging.Logger, optional): a logger.
                 Defaults to None, a.k.a using a default logger.
             project_id (str, optional): project identifier. Defaults to None.
+            base_url (str, optional): base url for the service. If not provided it will default to
+                the environment variable RXN4CHEMISTRY_BASE_URL or https://rxn.res.ibm.com.
 
         Examples:
             Initialize the wrapper by simply providing an API key:
@@ -66,6 +63,16 @@ class RXN4ChemistryWrapper:
         self.project_id = project_id
         self.logger = logger if logger else LOGGER
         self.headers = self._construct_headers()
+        self.routes = RXN4ChemistryRoutes(base_url)
+
+    def set_base_url(self, base_url: str) -> None:
+        """
+        Set base url for the RXN for Chemistry service.
+
+        Args:
+            base_url (str): base url for the service to set.
+        """
+        self.routes.base_url = base_url
 
     def _construct_headers(self) -> dict:
         """
@@ -110,7 +117,7 @@ class RXN4ChemistryWrapper:
         """
         data = {'name': name, 'invitations': invitations}
         response = requests.post(
-            PROJECT_URL,
+            self.routes.project_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={}
@@ -137,7 +144,7 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.list_all_projects()
             {...}
         """
-        response = requests.get(PROJECT_URL, headers=self.headers, cookies={})
+        response = requests.get(self.routes.project_id, headers=self.headers, cookies={})
         return response
 
     @response_handling(success_status_code=200, on_success=default_on_success)
@@ -182,7 +189,7 @@ class RXN4ChemistryWrapper:
                 format('ASC' if ascending_creation_order else 'DESC')
         }
         response = requests.get(
-            ATTEMPTS_URL.format(project_id=project_id),
+            self.routes.attempts_url.format(project_id=project_id),
             headers=self.headers,
             cookies={},
             params=payload
@@ -265,7 +272,7 @@ class RXN4ChemistryWrapper:
             payload['predictionId'] = prediction_id
         data = {'reactants': precursors, 'aiModel': ai_model}
         response = requests.post(
-            REACTION_PREDICTION_URL,
+            self.routes.reaction_prediction_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
@@ -298,7 +305,7 @@ class RXN4ChemistryWrapper:
             {...}
         """
         response = requests.get(
-            REACTION_PREDICTION_RESULTS_URL.format(
+            self.routes.reaction_prediction_results_url.format(
                 prediction_id=prediction_id
             ),
             headers=self.headers,
@@ -403,7 +410,7 @@ class RXN4ChemistryWrapper:
             'product': product
         }
         response = requests.post(
-            RETROSYNTHESIS_PREDICTION_URL,
+            self.routes.retrosynthesis_prediction_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
@@ -439,7 +446,7 @@ class RXN4ChemistryWrapper:
             {...}
         """
         response = requests.get(
-            RETROSYNTHESIS_PREDICTION_RESULTS_URL.format(
+            self.routes.retrosynthesis_prediction_results_url.format(
                 prediction_id=prediction_id
             ),
             headers=self.headers,
@@ -476,7 +483,7 @@ class RXN4ChemistryWrapper:
             {...}
         """
         response = requests.get(
-            RETROSYNTHESIS_SEQUENCE_PDF_URL.format(
+            self.routes.retrosynthesis_sequence_pdf_url.format(
                 prediction_id=prediction_id,
                 sequence_id=sequence_id
             ),
@@ -520,7 +527,7 @@ class RXN4ChemistryWrapper:
         """
         data = {'paragraph': paragraph}
         response = requests.post(
-            PARAGRAPH2ACTIONS_URL,
+            self.routes.paragraph2actions_url,
             headers=self.headers,
             data=json.dumps(data).encode(),
             cookies={}
@@ -562,7 +569,7 @@ class RXN4ChemistryWrapper:
             'sequenceId': sequence_id
         }
         response = requests.post(
-            SYNTHESIS_CREATION_FROM_SEQUENCE_URL,
+            self.routes.synthesis_creation_from_sequence_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={}
@@ -598,7 +605,7 @@ class RXN4ChemistryWrapper:
             )
         """
         response = requests.get(
-            SYNTHESIS_STATUS_URL.format(
+            self.routes.synthesis_status_url.format(
                 synthesis_id=synthesis_id
             ),
             headers=self.headers,
@@ -636,7 +643,7 @@ class RXN4ChemistryWrapper:
             )
         """
         response = requests.post(
-            SYNTHESIS_START_URL.format(synthesis_id=synthesis_id),
+            self.routes.synthesis_start_url.format(synthesis_id=synthesis_id),
             headers=self.headers,
             cookies={}
         )
@@ -771,7 +778,7 @@ class RXN4ChemistryWrapper:
                 )
         """
         response = requests.patch(
-            SYNTHESIS_PATCH_NODE_ACTIONS_URL.format(
+            self.routes.synthesis_patch_node_actions_url.format(
                 synthesis_id=synthesis_id,
                 node_id=node_id
             ),
@@ -851,7 +858,7 @@ class RXN4ChemistryWrapper:
             {...}
         """
         response = requests.get(
-            SYNTHESIS_SPECTROMETER_REPORT_URL.format(
+            self.routes.synthesis_spectrometer_report_url.format(
                 synthesis_id=synthesis_id,
                 node_id=node_id,
                 action_index=action_index
