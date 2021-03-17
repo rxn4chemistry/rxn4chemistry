@@ -337,7 +337,7 @@ class RXN4ChemistryWrapper:
         Args:
             product (str): a prouct SMILES.
             availability_pricing_threshold (int, optional): maximum price in
-                USD per mg/ml of commercially available compounds that will be
+                USD per g/ml of commercially available compounds that will be
                 considered available precursors for the retrosynthesis.
                 Defaults to 0, a.k.a., no threshold.
             available_smiles (str, optional): SMILES of molecules available as
