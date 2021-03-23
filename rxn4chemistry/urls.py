@@ -33,6 +33,10 @@ class RXN4ChemistryRoutes:
         self.reaction_prediction_results_url = '{}/{}'.format(
             self.predictions_url, '{prediction_id}'
         )
+        self.reaction_prediction_batch_url = '{}/batch'.format(self.reaction_prediction_url, 'batch')
+        self.reaction_prediction_batch_results_url = '{}/{}'.format(
+            self.reaction_prediction_batch_url, '{task_id}'
+        )
         self.retrosynthesis_prediction_url = '{}/{}'.format(self.retrosynthesis_url, 'rs')
         self.retrosynthesis_prediction_results_url = '{}/{}'.format(
             self.retrosynthesis_url, '{prediction_id}'
@@ -60,7 +64,7 @@ class RXN4ChemistryRoutes:
         Get the base url for the RXN for Chemistry service.
 
         Returns:
-            str: base url for the service
+            str: base url for the service.
         """
         return self._base_url
 

@@ -27,6 +27,23 @@ def prediction_id_on_success(response: requests.models.Response) -> dict:
     }
 
 
+def task_id_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a task identifier.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    return {
+        'task_id': response_dict['payload']['task_id'],
+        'task_status': response_dict['payload']['task_status']
+    }
+
+
 def synthesis_id_on_success(response: requests.models.Response) -> dict:
     """
     Process the successful response of requests returning a synthesis
@@ -62,7 +79,7 @@ def default_on_success(response: requests.models.Response) -> dict:
 def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
     """
     Postprocess retrosynthesis tree.
-    
+
     Postprocessing actions:
     * Correct `isCommercial` field based on metaData/borderColor.
 
@@ -183,3 +200,28 @@ def synthesis_status_on_success(response: requests.models.Response) -> dict:
         'status': response_dict['payload']['status'],
         'response': response_dict
     }
+
+
+def predict_reaction_batch_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning predict reaction batch results.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    identifier = response_dict["payload"]["task"]["task_id"]
+    status = response_dict["payload"]["task"]["status"]
+    return_dict = {}
+    if status == "DONE":
+        return response_dict["payload"]["result"]
+    elif status == "WAITING":
+        return_dict['message'] = (
+            'Task waiting: either the task is submitted and not running or it does not exists in the queue.'
+        )
+    return_dict['task_id'] = identifier
+    return_dict['task_status'] = status
+    return return_dict
