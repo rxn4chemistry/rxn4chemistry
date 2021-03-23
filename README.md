@@ -149,6 +149,19 @@ for action in analysis_actions:
 print(pdfs[0])
 ```
 
+## Forward prediction in batch
+
+It is possible to run a batch of forward reaction predictions without linking them to a project:
+
+```python
+response = rxn4chemistry_wrapper.predict_reaction_batch(precursors_list=['BrBr.c1ccc2cc3ccccc3cc2c1', 'Cl.c1ccc2cc3ccccc3cc2c1']*5)
+# wait for the predictions to complete
+time.sleep(2)
+print(rxn4chemistry_wrapper.get_predict_reaction_batch_results(response["task_id"]))
+```
+
+**NOTE:** the results for batch prediction are not stored permanently in our databases, so we strongly recommend to save them since they will expire.
+
 ## Examples
 
 To learn more see the [examples](./examples).
