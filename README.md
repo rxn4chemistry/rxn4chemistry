@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/rxn4chemistry/rxn4chemistry.svg?branch=master)](https://travis-ci.org/rxn4chemistry/rxn4chemistry)
 [![PyPI version](https://badge.fury.io/py/RXN4Chemistry.svg)](https://badge.fury.io/py/RXN4Chemistry)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rxn4chemistry/rxn4chemistry/master)
 
 ![logo](./docs_source/_static/logo.jpg)
 
