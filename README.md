@@ -114,7 +114,7 @@ Create a synthesis from a retrosynthesis sequence:
 # Each retrosynthetic path predicted has a unique sequence_id that can
 # be used to create a new synthesis
 response = rxn4chemistry_wrapper.create_synthesis_from_sequence(
-    sequence_id=results['retrosynthetic_paths'][0]['sequence_id']
+    sequence_id=results['retrosynthetic_paths'][0]['sequenceId']
 )
 print(response['synthesis_id'])
 
