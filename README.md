@@ -108,7 +108,7 @@ See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipy
 
 ### Biocatalysed retrosynthesis prediction
 
-Predict a biocatalysed retrosynthetic pathway given a product by specifying the model trained on biocatalysed reactions `enzymatic-2021-04-16`:
+Predict a biocatalysed retrosynthetic pathway given a product by specifying the model trained on biocatalysed reactions:
 
 ```python
 response = rxn4chemistry_wrapper.predict_automatic_retrosynthesis(
