@@ -106,6 +106,22 @@ print(results['retrosynthetic_paths'][0])
 
 See [here](./examples/diamond_light_source_covid19_candidates_retrosynthesis.ipynb) for a more comprehensive example.
 
+### Biocatalysed retrosynthesis prediction
+
+Predict a biocatalysed retrosynthetic pathway given a product by specifying the model trained on biocatalysed reactions `enzymatic-2021-04-16`:
+
+```python
+response = rxn4chemistry_wrapper.predict_automatic_retrosynthesis(
+    'OC1C(O)C=C(Br)C=C1', ai_model='enzymatic-2021-04-16'
+)
+results = rxn4chemistry_wrapper.get_predict_automatic_retrosynthesis_results(
+    response['prediction_id']
+)
+print(results['status'])
+# NOTE: upon 'SUCCESS' you can inspect the predicted retrosynthetic paths.
+print(results['retrosynthetic_paths'][0])
+```
+
 ### Create a synthesis and start it on Robot (or Simulator)
 
 Create a synthesis from a retrosynthesis sequence:
