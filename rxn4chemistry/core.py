@@ -1,31 +1,36 @@
 """Core IBM RXN for Chemistry API module."""
-from __future__ import (
-    absolute_import, division, print_function, unicode_literals
-)
-
+from __future__ import absolute_import, division, print_function, unicode_literals
 import copy
-import logging
 import requests
 import json
+import loguru
+from loguru import logger as default_logger
 from typing import Optional, List, Dict, Tuple, Any
+
 from .urls import RXN4ChemistryRoutes
 from .decorators import ibm_rxn_api_limits, response_handling
 from .callbacks import (
-    prediction_id_on_success, task_id_on_success, default_on_success,
+    prediction_id_on_success,
+    task_id_on_success,
+    default_on_success,
     automatic_retrosynthesis_results_on_success,
     retrosynthesis_sequence_pdf,
     paragraph_to_actions_on_success,
-    synthesis_id_on_success, synthesis_status_on_success, synthesis_analysis_report_pdf,
-    predict_reaction_batch_on_success
+    synthesis_id_on_success,
+    synthesis_on_success,
+    synthesis_execution_status_on_success,
+    synthesis_execution_id_on_success,
+    synthesis_analysis_report_pdf,
+    predict_reaction_batch_on_success,
 )
 
-LOGGER = logging.getLogger('rxn4chemistry:core')
+default_logger.disable("DEBUG")
 
 
 def post_order_tree_traversal(tree: Dict) -> List[Dict]:
     result = []
-    if 'children' in tree:
-        for child in tree['children']:
+    if "children" in tree:
+        for child in tree["children"]:
             result.extend(post_order_tree_traversal(child))
     if tree:
         result.append(tree)
@@ -40,16 +45,16 @@ class RXN4ChemistryWrapper:
     def __init__(
         self,
         api_key: str,
-        logger: Optional[logging.Logger] = None,
+        logger: Optional[loguru._logger.Logger] = None,
         project_id: Optional[str] = None,
-        base_url: Optional[str] = None
+        base_url: Optional[str] = None,
     ):
         """
         RXN4ChemistryWrapper constructor.
 
         Args:
             api_key (str): an API key to access the service.
-            logger (logging.Logger, optional): a logger.
+            logger (logging.logger, optional): a logger.
                 Defaults to None, a.k.a using a default logger.
             project_id (str, optional): project identifier. Defaults to None.
             base_url (str, optional): base url for the service. If not provided it will default to
@@ -63,7 +68,7 @@ class RXN4ChemistryWrapper:
         """
         self._api_key = api_key
         self.project_id = project_id
-        self.logger = logger if logger else LOGGER
+        self.logger = logger if logger else default_logger
         self.headers = self._construct_headers()
         self.routes = RXN4ChemistryRoutes(base_url)
 
@@ -84,18 +89,12 @@ class RXN4ChemistryWrapper:
             dict: dictionary containing the "Content-Type" and the
                 "Authorization".
         """
-        return {
-            'Content-Type': 'application/json',
-            'Authorization': self._api_key
-        }
+        return {"Content-Type": "application/json", "Authorization": self._api_key}
 
     @response_handling(success_status_code=201, on_success=default_on_success)
     @ibm_rxn_api_limits
     def create_project(
-        self,
-        name: str,
-        invitations: list = [],
-        set_project: bool = True
+        self, name: str, invitations: list = [], set_project: bool = True
     ) -> requests.models.Response:
         """
         Create new project on platform and set the project id,
@@ -117,16 +116,16 @@ class RXN4ChemistryWrapper:
 
             >>> rxn4chemistry_wrapper.create_project('test')
         """
-        data = {'name': name, 'invitations': invitations}
+        data = {"name": name, "invitations": invitations}
         response = requests.post(
             self.routes.project_url,
             headers=self.headers,
             data=json.dumps(data),
-            cookies={}
+            cookies={},
         )
 
         if set_project and response.status_code == 201:
-            self.set_project(response.json()['payload']['id'])
+            self.set_project(response.json()["payload"]["id"])
 
         return response
 
@@ -146,17 +145,19 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.list_all_projects()
             {...}
         """
-        response = requests.get(self.routes.project_url, headers=self.headers, cookies={})
+        response = requests.get(
+            self.routes.project_url, headers=self.headers, cookies={}
+        )
         return response
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def list_all_attempts_in_project(
-            self,
-            project_id: Optional[str] = None,
-            page: int = 0,
-            size: int = 8,
-            ascending_creation_order: bool = True
+        self,
+        project_id: Optional[str] = None,
+        page: int = 0,
+        size: int = 8,
+        ascending_creation_order: bool = True,
     ) -> requests.models.Response:
         """
         Get a list of all the forward prediction attempts in the set project.
@@ -182,20 +183,18 @@ class RXN4ChemistryWrapper:
         if project_id is None:
             project_id = self.project_id
         payload = {
-            'raw': {},
-            'page':
-                page,
-            'size':
-                size,
-            'sort':
-                'createdOn|{}'.
-                    format('ASC' if ascending_creation_order else 'DESC')
+            "raw": {},
+            "page": page,
+            "size": size,
+            "sort": "createdOn|{}".format(
+                "ASC" if ascending_creation_order else "DESC"
+            ),
         }
         response = requests.get(
             self.routes.attempts_url.format(project_id=project_id),
             headers=self.headers,
             cookies={},
-            params=payload
+            params=payload,
         )
         return response
 
@@ -206,7 +205,7 @@ class RXN4ChemistryWrapper:
         project_id: Optional[str] = None,
         page: int = 0,
         size: int = 8,
-        ascending_creation_order: bool = True
+        ascending_creation_order: bool = True,
     ) -> requests.models.Response:
         """
         Get a list of all the retrosynthesis attempts in the set project.
@@ -232,20 +231,18 @@ class RXN4ChemistryWrapper:
         if project_id is None:
             project_id = self.project_id
         payload = {
-            'raw': {},
-            'page':
-                page,
-            'size':
-                size,
-            'sort':
-                'createdOn|{}'.
-                format('ASC' if ascending_creation_order else 'DESC')
+            "raw": {},
+            "page": page,
+            "size": size,
+            "sort": "createdOn|{}".format(
+                "ASC" if ascending_creation_order else "DESC"
+            ),
         }
         response = requests.get(
             self.routes.retro_attempts_url.format(project_id=project_id),
             headers=self.headers,
             cookies={},
-            params=payload
+            params=payload,
         )
         return response
 
@@ -263,7 +260,7 @@ class RXN4ChemistryWrapper:
 
             >>> rxn4chemistry_wrapper.set_project('PROJECT_ID')
         """
-        self.logger.info('Set project id to {}'.format(project_id))
+        self.logger.info("Set project id to {}".format(project_id))
         self.project_id = project_id
 
     def set_api_key(self, api_key: str):
@@ -280,19 +277,17 @@ class RXN4ChemistryWrapper:
 
             >>> rxn4chemistry_wrapper.set_api_key('API_KEY')
         """
-        self.logger.info('Set API key to {}'.format(api_key))
+        self.logger.info("Set API key to {}".format(api_key))
         self._api_key = api_key
         self.headers = self._construct_headers()
 
-    @response_handling(
-        success_status_code=200, on_success=prediction_id_on_success
-    )
+    @response_handling(success_status_code=200, on_success=prediction_id_on_success)
     @ibm_rxn_api_limits
     def predict_reaction(
         self,
         precursors: str,
         prediction_id: Optional[str] = None,
-        ai_model: str = '2020-08-10'
+        ai_model: str = "2020-08-10",
     ) -> requests.models.Response:
         """
         Launch prediction given precursors SMILES.
@@ -319,17 +314,17 @@ class RXN4ChemistryWrapper:
             )
         """
         if self.project_id is None:
-            raise ValueError('Project identifier has to be set first.')
-        payload = {'projectId': self.project_id, 'aiModel': ai_model}
+            raise ValueError("Project identifier has to be set first.")
+        payload = {"projectId": self.project_id, "aiModel": ai_model}
         if prediction_id is not None:
-            payload['predictionId'] = prediction_id
-        data = {'reactants': precursors, 'aiModel': ai_model}
+            payload["predictionId"] = prediction_id
+        data = {"reactants": precursors, "aiModel": ai_model}
         response = requests.post(
             self.routes.reaction_prediction_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
-            params=payload
+            params=payload,
         )
         return response
 
@@ -362,18 +357,14 @@ class RXN4ChemistryWrapper:
                 prediction_id=prediction_id
             ),
             headers=self.headers,
-            cookies={}
+            cookies={},
         )
         return response
 
-    @response_handling(
-        success_status_code=200, on_success=task_id_on_success
-    )
+    @response_handling(success_status_code=200, on_success=task_id_on_success)
     @ibm_rxn_api_limits
     def predict_reaction_batch(
-        self,
-        precursors_list: List[str],
-        ai_model: str = '2020-08-10'
+        self, precursors_list: List[str], ai_model: str = "2020-08-10"
     ) -> requests.models.Response:
         """
         Launch prediction given precursors SMILES.
@@ -398,18 +389,20 @@ class RXN4ChemistryWrapper:
                 ['BrBr.c1ccc2cc3ccccc3cc2c1', 'Cl.c1ccc2cc3ccccc3cc2c1']
             )
         """
-        payload = {'aiModel': ai_model}
-        data = {'reactants': precursors_list, 'aiModel': ai_model}
+        payload = {"aiModel": ai_model}
+        data = {"reactants": precursors_list, "aiModel": ai_model}
         response = requests.post(
             self.routes.reaction_prediction_batch_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
-            params=payload
+            params=payload,
         )
         return response
 
-    @response_handling(success_status_code=200, on_success=predict_reaction_batch_on_success)
+    @response_handling(
+        success_status_code=200, on_success=predict_reaction_batch_on_success
+    )
     @ibm_rxn_api_limits
     def get_predict_reaction_batch_results(
         self, task_id: str
@@ -433,17 +426,13 @@ class RXN4ChemistryWrapper:
             {...}
         """
         response = requests.get(
-            self.routes.reaction_prediction_batch_results_url.format(
-                task_id=task_id
-            ),
+            self.routes.reaction_prediction_batch_results_url.format(task_id=task_id),
             headers=self.headers,
-            cookies={}
+            cookies={},
         )
         return response
 
-    @response_handling(
-        success_status_code=200, on_success=prediction_id_on_success
-    )
+    @response_handling(success_status_code=200, on_success=prediction_id_on_success)
     @ibm_rxn_api_limits
     def predict_automatic_retrosynthesis(
         self,
@@ -457,7 +446,7 @@ class RXN4ChemistryWrapper:
         max_steps: int = 3,
         nbeams: int = 10,
         pruning_steps: int = 2,
-        ai_model: str = '2020-07-01'
+        ai_model: str = "2020-07-01",
     ) -> requests.models.Response:
         """
         Launch automated retrosynthesis prediction given a product SMILES.
@@ -509,46 +498,35 @@ class RXN4ChemistryWrapper:
             )
         """
         if self.project_id is None:
-            raise ValueError('Project identifier has to be set first.')
-        payload = {'projectId': self.project_id, 'aiModel': ai_model}
+            raise ValueError("Project identifier has to be set first.")
+        payload = {"projectId": self.project_id, "aiModel": ai_model}
         data = {
-            'aiModel': ai_model,
-            'isinteractive': False,
-            'parameters':
-                {
-                    'availability_pricing_threshold':
-                        availability_pricing_threshold,
-                    'available_smiles':
-                        available_smiles,
-                    'exclude_smiles':
-                        exclude_smiles,
-                    'exclude_substructures':
-                        exclude_substructures,
-                    'exclude_target_molecule':
-                        exclude_target_molecule,
-                    'fap':
-                        fap,
-                    'max_steps':
-                        max_steps,
-                    'nbeams':
-                        nbeams,
-                    'pruning_steps':
-                        pruning_steps
-                },
-            'product': product
+            "aiModel": ai_model,
+            "isinteractive": False,
+            "parameters": {
+                "availability_pricing_threshold": availability_pricing_threshold,
+                "available_smiles": available_smiles,
+                "exclude_smiles": exclude_smiles,
+                "exclude_substructures": exclude_substructures,
+                "exclude_target_molecule": exclude_target_molecule,
+                "fap": fap,
+                "max_steps": max_steps,
+                "nbeams": nbeams,
+                "pruning_steps": pruning_steps,
+            },
+            "product": product,
         }
         response = requests.post(
             self.routes.retrosynthesis_prediction_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
-            params=payload
+            params=payload,
         )
         return response
 
     @response_handling(
-        success_status_code=200,
-        on_success=automatic_retrosynthesis_results_on_success
+        success_status_code=200, on_success=automatic_retrosynthesis_results_on_success
     )
     @ibm_rxn_api_limits
     def get_predict_automatic_retrosynthesis_results(
@@ -578,14 +556,11 @@ class RXN4ChemistryWrapper:
                 prediction_id=prediction_id
             ),
             headers=self.headers,
-            cookies={}
+            cookies={},
         )
         return response
 
-    @response_handling(
-        success_status_code=200,
-        on_success=retrosynthesis_sequence_pdf
-    )
+    @response_handling(success_status_code=200, on_success=retrosynthesis_sequence_pdf)
     @ibm_rxn_api_limits
     def get_retrosynthesis_sequence_pdf(
         self, prediction_id: str, sequence_id: str
@@ -612,22 +587,18 @@ class RXN4ChemistryWrapper:
         """
         response = requests.get(
             self.routes.retrosynthesis_sequence_pdf_url.format(
-                prediction_id=prediction_id,
-                sequence_id=sequence_id
+                prediction_id=prediction_id, sequence_id=sequence_id
             ),
             headers=self.headers,
-            cookies={}
+            cookies={},
         )
         return response
 
     @response_handling(
-        success_status_code=200,
-        on_success=paragraph_to_actions_on_success
+        success_status_code=200, on_success=paragraph_to_actions_on_success
     )
     @ibm_rxn_api_limits
-    def paragraph_to_actions(
-        self, paragraph: str
-    ) -> requests.models.Response:
+    def paragraph_to_actions(self, paragraph: str) -> requests.models.Response:
         """
         Get the actions from a paragraph describing a recipe.
 
@@ -653,22 +624,19 @@ class RXN4ChemistryWrapper:
             'ADD sodium borohydride (24 mg, 0.62 mmol)',
             'STIR for 1 hour at ambient temperature']
         """
-        data = {'paragraph': paragraph}
+        data = {"paragraph": paragraph}
         response = requests.post(
             self.routes.paragraph2actions_url,
             headers=self.headers,
             data=json.dumps(data).encode(),
-            cookies={}
+            cookies={},
         )
         return response
 
-    @response_handling(
-        success_status_code=200, on_success=synthesis_id_on_success
-    )
+    @response_handling(success_status_code=200, on_success=synthesis_id_on_success)
     @ibm_rxn_api_limits
     def create_synthesis_from_sequence(
-        self,
-        sequence_id: str
+        self, sequence_id: str, ai_model: str = "2020-10-20"
     ) -> requests.models.Response:
         """
         Create a new synthesis from a sequence identifier.
@@ -679,6 +647,8 @@ class RXN4ChemistryWrapper:
         Args:
             sequence_id (str): a sequence identifier returned by
                 predict_automatic_retrosynthesis_results.
+            ai_model (str, optional): model release. Defaults to
+                '2020-10-20'.
 
         Returns:
             dict: dictionary containing the synthesis identifier and the
@@ -692,28 +662,25 @@ class RXN4ChemistryWrapper:
             )
         """
         if self.project_id is None:
-            raise ValueError('Project identifier has to be set first.')
+            raise ValueError("Project identifier has to be set first.")
         data = {
-            'sequenceId': sequence_id
+            "sequenceId": sequence_id,
+            "projectId": self.project_id,
+            "aiModel": ai_model,
         }
         response = requests.post(
             self.routes.synthesis_creation_from_sequence_url,
             headers=self.headers,
             data=json.dumps(data),
-            cookies={}
+            cookies={},
         )
         return response
 
-    @response_handling(
-        success_status_code=200,
-        on_success=synthesis_status_on_success
-    )
+    @response_handling(success_status_code=200, on_success=synthesis_on_success)
     @ibm_rxn_api_limits
-    def get_synthesis_status(
-            self, synthesis_id: str
-    ) -> requests.models.Response:
+    def get_synthesis_procedure(self, synthesis_id: str) -> requests.models.Response:
         """
-        Get the status of a given synthesis based on its identifier.
+        Get a synthesis procedure based on its identifier.
 
         The provided synthesis identifier can be obtained as a previous step
         by calling the create_synthesis_from_sequence() method.
@@ -726,29 +693,86 @@ class RXN4ChemistryWrapper:
             dict: dictionary containing the the response.
 
         Examples:
-            Create a synthesis by providing the desired sequence identifier:
+            Retrieve a synthesis procedure by providing the desired sequence identifier:
+
+            >>> response = rxn4chemistry_wrapper.get_synthesis(
+                '5dd273618sid4897af'
+            )
+        """
+        response = requests.get(
+            self.routes.synthesis_procedure_url.format(synthesis_id=synthesis_id),
+            headers=self.headers,
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=synthesis_on_success)
+    @ibm_rxn_api_limits
+    def get_synthesis_execution(self, synthesis_id: str) -> requests.models.Response:
+        """
+        Get a synthesis procedure based on its identifier.
+
+        The provided synthesis identifier can be obtained as a previous step
+        by calling the create_synthesis_from_sequence() method.
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+
+        Returns:
+            dict: dictionary containing the the response.
+
+        Examples:
+            Retrieve a synthesis procedure by providing the desired sequence identifier:
+
+            >>> response = rxn4chemistry_wrapper.get_synthesis(
+                '5dd273618sid4897af'
+            )
+        """
+        response = requests.get(
+            self.routes.synthesis_execution_url.format(synthesis_id=synthesis_id),
+            headers=self.headers,
+            cookies={},
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200, on_success=synthesis_execution_status_on_success
+    )
+    @ibm_rxn_api_limits
+    def get_synthesis_status(self, synthesis_id: str) -> requests.models.Response:
+        """
+        Get the status of a given synthesis execution based on its identifier.
+
+        The provided synthesis identifier can be obtained as a previous step
+        by calling the create_synthesis_from_sequence() method.
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+
+        Returns:
+            dict: dictionary containing the the response.
+
+        Examples:
+            Get a synthesis execution statu by providing the desired sequence identifier:
 
             >>> response = rxn4chemistry_wrapper.get_synthesis_status(
                 '5dd273618sid4897af'
             )
         """
         response = requests.get(
-            self.routes.synthesis_status_url.format(
-                synthesis_id=synthesis_id
-            ),
+            self.routes.synthesis_status_url.format(synthesis_id=synthesis_id),
             headers=self.headers,
-            cookies={}
+            cookies={},
         )
         return response
 
     @response_handling(
-        success_status_code=200, on_success=synthesis_status_on_success
+        success_status_code=200, on_success=synthesis_execution_id_on_success
     )
     @ibm_rxn_api_limits
-    def start_synthesis(
-        self,
-        synthesis_id: str
-    ) -> requests.models.Response:
+    def start_synthesis(self, synthesis_id: str) -> requests.models.Response:
         """
         Start a synthesis on either on the robot or on the simulator.
 
@@ -773,7 +797,7 @@ class RXN4ChemistryWrapper:
         response = requests.post(
             self.routes.synthesis_start_url.format(synthesis_id=synthesis_id),
             headers=self.headers,
-            cookies={}
+            cookies={},
         )
         return response
 
@@ -798,21 +822,68 @@ class RXN4ChemistryWrapper:
         Examples:
             Return the flattened list of actions for the given synthesis identifier:
 
-            >>> result = rxn4chemistry_wrapper.get_tree_and_actions(
+            >>> result = rxn4chemistry_wrapper.get_synthesis_plan(
                 synthesis_id='5dd273618sid4897af'
             )
         """
-        response = self.get_synthesis_status(synthesis_id=synthesis_id)
-        tree: Dict = copy.deepcopy(response['response']['payload']['sequences'][0]['tree'])
+        response = self.get_synthesis_procedure(synthesis_id=synthesis_id)
+        tree: Dict = copy.deepcopy(
+            response["response"]["payload"]["sequences"][0]["tree"]
+        )
 
         ordered_tree_nodes = post_order_tree_traversal(tree=tree)
 
-        keys_to_keep = ['id', 'smiles', 'actions', 'children']
+        keys_to_keep = ["id", "smiles", "actions", "children"]
         flattened_actions = []
 
         for node in ordered_tree_nodes:
             [node.pop(key) for key in list(node.keys()) if key not in keys_to_keep]
-            flattened_actions.extend(node['actions'])
+            flattened_actions.extend(node["actions"])
+        return tree, ordered_tree_nodes, flattened_actions
+
+    def get_synthesis_execution_plan(
+        self, synthesis_id: str
+    ) -> Tuple[Dict, List, List]:
+        """
+        Return the synthesis tree for the given synthesis_id for an execution.
+
+        This is a simplified version of get_synthesis_status which only includes
+        synthesis related information and no meta data.
+        It also returns a flattened list of all the actions involved in every
+        step of the sequence.
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+
+        Returns:
+            Tuple[Dict, List, List]: A dictionary representation of the synthesis
+                tree and a flattened list containing all actions of the entire
+                synthesis represented as dictionaries.
+
+        Examples:
+            Return the flattened list of actions for the given synthesis identifier:
+
+            >>> result = rxn4chemistry_wrapper.get_synthesis_execution_plan(
+                synthesis_id='5dd273618sid4897af'
+            )
+        """
+        response = self.get_synthesis_execution(synthesis_id=synthesis_id)
+        response = self.get_synthesis_procedure(
+            synthesis_id=response["response"]["payload"]["content"][-1]["synthesisId"]
+        )
+        tree: Dict = copy.deepcopy(
+            response["response"]["payload"]["sequences"][0]["tree"]
+        )
+
+        ordered_tree_nodes = post_order_tree_traversal(tree=tree)
+
+        keys_to_keep = ["id", "smiles", "actions", "children"]
+        flattened_actions = []
+
+        for node in ordered_tree_nodes:
+            [node.pop(key) for key in list(node.keys()) if key not in keys_to_keep]
+            flattened_actions.extend(node["actions"])
         return tree, ordered_tree_nodes, flattened_actions
 
     def get_node_actions(self, synthesis_id: str, node_id: str) -> List[Dict]:
@@ -837,30 +908,36 @@ class RXN4ChemistryWrapper:
                 synthesis_id='5dd273618sid4897af', node_id='5z7f6bgz6g95gcbh'
             )
         """
-        response = self.get_synthesis_status(synthesis_id=synthesis_id)
-        tree: Dict = copy.deepcopy(response['response']['payload']['sequences'][0]['tree'])
+        response = self.get_synthesis_procedure(synthesis_id=synthesis_id)
+        tree: Dict = copy.deepcopy(
+            response["response"]["payload"]["sequences"][0]["tree"]
+        )
 
         ordered_tree_nodes = post_order_tree_traversal(tree=tree)
-        node = [tree_node for tree_node in ordered_tree_nodes if tree_node['id'] == node_id]
+        node = [
+            tree_node for tree_node in ordered_tree_nodes if tree_node["id"] == node_id
+        ]
 
         if len(node) != 1:
-            raise KeyError('None or multiple nodes with id {} found inside the tree of synthesis with id {}. Result: {}'.format(synthesis_id, node_id, node))
-        node_actions = node[0]['actions']
+            raise KeyError(
+                "None or multiple nodes with id {} found inside the tree of synthesis with id {}. Result: {}".format(
+                    synthesis_id, node_id, node
+                )
+            )
+        node_actions = node[0]["actions"]
         simplified_actions = []
         for action in node_actions:
-            simplified_actions.append({
-                'name': action['name'],
-                'content': action['content']
-            })
+            simplified_actions.append(
+                {"name": action["name"], "content": action["content"]}
+            )
 
         return simplified_actions
 
-    @response_handling(
-        success_status_code=200,
-        on_success=default_on_success
-    )
+    @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def update_node_actions(self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]])-> requests.models.Response:
+    def update_node_actions(
+        self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]]
+    ) -> requests.models.Response:
         """
         Update the list of actions for a specific node. The given actions will completely replace
         the existing actions for this node in the tree.
@@ -877,7 +954,7 @@ class RXN4ChemistryWrapper:
         Examples:
             Update the list of actions for the given synthesis and node identifier:
 
-            >>> result = rxn4chemistry_wrapper.get_node_actions(
+            >>> result = rxn4chemistry_wrapper.update_node_actions(
                     synthesis_id='5dd273618sid4897af',
                     node_id='5z7f6bgz6g95gcbh',
                     actions=[
@@ -907,91 +984,10 @@ class RXN4ChemistryWrapper:
         """
         response = requests.patch(
             self.routes.synthesis_patch_node_actions_url.format(
-                synthesis_id=synthesis_id,
-                node_id=node_id
+                synthesis_id=synthesis_id, node_id=node_id
             ),
             headers=self.headers,
-            data=json.dumps({'actions': actions}),
-            cookies={}
-        )
-        return response
-
-    def get_synthesis_actions_with_spectrometer_pdf(
-        self,
-        synthesis_id: str
-    ) -> List[Dict]:
-        """
-        Get a list of actions which have a spectrometer pdf ready for download.
-
-        Args:
-            synthesis_id (str): synthesis identifier.
-
-        Returns:
-            List[Dict]: a list of all actions in the synthesis which have a
-                spectrometer pdf ready for download
-
-        Examples:
-            Get the list of actions which have a report pdf ready for download:
-
-            >>> rxn4chemistry_wrapper.get_synthesis_actions_with_spectrometer_pdf(
-                '5e788ae548260b770105ecf4'
-            )
-        """
-        synthesis_tree, ordered_tree_nodes, actions = self.get_synthesis_plan(
-            synthesis_id=synthesis_id
-        )
-        result = []
-        for node in ordered_tree_nodes:
-            for action_index, action in enumerate(node['actions']):
-                if action['hasSpectrometerPdf']:
-                    result.append(
-                        {
-                            'synthesis_id': synthesis_id,
-                            'node_id': node['id'],
-                            'action_index': action_index
-                        }
-                    )
-        return result
-
-    @response_handling(
-        success_status_code=200,
-        on_success=synthesis_analysis_report_pdf
-    )
-    @ibm_rxn_api_limits
-    def get_synthesis_analysis_report_pdf(
-        self,
-        synthesis_id: str,
-        node_id: str,
-        action_index: int
-    ) -> requests.models.Response:
-        """
-        Get the spectrometer .pdf report for a given synthesis identifier,
-        node identifier and action index.
-        Args:
-            synthesis_id (str): identifier of the synthesis.
-            node_id (str): identifier of the node (corresponds to a reaction
-                in the synthesis tree).
-            action_index (int): corresponds to the index of the specific
-                analysis action in the node.
-        Returns:
-            dict: dictionary containing the .pdf report.
-        Examples:
-            Get a .pdf report providing the synthesis identifier, node identifier and
-            action index:
-            >>> rxn4chemistry_wrapper.get_synthesis_analysis_report_pdf(
-                synthesis_id='5e788ae548260b770105ecf4',
-                node_id='5ecb86cx6776vx1234fsd',
-                action_index=5
-            )
-            {...}
-        """
-        response = requests.get(
-            self.routes.synthesis_spectrometer_report_url.format(
-                synthesis_id=synthesis_id,
-                node_id=node_id,
-                action_index=action_index
-            ),
-            headers=self.headers,
-            cookies={}
+            data=json.dumps({"actions": actions}),
+            cookies={},
         )
         return response

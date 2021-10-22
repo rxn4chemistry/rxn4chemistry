@@ -1,12 +1,13 @@
 """Callbacks for IBM RXN for Chemistry API."""
-import logging
+from __future__ import absolute_import, division, print_function, unicode_literals
 import requests
+from loguru import logger
 from bs4 import BeautifulSoup
 
-LOGGER = logging.getLogger('rxn4chemistry:callbacks')
+logger.disable("DEBUG")
 
-BORDER_COLOR_COMMERCIAL = "#28a30d"
-BORDER_COLOR_UNAVAILABLE = "#ce4e04"
+BORDER_COLOR_COMMERCIAL = set(["#28a30d", "#0f62fe", "#002d9c"])
+BORDER_COLOR_UNAVAILABLE = set(["#ce4e04"])
 
 
 def prediction_id_on_success(response: requests.models.Response) -> dict:
@@ -21,10 +22,7 @@ def prediction_id_on_success(response: requests.models.Response) -> dict:
         dict: dictionary representing the response.
     """
     response_dict = response.json()
-    return {
-        'prediction_id': response_dict['payload']['id'],
-        'response': response_dict
-    }
+    return {"prediction_id": response_dict["payload"]["id"], "response": response_dict}
 
 
 def task_id_on_success(response: requests.models.Response) -> dict:
@@ -39,8 +37,8 @@ def task_id_on_success(response: requests.models.Response) -> dict:
     """
     response_dict = response.json()
     return {
-        'task_id': response_dict['payload']['task_id'],
-        'task_status': response_dict['payload']['task_status']
+        "task_id": response_dict["payload"]["task_id"],
+        "task_status": response_dict["payload"]["task_status"],
     }
 
 
@@ -56,10 +54,7 @@ def synthesis_id_on_success(response: requests.models.Response) -> dict:
         dict: dictionary representing the response.
     """
     response_dict = response.json()
-    return {
-        'synthesis_id': response_dict['payload']['id'],
-        'response': response_dict
-    }
+    return {"synthesis_id": response_dict["payload"]["id"], "response": response_dict}
 
 
 def default_on_success(response: requests.models.Response) -> dict:
@@ -73,7 +68,7 @@ def default_on_success(response: requests.models.Response) -> dict:
         dict: dictionary representing the response.
     """
     response_dict = response.json()
-    return {'response': response_dict}
+    return {"response": response_dict}
 
 
 def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
@@ -91,19 +86,24 @@ def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
     """
 
     # process children recursively
-    if 'children' in tree:
-        tree['children'] = [_postprocess_retrosynthesis_tree(child) for child in tree['children']]
+    if "children" in tree:
+        tree["children"] = [
+            _postprocess_retrosynthesis_tree(child) for child in tree["children"]
+        ]
 
     try:
-        tree['isCommercial'] = tree['metaData']['borderColor'] == BORDER_COLOR_COMMERCIAL
+        tree["isCommercial"] = (
+            tree["metaData"]["borderColor"] in BORDER_COLOR_COMMERCIAL
+        )
     except KeyError:
+        logger.exception("commercial field not available")
         pass
 
     return tree
 
 
 def automatic_retrosynthesis_results_on_success(
-    response: requests.models.Response
+    response: requests.models.Response,
 ) -> dict:
     """
     Process the successful response of an automatic retrosyntesis result
@@ -118,13 +118,12 @@ def automatic_retrosynthesis_results_on_success(
     response_dict = response.json()
 
     return {
-        'retrosynthetic_paths':
-            [
-                _postprocess_retrosynthesis_tree(sequence['tree'])
-                for sequence in response_dict['payload']['sequences']
-            ],
-        'status': response_dict['payload']['status'],
-        'response': response_dict
+        "retrosynthetic_paths": [
+            _postprocess_retrosynthesis_tree(sequence["tree"])
+            for sequence in response_dict["payload"]["sequences"]
+        ],
+        "status": response_dict["payload"]["status"],
+        "response": response_dict,
     }
 
 
@@ -139,7 +138,7 @@ def retrosynthesis_sequence_pdf(response: requests.models.Response) -> dict:
     Returns:
         dict: dictionary representing the response.
     """
-    return {'content': response.text}
+    return {"content": response.text}
 
 
 def synthesis_analysis_report_pdf(response: requests.models.Response) -> dict:
@@ -153,12 +152,10 @@ def synthesis_analysis_report_pdf(response: requests.models.Response) -> dict:
     Returns:
         dict: dictionary representing the response.
     """
-    return {'content': response.text}
+    return {"content": response.text}
 
 
-def paragraph_to_actions_on_success(
-    response: requests.models.Response
-) -> dict:
+def paragraph_to_actions_on_success(response: requests.models.Response) -> dict:
     """
     Process the successful response of a paragraph to actions request.
 
@@ -170,22 +167,20 @@ def paragraph_to_actions_on_success(
     """
     response_dict = response.json()
     return {
-        'actions': [
-            action.strip(' .')
+        "actions": [
+            action.strip(" .")
             for element in BeautifulSoup(
-                response_dict['payload']['actionSequence'],
-                'html.parser'
-            ).find_all('li')
-            for action in element.text.split(';')
+                response_dict["payload"]["actionSequence"], "html.parser"
+            ).find_all("li")
+            for action in element.text.split(";")
         ],
-        'response': response_dict
+        "response": response_dict,
     }
 
 
-def synthesis_status_on_success(response: requests.models.Response) -> dict:
+def synthesis_on_success(response: requests.models.Response) -> dict:
     """
-    Process the successful response of requests returning a synthesis
-    identifier.
+    Process the successful response of requests returning a synthesis procedure.
 
     Args:
         response (requests.models.Response): response from an API request.
@@ -194,11 +189,43 @@ def synthesis_status_on_success(response: requests.models.Response) -> dict:
         dict: dictionary representing the response.
     """
     response_dict = response.json()
-    response_dict['payload'].pop('user')
+    response_dict["payload"].pop("user", None)
+
+    return {"response": response_dict}
+
+
+def synthesis_execution_status_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a synthesis execution status.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    response_dict["payload"].pop("user", None)
+
+    return {"status": response_dict["payload"]["status"], "response": response_dict}
+
+
+def synthesis_execution_id_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a synthesis execution identifier.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    response_dict["payload"].pop("user", None)
 
     return {
-        'status': response_dict['payload']['status'],
-        'response': response_dict
+        "synthesis_execution_id": response_dict["payload"]["id"],
+        "response": response_dict,
     }
 
 
@@ -219,9 +246,9 @@ def predict_reaction_batch_on_success(response: requests.models.Response) -> dic
     if status == "DONE":
         return response_dict["payload"]["result"]
     elif status == "WAITING":
-        return_dict['message'] = (
-            'Task waiting: either the task is submitted and not running or it does not exists in the queue.'
-        )
-    return_dict['task_id'] = identifier
-    return_dict['task_status'] = status
+        return_dict[
+            "message"
+        ] = "Task waiting: either the task is submitted and not running or it does not exists in the queue."
+    return_dict["task_id"] = identifier
+    return_dict["task_status"] = status
     return return_dict
