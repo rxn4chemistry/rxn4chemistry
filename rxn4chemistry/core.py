@@ -24,8 +24,6 @@ from .callbacks import (
     predict_reaction_batch_on_success,
 )
 
-default_logger.disable("DEBUG")
-
 
 def post_order_tree_traversal(tree: Dict) -> List[Dict]:
     result = []

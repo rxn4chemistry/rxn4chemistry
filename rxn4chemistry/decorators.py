@@ -8,8 +8,6 @@ from functools import wraps, partial
 
 from .callbacks import default_on_success
 
-logger.disable("DEBUG")
-
 MAXIMUM_REQUESTS_PER_MINUTE = 1e5
 MININUM_TIMEOUT_BETWEEN_REQUESTS = 1e-5  # expressed in seconds
 LAST_REQUEST_TIME = int(time.time()) - 86400  # added a one day offset
