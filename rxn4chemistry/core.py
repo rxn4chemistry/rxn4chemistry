@@ -2,9 +2,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import copy
 import requests
+import logging
 import json
-import loguru
-from loguru import logger as default_logger
 from typing import Optional, List, Dict, Tuple, Any
 
 from .urls import RXN4ChemistryRoutes
@@ -23,6 +22,9 @@ from .callbacks import (
     synthesis_analysis_report_pdf,
     predict_reaction_batch_on_success,
 )
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def post_order_tree_traversal(tree: Dict) -> List[Dict]:
@@ -43,7 +45,6 @@ class RXN4ChemistryWrapper:
     def __init__(
         self,
         api_key: str,
-        logger: Optional[loguru._logger.Logger] = None,
         project_id: Optional[str] = None,
         base_url: Optional[str] = None,
     ):
@@ -52,8 +53,6 @@ class RXN4ChemistryWrapper:
 
         Args:
             api_key (str): an API key to access the service.
-            logger (logging.logger, optional): a logger.
-                Defaults to None, a.k.a using a default logger.
             project_id (str, optional): project identifier. Defaults to None.
             base_url (str, optional): base url for the service. If not provided it will default to
                 the environment variable RXN4CHEMISTRY_BASE_URL or https://rxn.res.ibm.com.
@@ -66,7 +65,6 @@ class RXN4ChemistryWrapper:
         """
         self._api_key = api_key
         self.project_id = project_id
-        self.logger = logger if logger else default_logger
         self.headers = self._construct_headers()
         self.routes = RXN4ChemistryRoutes(base_url)
 
@@ -258,7 +256,7 @@ class RXN4ChemistryWrapper:
 
             >>> rxn4chemistry_wrapper.set_project('PROJECT_ID')
         """
-        self.logger.info("Set project id to {}".format(project_id))
+        logger.info("Set project id to {}".format(project_id))
         self.project_id = project_id
 
     def set_api_key(self, api_key: str):
@@ -275,7 +273,7 @@ class RXN4ChemistryWrapper:
 
             >>> rxn4chemistry_wrapper.set_api_key('API_KEY')
         """
-        self.logger.info("Set API key to {}".format(api_key))
+        logger.info("Set API key to {}".format(api_key))
         self._api_key = api_key
         self.headers = self._construct_headers()
 
