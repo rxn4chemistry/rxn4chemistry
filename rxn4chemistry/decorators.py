@@ -1,12 +1,15 @@
 """Decorators for IBM RXN for Chemistry API."""
 from __future__ import absolute_import, division, print_function, unicode_literals
 import time
+import logging
 import threading
-from loguru import logger
 from typing import Optional, Callable
 from functools import wraps, partial
 
 from .callbacks import default_on_success
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 MAXIMUM_REQUESTS_PER_MINUTE = 1e5
 MININUM_TIMEOUT_BETWEEN_REQUESTS = 1e-5  # expressed in seconds
