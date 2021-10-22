@@ -16,12 +16,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'rxn4chemistry'
-copyright = '2020, RXN for Chemistry team'
-author = 'RXN for Chemistry team'
+project = "rxn4chemistry"
+copyright = "2021, RXN for Chemistry team"
+author = "RXN for Chemistry team"
 
 # The full version, including alpha/beta/rc tags
-release = '0.4.0'
+release = "1.0.0"
 
 # -- General configuration ---------------------------------------------------
 
@@ -29,12 +29,15 @@ release = '0.4.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon', 'sphinx.ext.todo',
-    'sphinx.ext.githubpages'
+    "sphinx.ext.autodoc",
+    "sphinx.ext.coverage",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.githubpages",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -46,14 +49,14 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
-html_logo = '_static/logo.jpg'
+html_theme = "sphinx_rtd_theme"
+html_logo = "_static/logo.jpg"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # -- Options for Latex/PDF output --------------------------------------------
 
-latex_logo = '_static/logo.jpg'
+latex_logo = "_static/logo.jpg"
