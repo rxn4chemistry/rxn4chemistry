@@ -9,4 +9,4 @@ dependencies:
     - pandas>=1.0.3
     - xlrd>=1.2.0
     - jupyter>=1.0.0
-    - rxn4chemistry>=0.6.0
+    - rxn4chemistry>=1.0.0
