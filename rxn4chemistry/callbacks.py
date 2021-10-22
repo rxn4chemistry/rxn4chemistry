@@ -4,8 +4,6 @@ import requests
 from loguru import logger
 from bs4 import BeautifulSoup
 
-logger.disable("DEBUG")
-
 BORDER_COLOR_COMMERCIAL = set(["#28a30d", "#0f62fe", "#002d9c"])
 BORDER_COLOR_UNAVAILABLE = set(["#ce4e04"])
 
