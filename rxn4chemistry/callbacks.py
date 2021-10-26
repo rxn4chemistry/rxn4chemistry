@@ -86,19 +86,21 @@ def _postprocess_retrosynthesis_tree(tree: dict) -> dict:
         dict: postprocessed retrosynthesis tree
     """
 
-    # process children recursively
-    if "children" in tree:
+    children = tree.get("children", [])
+    # node is a leaf
+    if len(children) == 0:
+        try:
+            tree["isCommercial"] = (
+                tree["metaData"]["borderColor"] in BORDER_COLOR_COMMERCIAL
+            )
+        except KeyError:
+            logger.warning("no information on commercial availability")
+            pass
+    else:
+        # process children recursively
         tree["children"] = [
             _postprocess_retrosynthesis_tree(child) for child in tree["children"]
         ]
-
-    try:
-        tree["isCommercial"] = (
-            tree["metaData"]["borderColor"] in BORDER_COLOR_COMMERCIAL
-        )
-    except KeyError:
-        logger.exception("commercial field not available")
-        pass
 
     return tree
 
