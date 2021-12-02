@@ -38,7 +38,7 @@ class RXN4ChemistryRoutes:
             self.project_url, "{project_id}", "attempts"
         )
         self.retro_attempts_url = "{}/{}/{}".format(
-            self.project_url, "{project_id}", "retrosynthesis-attempt"
+            self.project_url, "{project_id}", "retrosynthesis"
         )
         self.retrosynthesis_url = "{}/{}".format(self.api_url, "retrosynthesis")
         self.reaction_prediction_url = "{}/{}".format(self.predictions_url, "pr")
