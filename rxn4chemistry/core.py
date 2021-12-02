@@ -230,9 +230,6 @@ class RXN4ChemistryWrapper:
             "raw": {},
             "page": page,
             "size": size,
-            "sort": "createdOn|{}".format(
-                "ASC" if ascending_creation_order else "DESC"
-            ),
         }
         response = requests.get(
             self.routes.retro_attempts_url.format(project_id=project_id),
