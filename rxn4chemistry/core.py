@@ -987,3 +987,65 @@ class RXN4ChemistryWrapper:
             cookies={},
         )
         return response
+
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def current_user(
+        self
+    ) -> requests.models.Response:
+        """
+        Get user info of the current user API key
+
+        Returns:
+            dict: dictionary with current user info
+
+        Examples:
+            Getting infos of the current user.
+            >>> response = rxn4chemistry_wrapper.current_user_id()
+        """
+
+
+        response = requests.get(
+            self.routes.users_current_url,
+            headers=self.headers,
+            cookies={},)
+
+
+        return response
+
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def update_roborxn_api_key(
+        self,
+        user_id: str,
+        roborxn_api_key: str
+    ) -> requests.models.Response:
+        """
+        update the roboRxnApiKey for the user specified with it user_id
+        Args:
+            user_id (str): user_id  
+            roborxn_api_key (str): new API key to updated
+
+        Returns:
+            dict: dictionary containing the updated user information
+
+        Examples:
+            Updating the roboRxnApiKey of the user "test_user_id".
+            >>> response = rxn4chemistry_wrapper.update_roborxn_api_key(
+              user_id = 'test_user_id',
+              roborxn_api_key = 'NEW-roborxn_api_key')
+        """
+        data = {
+            "roboRxnApiKey": roborxn_api_key,
+        }
+
+        response = requests.get(
+            self.routes.users_id_url.format(user_id = user_id),
+            data=json.dumps(data),
+            headers=self.headers,
+            cookies={}
+        )
+
+        return response
