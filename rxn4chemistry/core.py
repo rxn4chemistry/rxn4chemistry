@@ -1002,7 +1002,7 @@ class RXN4ChemistryWrapper:
 
         Examples:
             Getting infos of the current user.
-            >>> response = rxn4chemistry_wrapper.current_user_id()
+            >>> response = rxn4chemistry_wrapper.current_user()
         """
 
 
@@ -1041,8 +1041,8 @@ class RXN4ChemistryWrapper:
             "roboRxnApiKey": roborxn_api_key,
         }
 
-        response = requests.get(
-            self.routes.users_id_url.format(user_id = user_id),
+        response = requests.patch(
+            self.routes.users_id_url.format(user_id=user_id),
             data=json.dumps(data),
             headers=self.headers,
             cookies={}
