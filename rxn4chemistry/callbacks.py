@@ -9,6 +9,13 @@ logger.addHandler(logging.NullHandler())
 
 BORDER_COLOR_COMMERCIAL = set(["#28a30d", "#0f62fe", "#002d9c"])
 BORDER_COLOR_UNAVAILABLE = set(["#ce4e04"])
+MODEL_NAMES_MAPPING = {
+    "PARAGRAPH2ACTIONS": "paragraph-to-actions",
+    "SMILES2ACTIONS": "sequence-to-actions",
+    "REACTION": "reaction-prediction-model",
+    "RETROSYNTHESIS": "retrosynthesis-prediction-model",
+}
+MODEL_FIELDS_MAPPING = {"name": "name"}
 
 
 def prediction_id_on_success(response: requests.models.Response) -> dict:
@@ -255,3 +262,29 @@ def predict_reaction_batch_on_success(response: requests.models.Response) -> dic
     return_dict["task_id"] = identifier
     return_dict["task_status"] = status
     return return_dict
+
+
+def model_listing_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a supported model list.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    models = response_dict["payload"]["models"]
+    return {
+        MODEL_NAMES_MAPPING[model_type]: [
+            {
+                MODEL_FIELDS_MAPPING[model_field]: model_value
+                for model_field, model_value in model_info.items()
+                if model_field in MODEL_FIELDS_MAPPING
+            }
+            for model_info in model_list
+        ]
+        for model_type, model_list in models.items()
+        if model_type in MODEL_NAMES_MAPPING
+    }
