@@ -12,6 +12,7 @@ from .callbacks import (
     prediction_id_on_success,
     task_id_on_success,
     default_on_success,
+    model_listing_on_success,
     automatic_retrosynthesis_results_on_success,
     retrosynthesis_sequence_pdf,
     paragraph_to_actions_on_success,
@@ -273,6 +274,35 @@ class RXN4ChemistryWrapper:
         logger.info("Set API key to {}".format(api_key))
         self._api_key = api_key
         self.headers = self._construct_headers()
+
+    @response_handling(success_status_code=200, on_success=model_listing_on_success)
+    @ibm_rxn_api_limits
+    def list_models(self) -> requests.models.Response:
+        """
+        Get the models for the project that is currently configured.
+
+        Returns:
+            dict: dictionary containing the available models.
+
+        Raises:
+            ValueError: in case self.project_id is not set.
+
+        Examples:
+            Get list of models supported in the project considered:
+
+            >>> rxn4chemistry_wrapper.list_models()
+            {...}
+        """
+        if self.project_id is None:
+            raise ValueError("Project identifier has to be set first.")
+
+        response = requests.get(
+            self.routes.project_models_url,
+            headers=self.headers,
+            params={"project_id": self.project_id},
+            cookies={},
+        )
+        return response
 
     @response_handling(success_status_code=200, on_success=prediction_id_on_success)
     @ibm_rxn_api_limits
@@ -983,4 +1013,56 @@ class RXN4ChemistryWrapper:
             data=json.dumps({"actions": actions}),
             cookies={},
         )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def current_user(self) -> requests.models.Response:
+        """
+        Get user info of the current user API key
+
+        Returns:
+            dict: dictionary with current user info
+
+        Examples:
+            Getting infos of the current user.
+            >>> response = rxn4chemistry_wrapper.current_user()
+        """
+        response = requests.get(
+            self.routes.users_current_url, headers=self.headers, cookies={}
+        )
+
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def update_roborxn_api_key(
+        self, user_id: str, roborxn_api_key: str
+    ) -> requests.models.Response:
+        """
+        update the roboRxnApiKey for the user specified with it user_id
+        Args:
+            user_id (str): user_id
+            roborxn_api_key (str): new API key to updated
+
+        Returns:
+            dict: dictionary containing the updated user information
+
+        Examples:
+            Updating the roboRxnApiKey of the user "test_user_id".
+            >>> response = rxn4chemistry_wrapper.update_roborxn_api_key(
+              user_id = 'test_user_id',
+              roborxn_api_key = 'NEW-roborxn_api_key')
+        """
+        data = {
+            "roboRxnApiKey": roborxn_api_key,
+        }
+
+        response = requests.patch(
+            self.routes.users_id_url.format(user_id=user_id),
+            data=json.dumps(data),
+            headers=self.headers,
+            cookies={},
+        )
+
         return response

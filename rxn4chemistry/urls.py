@@ -32,8 +32,12 @@ class RXN4ChemistryRoutes:
         self.api_url = "{}/{}".format(
             self._base_url, f"rxn/api/api/{self._api_version}"
         )
+        self.models_url = "{}/{}".format(self.api_url, "ai-models")
         self.project_url = "{}/{}".format(self.api_url, "projects")
         self.predictions_url = "{}/{}".format(self.api_url, "predictions")
+        self.users_url = "{}/{}".format(self.api_url, "users")
+        self.all_models_url = "{}/{}".format(self.models_url, "all")
+        self.project_models_url = self.models_url
         self.attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "attempts"
         )
@@ -80,6 +84,9 @@ class RXN4ChemistryRoutes:
         self.synthesis_start_url = "{}/{}/{}".format(
             self.synthesis_execution_url, "{synthesis_id}", "start"
         )
+
+        self.users_id_url = "{}/{}".format(self.users_url, "{user_id}")
+        self.users_current_url = "{}/{}".format(self.users_url, "current")
 
     @property
     def base_url(self) -> str:
