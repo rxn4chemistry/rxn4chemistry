@@ -150,11 +150,7 @@ class RXN4ChemistryWrapper:
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def list_all_attempts_in_project(
-        self,
-        project_id: Optional[str] = None,
-        page: int = 0,
-        size: int = 8,
-        ascending_creation_order: bool = True,
+        self, project_id: Optional[str] = None, page: int = 0, size: int = 8
     ) -> requests.models.Response:
         """
         Get a list of all the forward prediction attempts in the set project.
@@ -164,8 +160,6 @@ class RXN4ChemistryWrapper:
                 a.k.a., use the currently set project.
             page (int, optional): page to list attempts from. Defaults to 0.
             size (int, optional): number of elements per page. Defaults to 8.
-            ascending_creation_order (bool, optional): sort attempts by
-                ascending creation date. Defaults to True.
 
         Returns:
             dict: dictionary listing the attempts.
@@ -179,14 +173,7 @@ class RXN4ChemistryWrapper:
         """
         if project_id is None:
             project_id = self.project_id
-        payload = {
-            "raw": {},
-            "page": page,
-            "size": size,
-            "sort": "createdOn|{}".format(
-                "ASC" if ascending_creation_order else "DESC"
-            ),
-        }
+        payload = {"raw": {}, "page": page, "size": size}
         response = requests.get(
             self.routes.attempts_url.format(project_id=project_id),
             headers=self.headers,
@@ -198,11 +185,7 @@ class RXN4ChemistryWrapper:
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def list_all_retro_attempts_in_project(
-        self,
-        project_id: Optional[str] = None,
-        page: int = 0,
-        size: int = 8,
-        ascending_creation_order: bool = True,
+        self, project_id: Optional[str] = None, page: int = 0, size: int = 8
     ) -> requests.models.Response:
         """
         Get a list of all the retrosynthesis attempts in the set project.
@@ -212,8 +195,6 @@ class RXN4ChemistryWrapper:
                 a.k.a., use the currently set project.
             page (int, optional): page to list attempts from. Defaults to 0.
             size (int, optional): number of elements per page. Defaults to 8.
-            ascending_creation_order (bool, optional): sort attempts by
-                ascending creation date. Defaults to True.
 
         Returns:
             dict: dictionary listing the retrosynthesis attempts.
@@ -227,14 +208,7 @@ class RXN4ChemistryWrapper:
         """
         if project_id is None:
             project_id = self.project_id
-        payload = {
-            "raw": {},
-            "page": page,
-            "size": size,
-            "sort": "createdOn|{}".format(
-                "ASC" if ascending_creation_order else "DESC"
-            ),
-        }
+        payload = {"raw": {}, "page": page, "size": size}
         response = requests.get(
             self.routes.retro_attempts_url.format(project_id=project_id),
             headers=self.headers,
