@@ -3,10 +3,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import time
 import logging
 import threading
-from typing import Optional, Callable
+from typing import Optional, Callable, Any
 from functools import wraps, partial
 
+import requests
+
 from .callbacks import default_on_success
+from .response_handler import ResponseHandler
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -96,7 +99,7 @@ def ibm_rxn_api_limits(function: Callable) -> Callable:
 def response_handling(
     function: Optional[Callable] = None,
     success_status_code: int = 200,
-    on_success: Callable = default_on_success,
+    on_success: Callable[[requests.models.Response], Any] = default_on_success,
 ) -> Callable:
     """
     Decorator to handle request responses.
@@ -125,17 +128,11 @@ def response_handling(
         response = function(*args, **kwargs)
         logger.debug(f"response {response.text}")
 
-        if response.status_code == success_status_code:
-            return on_success(response)
-        elif response.status_code == 401:
-            logger.error(
-                "There is probably something wrong with your api key. " "Please check."
-            )
-            logger.debug(response.text)
-        else:
-            logger.exception("Unexpected error.")
-            logger.error(response.text)
-        response_dict = response.json()
-        return {"response": response_dict}
+        response_handler = ResponseHandler(
+            response=response,
+            success_status_code=success_status_code,
+            on_success=on_success,
+        )
+        return response_handler.handle()
 
     return _wrapper
