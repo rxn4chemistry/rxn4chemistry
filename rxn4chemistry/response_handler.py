@@ -56,7 +56,7 @@ class ResponseHandler:
             and not error_in_response_dict
             and self._payload is not None
         ):
-            return self.on_success(self._payload)
+            return self.on_success(self.response)
 
         self._print_error_logs()
 
