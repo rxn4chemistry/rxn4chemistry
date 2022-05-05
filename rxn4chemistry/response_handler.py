@@ -54,7 +54,7 @@ class ResponseHandler:
         if (
             successful_status
             and not error_in_response_dict
-            and self._payload is not None
+            and self._payload is not None and self._response_dict is not None
         ):
             return self.on_success(self.response)
 
@@ -67,7 +67,7 @@ class ResponseHandler:
 
     def _print_error_logs(self) -> None:
         # error-specific logs
-        if self._payload is None:
+        if self._payload is None or self._response_dict is None:
             logger.error(
                 "The service might be overloaded at the moment. Please try again."
             )
