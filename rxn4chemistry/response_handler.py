@@ -48,10 +48,14 @@ class ResponseHandler:
         successful_status = self.response.status_code == self.success_status_code
         error_in_response_dict = self._response_dict_has_error_status()
 
-        # Success: must be the adequate status code, and there must be no
-        # error in the response body. All other cases are considered to be
-        # an error.
-        if successful_status and not error_in_response_dict:
+        # Success: must be the adequate status code, there must be no
+        # error in the response body and the response must not be None.
+        # All other cases are considered to be an error.
+        if (
+            successful_status
+            and not error_in_response_dict
+            and self.response is not None
+        ):
             return self.on_success(self.response)
 
         self._print_error_logs()
@@ -63,7 +67,11 @@ class ResponseHandler:
 
     def _print_error_logs(self) -> None:
         # error-specific logs
-        if self._response_dict_has_error_status():
+        if self.response is None:
+            logger.error(
+                "The service might be overloaded at the moment. Please try again."
+            )
+        elif self._response_dict_has_error_status():
             logger.error(f"Execution error.")
             error_title = self._get_error_title()
             if error_title is not None:
