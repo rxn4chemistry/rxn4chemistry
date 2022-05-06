@@ -332,7 +332,7 @@ class RXN4ChemistryWrapper:
         ai_model: str = "2020-08-10",
     ) -> requests.models.Response:
         """
-        Get alternative predict reaction results for a prediction_id.
+        Generate alternative predict reaction results for a prediction_id.
 
         Args:
             prediction_id (str): prediction identifier.
@@ -347,12 +347,12 @@ class RXN4ChemistryWrapper:
             ValueError: in case self.project_id is not set.
 
         Examples:
-            Get alternative results from a reaction prediction by providing the prediction
-            identifier:
+            Generate alternative results from a reaction prediction by providing the prediction
+            identifier and the prediction inputs:
 
-            >>> rxn4chemistry_wrapper.get_predict_reaction_alternative_results(
-                response['response']['payload']['id']
-                # or response['prediction_id']
+            >>> rxn4chemistry_wrapper.predict_reaction_alternative_results(
+                prediction_id=response['response']['payload']['id'],  # or response['prediction_id']
+                precursors='BrBr.c1ccc2cc3ccccc3cc2c1'
             )
             {...}
         """
