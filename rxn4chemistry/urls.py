@@ -49,6 +49,9 @@ class RXN4ChemistryRoutes:
         self.reaction_prediction_results_url = "{}/{}".format(
             self.predictions_url, "{prediction_id}"
         )
+        self.reaction_prediction_alternative_results_url = "{}/{}".format(
+            self.predictions_url, "prb"
+        )
         self.reaction_prediction_batch_url = "{}/batch".format(
             self.reaction_prediction_url, "batch"
         )
