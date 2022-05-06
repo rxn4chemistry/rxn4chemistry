@@ -54,7 +54,8 @@ class ResponseHandler:
         if (
             successful_status
             and not error_in_response_dict
-            and self._payload is not None and self._response_dict is not None
+            and self._payload is not None
+            and self._response_dict is not None
         ):
             return self.on_success(self.response)
 

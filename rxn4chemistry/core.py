@@ -286,7 +286,6 @@ class RXN4ChemistryWrapper:
     def predict_reaction(
         self,
         precursors: str,
-        prediction_id: Optional[str] = None,
         ai_model: str = "2020-08-10",
     ) -> requests.models.Response:
         """
@@ -294,8 +293,6 @@ class RXN4ChemistryWrapper:
 
         Args:
             precursors (str): precursor SMILES separated with a '.'.
-            prediction_id (str, optional): prediction identifier. Defaults to
-                None, a.k.a., run an independent prediction.
             ai_model (str, optional): model release. Defaults to
                 '2020-08-10'.
 
@@ -316,11 +313,55 @@ class RXN4ChemistryWrapper:
         if self.project_id is None:
             raise ValueError("Project identifier has to be set first.")
         payload = {"projectId": self.project_id, "aiModel": ai_model}
-        if prediction_id is not None:
-            payload["predictionId"] = prediction_id
         data = {"reactants": precursors, "aiModel": ai_model}
         response = requests.post(
             self.routes.reaction_prediction_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+            params=payload,
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=prediction_id_on_success)
+    @ibm_rxn_api_limits
+    def predict_reaction_alternative_results(
+        self,
+        prediction_id: str,
+        precursors: str,
+        ai_model: str = "2020-08-10",
+    ) -> requests.models.Response:
+        """
+        Get alternative predict reaction results for a prediction_id.
+
+        Args:
+            prediction_id (str): prediction identifier.
+            precursors (str): precursor SMILES separated with a '.'.
+            ai_model (str, optional): model release. Defaults to
+                '2020-08-10'.
+
+        Returns:
+            dict: dictionary containing the prediction results.
+
+        Raises:
+            ValueError: in case self.project_id is not set.
+
+        Examples:
+            Get alternative results from a reaction prediction by providing the prediction
+            identifier:
+
+            >>> rxn4chemistry_wrapper.get_predict_reaction_alternative_results(
+                response['response']['payload']['id']
+                # or response['prediction_id']
+            )
+            {...}
+        """
+        if self.project_id is None:
+            raise ValueError("Project identifier has to be set first.")
+        payload = {"projectId": self.project_id, "predictionId": prediction_id}
+        data = {"reactants": precursors, "aiModel": ai_model}
+        response = requests.post(
+            self.routes.reaction_prediction_alternative_results_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
