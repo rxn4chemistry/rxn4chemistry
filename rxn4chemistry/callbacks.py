@@ -243,6 +243,8 @@ def predict_reaction_batch_on_success(response: requests.models.Response) -> dic
     """
     Process the successful response of requests returning predict reaction batch results.
 
+    Note: this function is also used for the batch-topn endpoint.
+
     Args:
         response (requests.models.Response): response from an API request.
 
