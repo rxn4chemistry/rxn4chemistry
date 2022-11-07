@@ -479,7 +479,7 @@ class RXN4ChemistryWrapper:
         self, precursors_lists: List[List[str]], topn: int, ai_model: str = "2020-08-10"
     ) -> requests.models.Response:
         """
-        Launch batch of reactions with multiple reactions given precursors SMILES.
+        Launch prediction of multiple outcomes for batch of reactions given precursors SMILES.
 
         Args:
             precursors_lists: lists of precursor SMILES (one list of precursors per reaction).
