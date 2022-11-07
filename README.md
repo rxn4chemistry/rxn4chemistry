@@ -165,7 +165,7 @@ print(rxn4chemistry_wrapper.get_predict_reaction_batch_results(response["task_id
 
 **NOTE:** the results for batch prediction are not stored permanently in our databases, so we strongly recommend to save them since they will expire.
 
-## Multiple outcome prediction in batch
+## Prediction of multiple reaction outcomes (in batch)
 
 It is also possible to predict multiple forward reaction prediction outcomes in batch:
 
