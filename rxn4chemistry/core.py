@@ -411,7 +411,7 @@ class RXN4ChemistryWrapper:
         Launch prediction given precursors SMILES.
 
         Args:
-            precursors (List[str]): list of precursor SMILES separated with a '.'.
+            precursors_list (List[str]): list of precursor SMILES separated with a '.'.
             ai_model (str, optional): model release. Defaults to
                 '2020-08-10'.
 
@@ -468,6 +468,78 @@ class RXN4ChemistryWrapper:
         """
         response = requests.get(
             self.routes.reaction_prediction_batch_results_url.format(task_id=task_id),
+            headers=self.headers,
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=task_id_on_success)
+    @ibm_rxn_api_limits
+    def predict_reaction_batch_topn(
+        self, precursors_lists: List[List[str]], topn: int, ai_model: str = "2020-08-10"
+    ) -> requests.models.Response:
+        """
+        Launch prediction of multiple outcomes for batch of reactions given precursors SMILES.
+
+        Args:
+            precursors_lists: lists of precursor SMILES (one list of precursors per reaction).
+            topn: number of predictions to make per reaction.
+            ai_model: model release.
+
+        Returns:
+            dict: dictionary containing the response.
+
+        Raises:
+            ValueError: in case self.project_id is not set.
+
+        Examples:
+            Predict a reaction batch (with multiple predictions) by providing the
+            lists of precursors and get task identifier
+            and status:
+
+            >>> response = rxn4chemistry_wrapper.predict_reaction_batch_topn(
+            ...     ['BrBr', 'c1ccc2cc3ccccc3cc2c1'], ['Cl', 'c1ccc2cc3ccccc3cc2c1'],
+            ...     topn=4
+            ... )
+        """
+        data = {"precursors_lists": precursors_lists, "topn": topn, "aiModel": ai_model}
+        response = requests.post(
+            self.routes.reaction_prediction_batch_topn_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200, on_success=predict_reaction_batch_on_success
+    )
+    @ibm_rxn_api_limits
+    def get_predict_reaction_batch_topn_results(
+        self, task_id: str
+    ) -> requests.models.Response:
+        """
+        Get the results for a batch with multiple predictions for a task_id.
+
+        Args:
+            task_id: task identifier.
+
+        Returns:
+            dict: dictionary containing the prediction results.
+
+        Examples:
+            Get results from a reaction prediction by providing the prediction
+            identifier:
+
+            >>> rxn4chemistry_wrapper.get_predict_reaction_batch_topn_results(
+            ...     response["task_id"]
+            ... )
+            ... {...}
+        """
+        response = requests.get(
+            self.routes.reaction_prediction_batch_topn_results_url.format(
+                task_id=task_id
+            ),
             headers=self.headers,
             cookies={},
         )

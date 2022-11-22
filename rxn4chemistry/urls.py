@@ -52,11 +52,17 @@ class RXN4ChemistryRoutes:
         self.reaction_prediction_alternative_results_url = "{}/{}".format(
             self.predictions_url, "prb"
         )
-        self.reaction_prediction_batch_url = "{}/batch".format(
+        self.reaction_prediction_batch_url = "{}/{}".format(
             self.reaction_prediction_url, "batch"
         )
         self.reaction_prediction_batch_results_url = "{}/{}".format(
             self.reaction_prediction_batch_url, "{task_id}"
+        )
+        self.reaction_prediction_batch_topn_url = "{}/{}".format(
+            self.reaction_prediction_url, "batch_topn"
+        )
+        self.reaction_prediction_batch_topn_results_url = "{}/{}".format(
+            self.reaction_prediction_batch_topn_url, "{task_id}"
         )
         self.retrosynthesis_prediction_url = "{}/{}".format(
             self.retrosynthesis_url, "rs"
