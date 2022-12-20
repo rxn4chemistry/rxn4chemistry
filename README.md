@@ -44,6 +44,26 @@ rxn4chemistry_wrapper = RXN4ChemistryWrapper(api_key=api_key, base_url='https://
 # rxn4chemistry_wrapper.set_base_url('https://some.other.rxn.server')
 ```
 
+
+### Enable logging
+
+Logging by the library is disabled by default as it may interfere with programmatic uses.
+In the very top of the notebook you can seeing a line that enabled all logging in the notebook.
+```python
+import logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(message)s')
+```
+This may also enable logging from other libraries. If you wish to selectively enable the logs from `rxn4chemistry`, consider something like this:
+```python
+import logging
+logger = logging.getLogger("rxn4chemistry")
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(levelname)s : %(message)s'))
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+```
+
+
 ### Create a project
 
 Get your API key from [here](https://rxn.res.ibm.com/rxn/user/profile) and build the wrapper:
@@ -183,6 +203,25 @@ print(rxn4chemistry_wrapper.get_predict_reaction_batch_topn_results(response["ta
 ```
 
 **NOTE:** the results for batch prediction are not stored permanently in our databases, so we strongly recommend to save them since they will expire.
+
+## Enable logging
+
+Logging by the library is disabled by default as it may interfere with programmatic uses.
+
+In the very top of the notebook you can seeing a line that enabled all logging in the notebook.
+```python
+import logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(message)s')
+```
+This may also enable logging from other libraries. If you wish to selectively enable the logs from `rxn4chemistry`, consider something like this:
+```python
+import logging
+logger = logging.getLogger("rxn4chemistry")
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(levelname)s : %(message)s'))
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+```
 
 ## Examples
 
