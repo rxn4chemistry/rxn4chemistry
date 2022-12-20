@@ -3,7 +3,7 @@ from typing import Any, Callable, Optional
 
 import requests
 
-logger = logging.getLogger("rxn4chemistry")
+logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
