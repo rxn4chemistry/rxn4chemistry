@@ -188,7 +188,7 @@ print(rxn4chemistry_wrapper.get_predict_reaction_batch_topn_results(response["ta
 
 Logging by the library is disabled by default as it may interfere with programmatic uses.
 
-In the very top of the notebook you can seeing a line that enabled all logging in the notebook.
+In the very top of the `rxn4chemistry_tour.ipynb` example notebook you can seeing a line that enables all logging in the notebook.
 ```python
 import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(message)s')
