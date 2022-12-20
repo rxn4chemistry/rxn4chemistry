@@ -1,9 +1,9 @@
 import logging
-from typing import Optional, Callable, Any
+from typing import Any, Callable, Optional
 
 import requests
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rxn4chemistry")
 logger.addHandler(logging.NullHandler())
 
 
@@ -67,13 +67,34 @@ class ResponseHandler:
             return {"response": self.response.text}
 
     def _print_error_logs(self) -> None:
+        """Note that logging has to be enabled, by default there is no output."""
         # error-specific logs
-        if self._payload is None or self._response_dict is None:
+        if self.response.status_code == 401 and len(self.response.history) > 0:
+            urls = {
+                "original": self.response.history[0].url,
+                "redirected": self.response.url,
+            }
+            longest_k = len(max(urls.keys(), key=len))
+            longest_v = len(max(urls.values(), key=len))
+            comparison = "\n".join(
+                [f"{k : >{longest_k}} url: {v : >{longest_v}}" for k, v in urls.items()]
+            )
+            logger.error(
+                "The api key was removed due to a redirect of the request.\n"
+                "You will have to set the base_url to the redirected url to "
+                "to prevent this failure. See `RXN4ChemistryWrapper()` or "
+                "RXN4ChemistryWrapper.set_base_url().\n"
+                f"Check this comparison to infer the redirected base_url:\n{comparison}"
+            )
+            # this is done by the request package without warning
+            # see https://github.com/psf/requests/pull/5375
+            # the only workaround would be via a .netrc file
+        elif self._payload is None or self._response_dict is None:
             logger.error(
                 "The service might be overloaded at the moment. Please try again."
             )
         elif self._response_dict_has_error_status():
-            logger.error(f"Execution error.")
+            logger.error("Execution error.")
             error_title = self._get_error_title()
             if error_title is not None:
                 logger.error(f"Error title : {error_title}")
