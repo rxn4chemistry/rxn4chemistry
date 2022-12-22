@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import copy
 import json
+import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
@@ -23,8 +24,10 @@ from .callbacks import (
     task_id_on_success,
 )
 from .decorators import ibm_rxn_api_limits, response_handling
-from .logging import logger
 from .urls import RXN4ChemistryRoutes
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def post_order_tree_traversal(tree: Dict) -> List[Dict]:

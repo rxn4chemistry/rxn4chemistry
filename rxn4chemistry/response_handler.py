@@ -1,8 +1,10 @@
+import logging
 from typing import Any, Callable, Optional
 
 import requests
 
-from .logging import logger
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 class ResponseHandler:
