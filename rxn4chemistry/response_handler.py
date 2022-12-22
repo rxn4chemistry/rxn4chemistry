@@ -70,6 +70,14 @@ class ResponseHandler:
         """Note that logging has to be enabled, by default there is no output."""
         # error-specific logs
         if self.response.status_code == 401 and len(self.response.history) > 0:
+            # In case the base_url responded with a redirect, the `requests` package
+            # stores these calls in the history attribute and follows up to the
+            # new url. But it strips Authorization headers (i.e. the api key) from
+            # the redirected request for security reasons without warning
+            # see https://github.com/psf/requests/pull/5375
+            # the only workaround would be via a .netrc file
+
+            # in this case, the user needs to update the base_url, which we know now.
             urls = {
                 "original": self.response.history[0].url,
                 "redirected": self.response.url,
@@ -86,9 +94,6 @@ class ResponseHandler:
                 "RXN4ChemistryWrapper.set_base_url().\n"
                 f"Check this comparison to infer the redirected base_url:\n{comparison}"
             )
-            # this is done by the request package without warning
-            # see https://github.com/psf/requests/pull/5375
-            # the only workaround would be via a .netrc file
         elif self._payload is None or self._response_dict is None:
             logger.error(
                 "The service might be overloaded at the moment. Please try again."
