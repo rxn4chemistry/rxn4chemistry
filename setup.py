@@ -32,7 +32,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
-    install_requires=["requests==2.23.0", "beautifulsoup4==4.9.0"],
+    install_requires=["requests<3.0.0,>=2.23.0", "beautifulsoup4==4.9.0"],
     packages=find_packages(),
     url="https://github.com/rxn4chemistry/rxn4chemistry",
     classifiers=[
