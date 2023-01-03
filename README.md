@@ -184,6 +184,25 @@ print(rxn4chemistry_wrapper.get_predict_reaction_batch_topn_results(response["ta
 
 **NOTE:** the results for batch prediction are not stored permanently in our databases, so we strongly recommend to save them since they will expire.
 
+## Enable logging
+
+Logging by the library is disabled by default as it may interfere with programmatic uses.
+
+In the very top of the `rxn4chemistry_tour.ipynb` example notebook you can see a line that enables all logging in the notebook.
+```python
+import logging
+logging.basicConfig(level=logging.INFO, format='%(levelname)s : %(message)s')
+```
+This may also enable logging from other libraries. If you wish to selectively enable the logs from `rxn4chemistry`, consider something like this:
+```python
+import logging
+logger = logging.getLogger("rxn4chemistry")
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter('%(levelname)s : %(message)s'))
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+```
+
 ## Examples
 
 To learn more see the [examples](./examples).

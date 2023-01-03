@@ -1,10 +1,11 @@
 """Decorators for IBM RXN for Chemistry API."""
 from __future__ import absolute_import, division, print_function, unicode_literals
-import time
+
 import logging
 import threading
-from typing import Optional, Callable, Any
-from functools import wraps, partial
+import time
+from functools import partial, wraps
+from typing import Any, Callable, Optional
 
 import requests
 
