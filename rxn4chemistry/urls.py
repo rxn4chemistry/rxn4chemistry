@@ -41,6 +41,8 @@ class RXN4ChemistryRoutes:
         self.attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "attempts"
         )
+
+
         self.retro_attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "retrosynthesis"
         )
@@ -73,8 +75,15 @@ class RXN4ChemistryRoutes:
         self.retrosynthesis_sequence_pdf_url = "{}/sequences/{}/download-pdf".format(
             self.retrosynthesis_prediction_results_url, "{sequence_id}"
         )
-        self.paragraph2actions_url = "{}/{}".format(self.api_url, "paragraph-actions")
-        self.synthesis_url = "{}/{}".format(self.api_url, "synthesis")
+        self.paragraph2actions_url = "{}/{}".format(
+            self.api_url, "paragraph-actions"
+        )
+        self.synthesis_url = "{}/{}".format(
+            self.api_url, "synthesis"
+        )
+        self.synthesis_reaction_setting_url =  "{}/{}/{}/{}/{}".format(
+            self.synthesis_url, "{synthesis_id}", "node", "{node_id}","reaction-settings"
+        )
         self.synthesis_procedure_url = "{}/{}".format(
             self.synthesis_url, "{synthesis_id}"
         )

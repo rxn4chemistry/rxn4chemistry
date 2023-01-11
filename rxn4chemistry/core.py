@@ -945,15 +945,14 @@ class RXN4ChemistryWrapper:
         tree: Dict = copy.deepcopy(
             response["response"]["payload"]["sequences"][0]["tree"]
         )
-
         ordered_tree_nodes = post_order_tree_traversal(tree=tree)
 
-        keys_to_keep = ["id", "smiles", "actions", "children"]
+        keys_to_keep = ["id", "smiles", "actions","initialActions", "children"]
         flattened_actions = []
 
         for node in ordered_tree_nodes:
             [node.pop(key) for key in list(node.keys()) if key not in keys_to_keep]
-            flattened_actions.extend(node["actions"])
+            flattened_actions.extend(node["initialActions"])
         return tree, ordered_tree_nodes, flattened_actions
 
     def get_synthesis_execution_plan(
@@ -992,7 +991,6 @@ class RXN4ChemistryWrapper:
         )
 
         ordered_tree_nodes = post_order_tree_traversal(tree=tree)
-
         keys_to_keep = ["id", "smiles", "actions", "children"]
         flattened_actions = []
 
@@ -1039,7 +1037,7 @@ class RXN4ChemistryWrapper:
                     synthesis_id, node_id, node
                 )
             )
-        node_actions = node[0]["actions"]
+        node_actions = node[0]["initialActions"]
         simplified_actions = []
         for action in node_actions:
             simplified_actions.append(
@@ -1097,6 +1095,7 @@ class RXN4ChemistryWrapper:
                     ]
                 )
         """
+        print(json.dumps({"initialActions": actions}))
         response = requests.patch(
             self.routes.synthesis_patch_node_actions_url.format(
                 synthesis_id=synthesis_id, node_id=node_id
@@ -1157,4 +1156,80 @@ class RXN4ChemistryWrapper:
             cookies={},
         )
 
+        return response
+    @ibm_rxn_api_limits
+    def get_reaction_settings(
+         self, synthesis_id: str, node_id: str
+    ) -> requests.models.Response:
+      
+
+
+        response = requests.get(
+            self.routes.synthesis_reaction_setting_url.format(
+                synthesis_id=synthesis_id, node_id=node_id
+            ),
+            headers=self.headers,
+            cookies={},
+        ).json()
+        print(response)
+        print(response["payload"])
+        return response["payload"]['actions'], response["payload"]['product']
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def update_reaction_settings(
+         self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]], product: List[Dict[str, Any]]
+    ) -> requests.models.Response:
+        """
+        Update the list of actions for a specific node. The given actions will completely replace
+        the existing actions for this node in the tree.
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+            node_id (str): the 'id' field of a specific node in the synthesis tree
+            actions (List[Dict[str, Any]): A list of actions which will completely replace
+                the existing actions for this node.
+
+        Returns:
+            dict: dictionary containing the .pdf report.
+        Examples:
+            Update the list of actions for the given synthesis and node identifier:
+
+            >>> result = rxn4chemistry_wrapper.update_node_actions(
+                    synthesis_id='5dd273618sid4897af',
+                    node_id='5z7f6bgz6g95gcbh',
+                    actions=[
+                        {
+                            'name': 'add',
+                            "content": {
+                                "atmosphere": None,
+                                "duration": None,
+                                "temperature": None,
+                                "dropwise": {
+                                  "value": False,
+                                  "quantity": None,
+                                  "unit": None
+                                },
+                                "material": {
+                                  "value": "ethanol",
+                                  "quantity": {
+                                    "value": 10,
+                                    "unit": "ml"
+                                  },
+                                  "unit": None
+                                }
+                            },
+                        }
+                    ]
+                )
+        """
+        response = requests.put(
+            self.routes.synthesis_reaction_setting_url.format(
+                synthesis_id=synthesis_id, node_id=node_id
+            ),
+            headers=self.headers,
+            data=json.dumps({"actions": actions,"product":product}),
+            cookies={},
+        )
         return response
