@@ -15,7 +15,7 @@ def check_starting_material_availability(tree: dict):
         bool: return True if all node leafs are commercially available.
     """
 
-    commercially_available = False
+    commercially_available = True
     children = tree.get("children", [])
     # node is a leaf
     if len(children) == 0:

@@ -1130,9 +1130,8 @@ class RXN4ChemistryWrapper:
             Predict reaction properties by providing the reaction SMILES and aiModel:
 
             >>> response = rxn4chemistry_wrapper.predict_reaction_properties_from_smiles(
-            {
-            "aiModel": "atom-mapping-2020-08-20",
-            "reactions": ["CCCCCCO >> CCCCCCCO"]
+                reactions=["CCCCCCO >> CCCCCCCO"],
+                ai_model="atom-mapping-2020-08-20"
             )
         """
         data = {"aiModel": ai_model, "reactions": reactions, }
