@@ -1109,7 +1109,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def start_reaction_properties_prediction_from_smiles(
+    def predict_reaction_properties_from_smiles(
             self,
             reactions: List[str],
             ai_model: str = "atom-mapping-2020-08-20",
@@ -1118,7 +1118,7 @@ class RXN4ChemistryWrapper:
         Launch prediction with given reactions SMILES.
 
         Args:
-            ai_model (str, optional): model release. Defaults to
+            ai_model (str, optional): model flavour and release. Defaults to
                 'atom-mapping-2020-08-20'.
             reactions (List[str]): list of reaction smiles to predict reaction properties.
 
@@ -1129,7 +1129,7 @@ class RXN4ChemistryWrapper:
         Examples:
             Predict reaction properties by providing the reaction SMILES and aiModel:
 
-            >>> response = rxn4chemistry_wrapper.start_reaction_properties_prediction_from_smiles(
+            >>> response = rxn4chemistry_wrapper.predict_reaction_properties_from_smiles(
             {
             "aiModel": "atom-mapping-2020-08-20",
             "reactions": ["CCCCCCO >> CCCCCCCO"]

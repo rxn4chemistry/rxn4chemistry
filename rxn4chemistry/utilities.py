@@ -15,21 +15,21 @@ def check_starting_material_availability(tree: dict):
         bool: return True if all node leafs are commercially available.
     """
 
+    commercially_available = False
     children = tree.get("children", [])
     # node is a leaf
     if len(children) == 0:
         try:
             commercially_available = tree["isCommercial"]
-            return commercially_available
         except KeyError:
             logger.warning("No information on commercial availability")
-            return False
+            commercially_available = False
     else:
         # process children recursively
         for child in tree["children"]:
             if not check_starting_material_availability(child):
-                return False
-    return tree
+                commercially_available = False
+    return commercially_available
 
 
 def check_results_for_material_availability(results: dict):
@@ -44,7 +44,9 @@ def check_results_for_material_availability(results: dict):
     """
     return [
         {
-            tree[index]["sequenceId"]: check_starting_material_availability(tree)
-            for index, tree in enumerate(results["retrosynthetic_paths"])
+            "index": index,
+            "sequence_id": tree["sequenceId"],
+            "are_materials_available": check_starting_material_availability(tree),
         }
+        for index, tree in enumerate(results["retrosynthetic_paths"])
     ]
