@@ -1109,6 +1109,43 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
+    def predict_reaction_properties_from_smiles(
+        self,
+        reactions: List[str],
+        ai_model: str = "atom-mapping-2020-08-20",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given reactions SMILES.
+
+        Args:
+            ai_model (str, optional): model flavour and release. Defaults to
+                'atom-mapping-2020-08-20'.
+            reactions (List[str]): list of reaction smiles to predict reaction properties.
+
+        Returns:
+            dict: dictionary containing the
+            response.
+
+        Examples:
+            Predict reaction properties by providing the reaction SMILES and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.predict_reaction_properties_from_smiles(
+                reactions=["CCCCCCO >> CCCCCCCO"],
+                ai_model="atom-mapping-2020-08-20"
+            )
+        """
+        raise NotImplementedError("This endpoint is not available for use yet.")
+        # data = {"aiModel": ai_model, "reactions": reactions, }
+        # response = requests.post(
+        #     self.routes.reaction_prediction_batch_url,
+        #     headers=self.headers,
+        #     data=json.dumps(data),
+        #     cookies={},
+        # )
+        # return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
     def current_user(self) -> requests.models.Response:
         """
         Get user info of the current user API key

@@ -120,3 +120,6 @@ examples/data.xlsx
 # custom folders
 docs_source/_build/
 docs_source/_modules/
+
+# PyCharm
+.idea
