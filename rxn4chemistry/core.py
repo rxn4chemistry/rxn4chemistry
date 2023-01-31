@@ -1110,9 +1110,9 @@ class RXN4ChemistryWrapper:
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def predict_reaction_properties_from_smiles(
-            self,
-            reactions: List[str],
-            ai_model: str = "atom-mapping-2020-08-20",
+        self,
+        reactions: List[str],
+        ai_model: str = "atom-mapping-2020-08-20",
     ) -> requests.models.Response:
         """
         Launch prediction with given reactions SMILES.
@@ -1134,14 +1134,15 @@ class RXN4ChemistryWrapper:
                 ai_model="atom-mapping-2020-08-20"
             )
         """
-        data = {"aiModel": ai_model, "reactions": reactions, }
-        response = requests.post(
-            self.routes.reaction_prediction_batch_url,
-            headers=self.headers,
-            data=json.dumps(data),
-            cookies={},
-        )
-        return response
+        raise NotImplementedError("This endpoint is not available for use yet.")
+        # data = {"aiModel": ai_model, "reactions": reactions, }
+        # response = requests.post(
+        #     self.routes.reaction_prediction_batch_url,
+        #     headers=self.headers,
+        #     data=json.dumps(data),
+        #     cookies={},
+        # )
+        # return response
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits

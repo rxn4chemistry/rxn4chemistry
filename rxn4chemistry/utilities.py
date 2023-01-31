@@ -1,12 +1,13 @@
 import logging
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def check_starting_material_availability(tree: dict):
+def check_starting_material_availability(tree: dict) -> bool:
     """
-    Check all tree node leafs for material availability. (Commercially available)
+    Check all tree node leafs for material availability (intended as commercially available).
 
     Args:
         tree (dict): Retrosynthesis tree.
@@ -32,9 +33,9 @@ def check_starting_material_availability(tree: dict):
     return commercially_available
 
 
-def check_results_for_material_availability(results: dict):
+def check_results_for_material_availability(results: dict) -> List[Dict[str, Any]]:
     """
-    Check all trees in results for material availability in all node leafs. (Commercially available)
+    Check all trees in results for material availability in all node leafs (intended as commercially available).
 
     Args:
         results (dict): Contains retrosynthetic_paths with all retrosynthesis trees that make the path.
