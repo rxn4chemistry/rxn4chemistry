@@ -292,3 +292,18 @@ def model_listing_on_success(response: requests.models.Response) -> dict:
         for model_type, model_list in models.items()
         if model_type in MODEL_NAMES_MAPPING
     }
+
+
+def reaction_settings_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning actions and product
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the actions and product.
+    """
+    response_dict = response.json()
+
+    return {"actions": response_dict["payload"]["actions"], "product": response_dict["payload"]["product"]}

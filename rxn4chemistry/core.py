@@ -22,6 +22,7 @@ from .callbacks import (
     synthesis_id_on_success,
     synthesis_on_success,
     task_id_on_success,
+    reaction_settings_on_success,
 )
 from .decorators import ibm_rxn_api_limits, response_handling
 from .urls import RXN4ChemistryRoutes
@@ -916,6 +917,35 @@ class RXN4ChemistryWrapper:
         )
         return response
 
+    @ibm_rxn_api_limits
+    def get_node_id(self, synthesis_id: str) -> List:
+        """
+        Get a list of node ids 
+
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+        Returns:
+            List: containing the node ID.
+
+        Examples:
+            Start the synthesis with a given identifier:
+
+            >>> response = rxn4chemistry_wrapper.get_node_id(
+                synthesis_id='5dd273618sid4897af'
+            )
+        """
+
+        response = self.get_synthesis_procedure(synthesis_id=synthesis_id)
+        tree: Dict = copy.deepcopy(
+            response["response"]["payload"]["sequences"][0]["tree"]
+        )
+        ordered_tree_nodes = post_order_tree_traversal(tree=tree)
+
+        node_ids = [i ['id'] for i in ordered_tree_nodes]
+
+        return node_ids
+
     def get_synthesis_plan(self, synthesis_id: str) -> Tuple[Dict, List, List]:
         """
         Return the synthesis tree for the given synthesis_id.
@@ -941,19 +971,9 @@ class RXN4ChemistryWrapper:
                 synthesis_id='5dd273618sid4897af'
             )
         """
-        response = self.get_synthesis_procedure(synthesis_id=synthesis_id)
-        tree: Dict = copy.deepcopy(
-            response["response"]["payload"]["sequences"][0]["tree"]
-        )
-        ordered_tree_nodes = post_order_tree_traversal(tree=tree)
 
-        keys_to_keep = ["id", "smiles", "actions","initialActions", "children"]
-        flattened_actions = []
+        raise DeprecationWarning("Deprecated method use get_node_id() to get the node id insead and get_reaction_settings() to get the actions of a synthesis procedure")
 
-        for node in ordered_tree_nodes:
-            [node.pop(key) for key in list(node.keys()) if key not in keys_to_keep]
-            flattened_actions.extend(node["initialActions"])
-        return tree, ordered_tree_nodes, flattened_actions
 
     def get_synthesis_execution_plan(
         self, synthesis_id: str
@@ -1095,16 +1115,9 @@ class RXN4ChemistryWrapper:
                     ]
                 )
         """
-        print(json.dumps({"initialActions": actions}))
-        response = requests.patch(
-            self.routes.synthesis_patch_node_actions_url.format(
-                synthesis_id=synthesis_id, node_id=node_id
-            ),
-            headers=self.headers,
-            data=json.dumps({"actions": actions}),
-            cookies={},
-        )
-        return response
+
+        raise DeprecationWarning("deprecated method use ... insead!")
+
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
@@ -1157,12 +1170,30 @@ class RXN4ChemistryWrapper:
         )
 
         return response
+
+    @response_handling(success_status_code=200, on_success=reaction_settings_on_success)
     @ibm_rxn_api_limits
     def get_reaction_settings(
          self, synthesis_id: str, node_id: str
     ) -> requests.models.Response:
-      
+        """
+        Retrieves a the actions and product from a specified synthesis and node. 
+        Args:
+            synthesis_id (str): a synthesis identifier returned by
+                create_synthesis_from_sequence() method.
+            node_id (str): the 'id' field of a specific node in the synthesis tree
 
+        Returns:
+            actions (List[Dict[str, Any]): A list of actions which will completely replace
+                the existing actions for this node.
+            products (List[Dict[str, Any]): A list of product which will completely replace
+                the existing product for this node.
+        Examples:
+            Getting the actions and product of a synthesis.
+            >>> actions, product = rxn4chemistry_wrapper.get_reaction_settings(
+                            synthesis_id='5dd273618sid4897af',
+                            node_id='5z7f6bgz6g95gcbh')
+        """
 
         response = requests.get(
             self.routes.synthesis_reaction_setting_url.format(
@@ -1170,10 +1201,9 @@ class RXN4ChemistryWrapper:
             ),
             headers=self.headers,
             cookies={},
-        ).json()
-        print(response)
-        print(response["payload"])
-        return response["payload"]['actions'], response["payload"]['product']
+        )
+
+        return response
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
@@ -1181,8 +1211,9 @@ class RXN4ChemistryWrapper:
          self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]], product: List[Dict[str, Any]]
     ) -> requests.models.Response:
         """
-        Update the list of actions for a specific node. The given actions will completely replace
-        the existing actions for this node in the tree.
+        Update the list of actions and products for a specific node. The given actions will completely replace
+        the existing actions for this node in the tree. The given products will completely replace
+        the existing product for this node in the tree
 
         Args:
             synthesis_id (str): a synthesis identifier returned by
@@ -1190,13 +1221,15 @@ class RXN4ChemistryWrapper:
             node_id (str): the 'id' field of a specific node in the synthesis tree
             actions (List[Dict[str, Any]): A list of actions which will completely replace
                 the existing actions for this node.
+            products (List[Dict[str, Any]): A list of product which will completely replace
+                the existing product for this node.
 
         Returns:
-            dict: dictionary containing the .pdf report.
+            dict: dictionary containing the response.
         Examples:
-            Update the list of actions for the given synthesis and node identifier:
+            Update the list of actions and product for the given synthesis and node identifier:
 
-            >>> result = rxn4chemistry_wrapper.update_node_actions(
+            >>> result = rxn4chemistry_wrapper.update_reaction_settings(
                     synthesis_id='5dd273618sid4897af',
                     node_id='5z7f6bgz6g95gcbh',
                     actions=[
@@ -1221,7 +1254,20 @@ class RXN4ChemistryWrapper:
                                 }
                             },
                         }
-                    ]
+                    ],
+                product={"product":{
+                                "moleculeInfo":{
+                                "density": 997,
+                                "molecularWeight":214,
+                                "name": "N-(4-bromophenyl)acetamide"},
+                                "productMassAndReactionInformation":{
+                                        "unit": "mg",
+                                        "quantity": 500,
+                                        "securityFactor": 1.1, 
+                                        "stoichiometryFactor": 1.0,
+                                        "yield": 0.9
+                             }
+                        }
                 )
         """
         response = requests.put(
@@ -1229,7 +1275,7 @@ class RXN4ChemistryWrapper:
                 synthesis_id=synthesis_id, node_id=node_id
             ),
             headers=self.headers,
-            data=json.dumps({"actions": actions,"product":product}),
+            data=json.dumps({"actions": actions, "product":product}),
             cookies={},
         )
         return response
