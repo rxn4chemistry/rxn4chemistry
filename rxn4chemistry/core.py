@@ -972,7 +972,6 @@ class RXN4ChemistryWrapper:
             )
         """
 
-        raise DeprecationWarning("Deprecated method use get_node_id() to get the node id insead and get_reaction_settings() to get the actions of a synthesis procedure")
 
 
     def get_synthesis_execution_plan(
@@ -1041,30 +1040,8 @@ class RXN4ChemistryWrapper:
                 synthesis_id='5dd273618sid4897af', node_id='5z7f6bgz6g95gcbh'
             )
         """
-        response = self.get_synthesis_procedure(synthesis_id=synthesis_id)
-        tree: Dict = copy.deepcopy(
-            response["response"]["payload"]["sequences"][0]["tree"]
-        )
+        raise DeprecationWarning("Deprecated method use get_node_id() to get the node id insead and get_reaction_settings() to get the actions of a synthesis procedure")
 
-        ordered_tree_nodes = post_order_tree_traversal(tree=tree)
-        node = [
-            tree_node for tree_node in ordered_tree_nodes if tree_node["id"] == node_id
-        ]
-
-        if len(node) != 1:
-            raise KeyError(
-                "None or multiple nodes with id {} found inside the tree of synthesis with id {}. Result: {}".format(
-                    synthesis_id, node_id, node
-                )
-            )
-        node_actions = node[0]["initialActions"]
-        simplified_actions = []
-        for action in node_actions:
-            simplified_actions.append(
-                {"name": action["name"], "content": action["content"]}
-            )
-
-        return simplified_actions
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
@@ -1116,7 +1093,7 @@ class RXN4ChemistryWrapper:
                 )
         """
 
-        raise DeprecationWarning("deprecated method use ... insead!")
+        raise DeprecationWarning("Deprecated method use get_node_id() to get the node id insead and get_reaction_settings() to get the actions of a synthesis procedure")
 
 
     @response_handling(success_status_code=200, on_success=default_on_success)
