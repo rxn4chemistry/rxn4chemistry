@@ -302,7 +302,7 @@ def reaction_settings_on_success(response: requests.models.Response) -> dict:
         response (requests.models.Response): response from an API request.
 
     Returns:
-        dict: dictionary representing the actions and product.
+        dict: dictionary containing the actions and product.
     """
     response_dict = response.json()
 
