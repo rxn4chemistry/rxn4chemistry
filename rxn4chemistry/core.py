@@ -1185,7 +1185,7 @@ class RXN4ChemistryWrapper:
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def update_reaction_settings(
-         self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]], product: List[Dict[str, Any]]
+         self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]], product: Dict[str, Any]
     ) -> requests.models.Response:
         """
         Update the list of actions and products for a specific node. The given actions will completely replace
