@@ -1198,7 +1198,7 @@ class RXN4ChemistryWrapper:
             node_id (str): the 'id' field of a specific node in the synthesis tree
             actions (List[Dict[str, Any]): A list of actions which will completely replace
                 the existing actions for this node.
-            products (List[Dict[str, Any]): A list of product which will completely replace
+            product (Dict[str, Any]): A list of product which will completely replace
                 the existing product for this node.
 
         Returns:
