@@ -942,7 +942,7 @@ class RXN4ChemistryWrapper:
         )
         ordered_tree_nodes = post_order_tree_traversal(tree=tree)
 
-        node_ids = [i ['id'] for i in ordered_tree_nodes]
+        node_ids = [node['id'] for node in ordered_tree_nodes]
 
         return node_ids
 
