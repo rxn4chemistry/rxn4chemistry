@@ -926,7 +926,7 @@ class RXN4ChemistryWrapper:
             synthesis_id (str): a synthesis identifier returned by
                 create_synthesis_from_sequence() method.
         Returns:
-            List: containing the node ID.
+            List: containing the node identifiers.
 
         Examples:
             Start the synthesis with a given identifier:
