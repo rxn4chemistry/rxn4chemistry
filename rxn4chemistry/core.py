@@ -931,7 +931,7 @@ class RXN4ChemistryWrapper:
         Examples:
             Start the synthesis with a given identifier:
 
-            >>> response = rxn4chemistry_wrapper.get_node_id(
+            >>> response = rxn4chemistry_wrapper.get_node_ids(
                 synthesis_id='5dd273618sid4897af'
             )
         """
