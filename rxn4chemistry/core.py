@@ -918,7 +918,7 @@ class RXN4ChemistryWrapper:
         return response
 
     @ibm_rxn_api_limits
-    def get_node_id(self, synthesis_id: str) -> List:
+    def get_node_ids(self, synthesis_id: str) -> List:
         """
         Get a list of node ids 
 
