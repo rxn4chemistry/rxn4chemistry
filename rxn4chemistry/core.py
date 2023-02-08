@@ -1252,7 +1252,7 @@ class RXN4ChemistryWrapper:
                 synthesis_id=synthesis_id, node_id=node_id
             ),
             headers=self.headers,
-            data=json.dumps({"actions": actions, "product":product}),
+            data=json.dumps({"actions": actions, "product": product}),
             cookies={},
         )
         return response
