@@ -1093,7 +1093,7 @@ class RXN4ChemistryWrapper:
                 )
         """
 
-        raise DeprecationWarning("Deprecated method use get_node_id() to get the node id insead and get_reaction_settings() to get the actions of a synthesis procedure")
+        raise DeprecationWarning("Deprecated method use get_node_ids() to get the node ids and get_reaction_settings() to get the actions of a synthesis procedure!")
 
 
     @response_handling(success_status_code=200, on_success=default_on_success)
