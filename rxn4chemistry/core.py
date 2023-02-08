@@ -1166,6 +1166,7 @@ class RXN4ChemistryWrapper:
                 the existing actions for this node.
             products (List[Dict[str, Any]): A list of product which will completely replace
                 the existing product for this node.
+
         Examples:
             Getting the actions and product of a synthesis.
             >>> actions_and_product = rxn4chemistry_wrapper.get_reaction_settings(
