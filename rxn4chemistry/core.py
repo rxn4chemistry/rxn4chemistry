@@ -1167,7 +1167,7 @@ class RXN4ChemistryWrapper:
                 the existing product for this node.
         Examples:
             Getting the actions and product of a synthesis.
-            >>> actions, product = rxn4chemistry_wrapper.get_reaction_settings(
+            >>> actions_and_product = rxn4chemistry_wrapper.get_reaction_settings(
                             synthesis_id='5dd273618sid4897af',
                             node_id='5z7f6bgz6g95gcbh')
         """
