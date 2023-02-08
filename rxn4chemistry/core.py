@@ -1188,9 +1188,10 @@ class RXN4ChemistryWrapper:
          self, synthesis_id: str, node_id: str, actions: List[Dict[str, Any]], product: Dict[str, Any]
     ) -> requests.models.Response:
         """
-        Update the list of actions and products for a specific node. The given actions will completely replace
-        the existing actions for this node in the tree. The given products will completely replace
-        the existing product for this node in the tree
+        Update the list of actions and products for a specific node.
+        
+        The given actions will completely replace the existing actions for this node in the tree.
+        The given products will completely replace the existing product for this node in the tree.
 
         Args:
             synthesis_id (str): a synthesis identifier returned by
