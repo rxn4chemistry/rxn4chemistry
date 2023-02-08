@@ -1155,6 +1155,7 @@ class RXN4ChemistryWrapper:
     ) -> requests.models.Response:
         """
         Retrieves a the actions and product from a specified synthesis and node. 
+
         Args:
             synthesis_id (str): a synthesis identifier returned by
                 create_synthesis_from_sequence() method.
