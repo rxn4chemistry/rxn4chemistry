@@ -971,7 +971,9 @@ class RXN4ChemistryWrapper:
                 synthesis_id='5dd273618sid4897af'
             )
         """
+        raise DeprecationWarning("Deprecated method use get_node_ids() to get the node ids and get_reaction_settings() to get the actions of a synthesis procedure!")
 
+    
 
 
     def get_synthesis_execution_plan(
