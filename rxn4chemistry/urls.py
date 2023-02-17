@@ -22,7 +22,7 @@ class RXN4ChemistryRoutes:
         self._base_url = (
             base_url
             if base_url
-            else os.getenv("RXN4CHEMISTRY_BASE_URL", "https://rxn.res.ibm.com")
+            else os.getenv("RXN4CHEMISTRY_BASE_URL", "https://rxn.app.accelerate.science")
         )
         self._api_version = api_version
         self._update_routes()
