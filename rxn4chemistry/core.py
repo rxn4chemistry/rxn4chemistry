@@ -1125,7 +1125,7 @@ class RXN4ChemistryWrapper:
         """
         data = {"aiModel": ai_model, "reactions": reactions, }
         response = requests.post(
-            self.routes.reaction_properties_predictions_url,
+            self.routes.reaction_properties_predictions_from_smiles_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},

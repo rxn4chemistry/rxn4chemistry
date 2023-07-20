@@ -35,15 +35,15 @@ class RXN4ChemistryRoutes:
         self.models_url = "{}/{}".format(self.api_url, "ai-models")
         self.project_url = "{}/{}".format(self.api_url, "projects")
         self.predictions_url = "{}/{}".format(self.api_url, "predictions")
-        self.reaction_properties_predictions_url = "{}/{}/{}".format(
-            self.api_url, "reaction-properties-predictions", "from-smiles"
-        )
+        self.reaction_properties_predictions_url = "{}/{}".format(self.api_url, "reaction-properties-predictions")
         self.users_url = "{}/{}".format(self.api_url, "users")
         self.all_models_url = "{}/{}".format(self.models_url, "all")
         self.project_models_url = self.models_url
         self.attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "attempts"
         )
+
+
         self.retro_attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "retrosynthesis"
         )
@@ -103,6 +103,10 @@ class RXN4ChemistryRoutes:
         self.synthesis_start_url = "{}/{}/{}".format(
             self.synthesis_execution_url, "{synthesis_id}", "start"
         )
+        self.reaction_properties_predictions_from_smiles_url = "{}/{}".format(
+            self.reaction_properties_predictions_url, "from-smiles"
+        )
+
         self.users_id_url = "{}/{}".format(self.users_url, "{user_id}")
         self.users_current_url = "{}/{}".format(self.users_url, "current")
 
