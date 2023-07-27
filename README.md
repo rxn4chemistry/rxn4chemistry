@@ -59,9 +59,9 @@ rxn4chemistry_wrapper.create_project('test_wrapper')
 print(rxn4chemistry_wrapper.project_id)
 ```
 
-### Reaction prediction
+### Reaction outcome prediction
 
-Running a reaction prediction is as simple as:
+Running a reaction outcome prediction is as simple as:
 
 ```python
 response = rxn4chemistry_wrapper.predict_reaction(
@@ -120,6 +120,36 @@ results = rxn4chemistry_wrapper.get_predict_automatic_retrosynthesis_results(
 print(results['status'])
 # NOTE: upon 'SUCCESS' you can inspect the predicted retrosynthetic paths.
 print(results['retrosynthetic_paths'][0])
+```
+
+
+### Prediction of reaction properties (atom-to-atom mapping, reaction yield, ...)
+
+Prediction of atom-to-atom mapping (see [paper](https://doi.org/10.1126/sciadv.abe4166)):
+```python
+response = rxn4chemistry_wrapper.predict_reaction_properties(
+    reactions=[
+        "CC(C)S.CN(C)C=O.Fc1cccnc1F.O=C([O-])[O-].[K+].[K+]>>CC(C)Sc1ncccc1F",
+        "C1COCCO1.CC(C)(C)OC(=O)CONC(=O)NCc1cccc2ccccc12.Cl>>O=C(O)CONC(=O)NCc1cccc2ccccc12",
+        "C=CCN=C=S.CNCc1ccc(C#N)cc1.NNC(=O)c1cn2c(n1)CCCC2>>C=CCN1C(C2=CN3CCCCC3=N2)=NN=C1N(C)CC1=CC=C(C#N)C=C1",
+    ],
+    ai_model="atom-mapping-2020",
+)
+for predicted_mapping_dict in response["response"]["payload"]["content"]:
+    print(predicted_mapping_dict["value"])
+```
+
+Prediction of reaction yields (see [paper](https://doi.org/10.1088/2632-2153/abc81d)):
+```python
+response = rxn4chemistry_wrapper.predict_reaction_properties(
+    reactions=[
+        "Clc1ccccn1.Cc1ccc(N)cc1.O=S(=O)(O[Pd]1c2ccccc2-c2ccccc2N~1)C(F)(F)F.COc1ccc(OC)c(P([C@]23C[C@H]4C[C@H](C[C@H](C4)C2)C3)[C@]23C[C@H]4C[C@H](C[C@H](C4)C2)C3)c1-c1c(C(C)C)cc(C(C)C)cc1C(C)C.CCN=P(N=P(N(C)C)(N(C)C)N(C)C)(N(C)C)N(C)C.Cc1cc(C)on1>>Cc1ccc(Nc2ccccn2)cc1",
+        "Brc1ccccn1.Cc1ccc(N)cc1.O=S(=O)(O[Pd]1c2ccccc2-c2ccccc2N~1)C(F)(F)F.COc1ccc(OC)c(P([C@]23C[C@H]4C[C@H](C[C@H](C4)C2)C3)[C@]23C[C@H]4C[C@H](C[C@H](C4)C2)C3)c1-c1c(C(C)C)cc(C(C)C)cc1C(C)C.CCN=P(N=P(N(C)C)(N(C)C)N(C)C)(N(C)C)N(C)C.COC(=O)c1ccno1>>Cc1ccc(Nc2ccccn2)cc1",
+    ],
+    ai_model="yield-2020-08-10",
+)
+for predicted_yield_dict in response["response"]["payload"]["content"]:
+    print(predicted_yield_dict["value"])
 ```
 
 ### Create a synthesis and start it on the robot (or simulator)

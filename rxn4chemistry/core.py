@@ -1100,40 +1100,37 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def predict_reaction_properties_from_smiles(
+    def predict_reaction_properties(
         self,
         reactions: List[str],
-        ai_model: str = "atom-mapping-2020-08-20",
+        ai_model: str = "atom-mapping-2020",
     ) -> requests.models.Response:
         """
-        Launch prediction with given reactions SMILES.
+        Launch prediction with given reaction SMILES strings.
 
         Args:
-            ai_model (str, optional): model flavour and release. Defaults to
-                'atom-mapping-2020-08-20'.
-            reactions (List[str]): list of reaction smiles to predict reaction properties.
-
+            reactions: list of reaction smiles to predict reaction properties.
+            ai_model: model flavour and release. "atom-mapping-2020" for the default
+                atom mapping model, "yield-2020-08-10" for the default yield model.
         Returns:
-            dict: dictionary containing the
-            response.
+            dict: dictionary containing the response.
 
         Examples:
             Predict reaction properties by providing the reaction SMILES and aiModel:
 
             >>> response = rxn4chemistry_wrapper.predict_reaction_properties_from_smiles(
-                reactions=["CCCCCCO >> CCCCCCCO"],
-                ai_model="atom-mapping-2020-08-20"
-            )
+            ...     reactions=["CCCCCCO>>CCCCCCCO"],
+            ...     ai_model="atom-mapping-2020"
+            ... )
         """
-        raise NotImplementedError("This endpoint is not available for use yet.")
-        # data = {"aiModel": ai_model, "reactions": reactions, }
-        # response = requests.post(
-        #     self.routes.reaction_prediction_batch_url,
-        #     headers=self.headers,
-        #     data=json.dumps(data),
-        #     cookies={},
-        # )
-        # return response
+        data = {"aiModel": ai_model, "reactions": reactions, }
+        response = requests.post(
+            self.routes.reaction_properties_predictions_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
