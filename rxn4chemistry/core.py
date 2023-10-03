@@ -1310,7 +1310,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def predict_from_request(
+    def batch_executor_predict_from_request(
         self, inputs: List[Dict[str, List[str]]], delete_temporary_s3_files: bool = True,
     ) -> requests.models.Response:
         """
@@ -1325,10 +1325,13 @@ class RXN4ChemistryWrapper:
             The predictions and optionally the path of the output file in S3
             where they are stored.
 
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
         Examples:
             Run a batch prediction using the wrapper:
 
-            >>> rxn4chemistry_wrapper.predict_from_request(
+            >>> rxn4chemistry_wrapper.batch_executor_predict_from_request(
                 {
                     "content": {
                         inputs=[
@@ -1342,6 +1345,9 @@ class RXN4ChemistryWrapper:
                 }
             )
         """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
         data = {
             "content": {
                 "inputs": inputs,
@@ -1358,7 +1364,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def predict_from_uri(
+    def batch_executor_predict_from_uri(
         self, input_s3_path: str, output_s3_path: str,
     ) -> None:
         """
@@ -1368,10 +1374,13 @@ class RXN4ChemistryWrapper:
             input_s3_path: S3 path for input file.
             output_s3_path: S3 path for output file.
 
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
         Examples:
             Run a batch prediction using the wrapper:
 
-            >>> rxn4chemistry_wrapper.predict_from_uri(
+            >>> rxn4chemistry_wrapper.batch_executor_predict_from_uri(
                 {
                 "content": {
                     "input_s3_path": "",
@@ -1379,6 +1388,9 @@ class RXN4ChemistryWrapper:
                 }
             )
         """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
         data = {
             "content": {
                 "input_s3_path": input_s3_path,
@@ -1394,7 +1406,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def download_from_uri(
+    def batch_executor_download_from_uri(
         self, s3_path: str,
     ) -> requests.models.Response:
         """
@@ -1406,11 +1418,17 @@ class RXN4ChemistryWrapper:
         Returns:
             A presigned URI for download.
 
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
         Examples:
             Run an example using the wrapper:
 
-            >>> rxn4chemistry_wrapper.download_from_uri({"s3_path": ""})
+            >>> rxn4chemistry_wrapper.batch_executor_download_from_uri({"s3_path": ""})
         """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
         data = {
             "s3_path": s3_path
         }
@@ -1424,7 +1442,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def read_from_uri(
+    def batch_executor_read_from_uri(
         self, s3_path: str,
     ) -> requests.models.Response:
         """
@@ -1436,11 +1454,17 @@ class RXN4ChemistryWrapper:
         Returns:
             The list of lines in the file.
 
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
         Examples:
             Run an example using the wrapper:
 
-            >>> rxn4chemistry_wrapper.read_from_uri({"s3_path": ""})
+            >>> rxn4chemistry_wrapper.batch_executor_read_from_uri({"s3_path": ""})
         """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
         data = {
             "s3_path": s3_path
         }
