@@ -51,6 +51,7 @@ class RXN4ChemistryWrapper:
         api_key: str,
         project_id: Optional[str] = None,
         base_url: Optional[str] = None,
+        batch_executor_base_url: Optional[str] = None,
     ):
         """
         RXN4ChemistryWrapper constructor.
@@ -60,6 +61,8 @@ class RXN4ChemistryWrapper:
             project_id (str, optional): project identifier. Defaults to None.
             base_url (str, optional): base url for the service. If not provided it will default to
                 the environment variable RXN4CHEMISTRY_BASE_URL or https://rxn.res.ibm.com.
+            batch_executor_base_url (str, optional): base url for the batch executor service. If not provided
+                it will default to the environment variable BATCH_EXECUTOR_BASE_URL.
 
         Examples:
             Initialize the wrapper by simply providing an API key:
@@ -70,7 +73,7 @@ class RXN4ChemistryWrapper:
         self._api_key = api_key
         self.project_id = project_id
         self.headers = self._construct_headers()
-        self.routes = RXN4ChemistryRoutes(base_url)
+        self.routes = RXN4ChemistryRoutes(base_url, batch_executor_base_url)
 
     def set_base_url(self, base_url: str) -> None:
         """
@@ -80,6 +83,15 @@ class RXN4ChemistryWrapper:
             base_url (str): base url for the service to set.
         """
         self.routes.base_url = base_url
+
+    def set_batch_executor_base_url(self, batch_executor_base_url: str) -> None:
+        """
+        Set base url for the RXN batch-executor service.
+
+        Args:
+            batch_executor_base_url (str): base url for the service to set.
+        """
+        self.routes.batch_executor_base_url = batch_executor_base_url
 
     def _construct_headers(self) -> dict:
         """
@@ -1292,6 +1304,174 @@ class RXN4ChemistryWrapper:
             ),
             headers=self.headers,
             data=json.dumps({"actions": actions, "product": product}),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def batch_executor_predict_from_request(
+        self, inputs: List[Dict[str, List[str]]], delete_temporary_s3_files: bool = True,
+    ) -> requests.models.Response:
+        """
+        Run a batch prediction from reactions specified directly in
+            the request body.
+
+        Args:
+            inputs: List with precursors and products.
+            delete_temporary_s3_files: Boolean to delete temporary s3 files.
+
+        Returns:
+            The predictions and optionally the path of the output file in S3
+            where they are stored.
+
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
+        Examples:
+            Run a batch prediction using the wrapper:
+
+            >>> rxn4chemistry_wrapper.batch_executor_predict_from_request(
+                {
+                    "content": {
+                        inputs=[
+                            {
+                                precursors: [],
+                                products: []
+                            }
+                        ],
+                        delete_temporary_s3_files=True
+                    }
+                }
+            )
+        """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
+        data = {
+            "content": {
+                "inputs": inputs,
+                "delete_temporary_s3_files": delete_temporary_s3_files,
+            }
+        }
+        response = requests.post(
+            self.routes.batch_executor_predict_from_request_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def batch_executor_predict_from_uri(
+        self, input_s3_path: str, output_s3_path: str,
+    ) -> None:
+        """
+        Run a batch prediction from a file in s3.
+
+        Args:
+            input_s3_path: S3 path for input file.
+            output_s3_path: S3 path for output file.
+
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
+        Examples:
+            Run a batch prediction using the wrapper:
+
+            >>> rxn4chemistry_wrapper.batch_executor_predict_from_uri(
+                {
+                "content": {
+                    "input_s3_path": "",
+                    "output_s3_path": ""
+                }
+            )
+        """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
+        data = {
+            "content": {
+                "input_s3_path": input_s3_path,
+                "output_s3_path": output_s3_path
+            }
+        }
+        requests.post(
+            self.routes.batch_executor_predict_from_uri_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def batch_executor_download_from_uri(
+        self, s3_path: str,
+    ) -> requests.models.Response:
+        """
+        Creates a presigned URI for downloading a file in S3.
+
+        Args:
+            s3_path: a s3 uri.
+
+        Returns:
+            A presigned URI for download.
+
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
+        Examples:
+            Run an example using the wrapper:
+
+            >>> rxn4chemistry_wrapper.batch_executor_download_from_uri({"s3_path": ""})
+        """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
+        data = {
+            "s3_path": s3_path
+        }
+        response = requests.get(
+            self.routes.batch_executor_download_from_uri_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def batch_executor_read_from_uri(
+        self, s3_path: str,
+    ) -> requests.models.Response:
+        """
+        Read the content of an input/output file in S3.
+
+        Args:
+            s3_path: a s3 uri.
+
+        Returns:
+            The list of lines in the file.
+
+        Raises:
+            ValueError: in case the batch executor url is not set.
+
+        Examples:
+            Run an example using the wrapper:
+
+            >>> rxn4chemistry_wrapper.batch_executor_read_from_uri({"s3_path": ""})
+        """
+        if self.routes.batch_executor_base_url is None:
+            raise ValueError("Batch executor endpoints are not configured correctly.")
+
+        data = {
+            "s3_path": s3_path
+        }
+        response = requests.get(
+            self.routes.batch_executor_read_from_uri_url,
+            headers=self.headers,
+            data=json.dumps(data),
             cookies={},
         )
         return response
