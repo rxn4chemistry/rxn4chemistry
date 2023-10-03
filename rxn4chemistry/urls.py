@@ -9,13 +9,15 @@ class RXN4ChemistryRoutes:
     Routes for RXN for Chemistry service.
     """
 
-    def __init__(self, base_url: Optional[str] = None, api_version: str = "v1") -> None:
+    def __init__(self, base_url: Optional[str] = None, batch_executor_base_url: Optional[str] = None, api_version: str = "v1") -> None:
         """
         Initialize the routes.
 
         Args:
             base_url (str, optional): base url for the service. If not provided it will default to
                 the environment variable RXN4CHEMISTRY_BASE_URL or https://rxn.res.ibm.com.
+            batch_executor_base_url (str, optional): base url for the batch executor service. If not provided
+                it will default to the environment variable BATCH_EXECUTOR_BASE_URL.
             api_version (str, optional): api version. If not provided it will default to
                 v1.
         """
@@ -23,6 +25,11 @@ class RXN4ChemistryRoutes:
             base_url
             if base_url
             else os.getenv("RXN4CHEMISTRY_BASE_URL", "https://rxn.app.accelerate.science")
+        )
+        self._batch_executor_base_url = (
+            batch_executor_base_url
+            if batch_executor_base_url
+            else os.getenv("BATCH_EXECUTOR_BASE_URL")
         )
         self._api_version = api_version
         self._update_routes()
@@ -42,7 +49,6 @@ class RXN4ChemistryRoutes:
         self.attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "attempts"
         )
-
 
         self.retro_attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "retrosynthesis"
@@ -110,6 +116,22 @@ class RXN4ChemistryRoutes:
         self.users_id_url = "{}/{}".format(self.users_url, "{user_id}")
         self.users_current_url = "{}/{}".format(self.users_url, "current")
 
+        self.batch_executor_predict_from_request_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/predict-from-request"
+        )
+
+        self.batch_executor_predict_from_uri_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/predict-from-uri"
+        )
+
+        self.batch_executor_download_from_uri_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/download-from-uri"
+        )
+
+        self.batch_executor_read_from_uri_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/read-from-uri"
+        )
+
     @property
     def base_url(self) -> str:
         """
@@ -129,4 +151,25 @@ class RXN4ChemistryRoutes:
             value (str): bease url to set.
         """
         self._base_url = value
+        self._update_routes()
+
+    @property
+    def batch_executor_base_url(self) -> str:
+        """
+        Get the base url for the RXN for Chemistry service.
+
+        Returns:
+            str: base url for the service.
+        """
+        return self._batch_executor_base_url
+
+    @batch_executor_base_url.setter
+    def batch_executor_base_url(self, value: str) -> None:
+        """
+        Set the base url for the RXN for Chemistry service.
+
+        Args:
+            value (str): bease url to set.
+        """
+        self._batch_executor_base_url = value
         self._update_routes()
