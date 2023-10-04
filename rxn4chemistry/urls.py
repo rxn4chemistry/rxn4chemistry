@@ -1,5 +1,6 @@
 """URL routes for IBM RXN for Chemistry API."""
 from __future__ import absolute_import, division, print_function, unicode_literals
+
 import os
 from typing import Optional
 
@@ -9,7 +10,12 @@ class RXN4ChemistryRoutes:
     Routes for RXN for Chemistry service.
     """
 
-    def __init__(self, base_url: Optional[str] = None, batch_executor_base_url: Optional[str] = None, api_version: str = "v1") -> None:
+    def __init__(
+        self,
+        base_url: Optional[str] = None,
+        batch_executor_base_url: Optional[str] = None,
+        api_version: str = "v1",
+    ) -> None:
         """
         Initialize the routes.
 
@@ -24,7 +30,9 @@ class RXN4ChemistryRoutes:
         self._base_url = (
             base_url
             if base_url
-            else os.getenv("RXN4CHEMISTRY_BASE_URL", "https://rxn.app.accelerate.science")
+            else os.getenv(
+                "RXN4CHEMISTRY_BASE_URL", "https://rxn.app.accelerate.science"
+            )
         )
         self._batch_executor_base_url = (
             batch_executor_base_url
@@ -42,7 +50,9 @@ class RXN4ChemistryRoutes:
         self.models_url = "{}/{}".format(self.api_url, "ai-models")
         self.project_url = "{}/{}".format(self.api_url, "projects")
         self.predictions_url = "{}/{}".format(self.api_url, "predictions")
-        self.reaction_properties_predictions_url = "{}/{}".format(self.api_url, "reaction-properties-predictions")
+        self.reaction_properties_predictions_url = "{}/{}".format(
+            self.api_url, "reaction-properties-predictions"
+        )
         self.users_url = "{}/{}".format(self.api_url, "users")
         self.all_models_url = "{}/{}".format(self.models_url, "all")
         self.project_models_url = self.models_url
@@ -82,14 +92,14 @@ class RXN4ChemistryRoutes:
         self.retrosynthesis_sequence_pdf_url = "{}/sequences/{}/download-pdf".format(
             self.retrosynthesis_prediction_results_url, "{sequence_id}"
         )
-        self.paragraph2actions_url = "{}/{}".format(
-            self.api_url, "paragraph-actions"
-        )
-        self.synthesis_url = "{}/{}".format(
-            self.api_url, "synthesis"
-        )
-        self.synthesis_reaction_setting_url =  "{}/{}/{}/{}/{}".format(
-            self.synthesis_url, "{synthesis_id}", "node", "{node_id}","reaction-settings"
+        self.paragraph2actions_url = "{}/{}".format(self.api_url, "paragraph-actions")
+        self.synthesis_url = "{}/{}".format(self.api_url, "synthesis")
+        self.synthesis_reaction_setting_url = "{}/{}/{}/{}/{}".format(
+            self.synthesis_url,
+            "{synthesis_id}",
+            "node",
+            "{node_id}",
+            "reaction-settings",
         )
         self.synthesis_procedure_url = "{}/{}".format(
             self.synthesis_url, "{synthesis_id}"
@@ -130,6 +140,22 @@ class RXN4ChemistryRoutes:
 
         self.batch_executor_read_from_uri_url = "{}/{}".format(
             self._batch_executor_base_url, f"rxn/read-from-uri"
+        )
+
+        self.batch_executor_job_id_to_status_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/get-job-status"
+        )
+
+        self.batch_executor_predict_from_request_via_job_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/predict-from-request-via-job"
+        )
+
+        self.batch_executor_predict_from_uri_via_job_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/predict-from-uri-via-job"
+        )
+
+        self.batch_executor_job_id_to_time_url = "{}/{}".format(
+            self._batch_executor_base_url, f"rxn/get-job-time"
         )
 
     @property

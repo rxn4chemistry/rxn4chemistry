@@ -306,4 +306,7 @@ def reaction_settings_on_success(response: requests.models.Response) -> dict:
     """
     response_dict = response.json()
 
-    return {"actions": response_dict["payload"]["actions"], "product": response_dict["payload"]["product"]}
+    return {
+        "actions": response_dict["payload"]["actions"],
+        "product": response_dict["payload"]["product"],
+    }
