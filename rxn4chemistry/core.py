@@ -1316,164 +1316,6 @@ class RXN4ChemistryWrapper:
         )
         return response
 
-    @response_handling(success_status_code=200, on_success=default_on_success)
-    @ibm_rxn_api_limits
-    def batch_executor_predict_from_request(
-        self,
-        inputs: List[Dict[str, List[str]]],
-        batch_size: int,
-        top_n: int,
-        task: str,
-        model_type: str,
-        model_tag: str,
-        s3_batch_folder: str = "batches/",
-        s3_pred_folder: str = "batches_predictions/",
-        delete_temporary_s3_files: bool = True,
-    ) -> requests.models.Response:
-        """
-        Run a batch prediction from reactions specified directly in
-            the request body.
-
-        Args:
-            inputs: List with precursors and products.
-            batch_size: Limits number of elements per batch.
-            top_n: Defines top_n.
-            task: Identifies the task.
-            model_type: Defines the model type.
-            model_tag: Specifies the tag of the model.
-            s3_batch_folder: Defines a folder on s3 for the batch.
-            s3_pred_folder: Defines a folder on s3 for the prediction.
-            delete_temporary_s3_files: Boolean to delete temporary s3 files.
-
-        Returns:
-            The predictions and optionally the path of the output file in S3
-            where they are stored.
-
-        Raises:
-            ValueError: in case the batch executor url is not set.
-
-        Examples:
-            Run a batch prediction using the wrapper:
-
-            >>> rxn4chemistry_wrapper.batch_executor_predict_from_request(
-                {
-                    "batch_size": 10,
-                    "top_n": 5,
-                    "task": "",
-                    "model_type": "",
-                    "model_tag": "",
-                    "s3_batch_folder": "batches/",
-                    "s3_pred_folder": "batches_predictions/",
-                    "content": {
-                        inputs=[
-                            {
-                                precursors: [],
-                                products: []
-                            }
-                        ],
-                        delete_temporary_s3_files=True
-                    }
-                }
-            )
-        """
-        if self.routes.batch_executor_base_url is None:
-            raise ValueError("Batch executor endpoints are not configured correctly.")
-
-        data = {
-            "batch_size": batch_size,
-            "top_n": top_n,
-            "task": task,
-            "model_type": model_type,
-            "model_tag": model_tag,
-            "s3_batch_folder": s3_batch_folder,
-            "s3_pred_folder": s3_pred_folder,
-            "content": {
-                "inputs": inputs,
-                "delete_temporary_s3_files": delete_temporary_s3_files,
-            },
-        }
-        response = requests.post(
-            self.routes.batch_executor_predict_from_request_url,
-            headers=self.headers,
-            data=json.dumps(data),
-            cookies={},
-        )
-        return response
-
-    @response_handling(success_status_code=200, on_success=default_on_success)
-    @ibm_rxn_api_limits
-    def batch_executor_predict_from_uri(
-        self,
-        input_s3_path: str,
-        output_s3_path: str,
-        batch_size: int,
-        top_n: int,
-        task: str,
-        model_type: str,
-        model_tag: str,
-        s3_batch_folder: str = "batches/",
-        s3_pred_folder: str = "batches_predictions/",
-    ) -> None:
-        """
-        Run a batch prediction from a file in s3.
-
-        Args:
-            input_s3_path: S3 path for input file.
-            output_s3_path: S3 path for output file.
-            batch_size: Limits number of elements per batch.
-            top_n: Defines top_n.
-            task: Identifies the task.
-            model_type: Defines the model type.
-            model_tag: Specifies the tag of the model.
-            s3_batch_folder: Defines a folder on s3 for the batch.
-            s3_pred_folder: Defines a folder on s3 for the prediction.
-
-        Raises:
-            ValueError: in case the batch executor url is not set.
-
-        Examples:
-            Run a batch prediction using the wrapper:
-
-            >>> rxn4chemistry_wrapper.batch_executor_predict_from_uri(
-                {
-                    "batch_size": 10,
-                    "top_n": 5,
-                    "task": "",
-                    "model_type": "",
-                    "model_tag": "",
-                    "s3_batch_folder": "batches/",
-                    "s3_pred_folder": "batches_predictions/",
-                    "content": {
-                        "input_s3_path": "",
-                        "output_s3_path": ""
-                    }
-                }
-            )
-        """
-        if self.routes.batch_executor_base_url is None:
-            raise ValueError("Batch executor endpoints are not configured correctly.")
-
-        data = {
-            "batch_size": batch_size,
-            "top_n": top_n,
-            "task": task,
-            "model_type": model_type,
-            "model_tag": model_tag,
-            "s3_batch_folder": s3_batch_folder,
-            "s3_pred_folder": s3_pred_folder,
-            "content": {
-                "input_s3_path": input_s3_path,
-                "output_s3_path": output_s3_path,
-            },
-        }
-        requests.post(
-            self.routes.batch_executor_predict_from_uri_url,
-            headers=self.headers,
-            data=json.dumps(data),
-            cookies={},
-        )
-
-    @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def batch_executor_download_from_uri(
         self,
@@ -1494,21 +1336,20 @@ class RXN4ChemistryWrapper:
         Examples:
             Run an example using the wrapper:
 
-            >>> rxn4chemistry_wrapper.batch_executor_download_from_uri({"s3_path": ""})
+            >>> rxn4chemistry_wrapper.batch_executor_download_from_uri(s3_path="mock/dummy_input.jsonl")
         """
         if self.routes.batch_executor_base_url is None:
             raise ValueError("Batch executor endpoints are not configured correctly.")
 
-        data = {"s3_path": s3_path}
+        params = {"s3_path": s3_path}
         response = requests.get(
             self.routes.batch_executor_download_from_uri_url,
             headers=self.headers,
-            data=json.dumps(data),
+            params=params,
             cookies={},
         )
         return response
 
-    @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def batch_executor_read_from_uri(
         self,
@@ -1529,21 +1370,20 @@ class RXN4ChemistryWrapper:
         Examples:
             Run an example using the wrapper:
 
-            >>> rxn4chemistry_wrapper.batch_executor_read_from_uri({"s3_path": ""})
+            >>> rxn4chemistry_wrapper.batch_executor_read_from_uri(s3_path="mock/dummy_input.jsonl")
         """
         if self.routes.batch_executor_base_url is None:
             raise ValueError("Batch executor endpoints are not configured correctly.")
 
-        data = {"s3_path": s3_path}
+        params = {"s3_path": s3_path}
         response = requests.get(
             self.routes.batch_executor_read_from_uri_url,
             headers=self.headers,
-            data=json.dumps(data),
+            params=params,
             cookies={},
         )
         return response
 
-    @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def batch_executor_job_id_to_status(
         self,
@@ -1569,11 +1409,11 @@ class RXN4ChemistryWrapper:
         if self.routes.batch_executor_base_url is None:
             raise ValueError("Batch executor endpoints are not configured correctly.")
 
-        data = {"job_id_list": job_id_list}
+        params = {"job_id_list": job_id_list}
         response = requests.get(
             self.routes.batch_executor_job_id_to_status_url,
             headers=self.headers,
-            data=json.dumps(data),
+            params=params,
             cookies={},
         )
         return response
@@ -1584,7 +1424,7 @@ class RXN4ChemistryWrapper:
         self,
         inputs: List[Dict[str, List[str]]],
         batch_size: int,
-        top_n: int,
+        topn: int,
         task: str,
         model_type: str,
         model_tag: str,
@@ -1599,7 +1439,7 @@ class RXN4ChemistryWrapper:
         Args:
             inputs: List with precursors and products.
             batch_size: Limits number of elements per batch.
-            top_n: Defines top_n.
+            topn: Defines topn.
             task: Identifies the task.
             model_type: Defines the model type.
             model_tag: Specifies the tag of the model.
@@ -1620,7 +1460,7 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.batch_executor_predict_from_request_via_job(
                 {
                     "batch_size": 10,
-                    "top_n": 5,
+                    "topn": 5,
                     "task": "",
                     "model_type": "",
                     "model_tag": "",
@@ -1643,7 +1483,7 @@ class RXN4ChemistryWrapper:
 
         data = {
             "batch_size": batch_size,
-            "top_n": top_n,
+            "topn": topn,
             "task": task,
             "model_type": model_type,
             "model_tag": model_tag,
@@ -1662,20 +1502,19 @@ class RXN4ChemistryWrapper:
         )
         return response
 
-    @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def batch_executor_predict_from_uri_via_job(
         self,
         input_s3_path: str,
         output_s3_path: str,
         batch_size: int,
-        top_n: int,
+        topn: int,
         task: str,
         model_type: str,
         model_tag: str,
         s3_batch_folder: str = "batches/",
         s3_pred_folder: str = "batches_predictions/",
-    ) -> None:
+    ) -> requests.models.Response:
         """
         Run a batch prediction from a file in s3 using Ray's JobSubmissionClient.
 
@@ -1683,7 +1522,7 @@ class RXN4ChemistryWrapper:
             input_s3_path: S3 path for input file.
             output_s3_path: S3 path for output file.
             batch_size: Limits number of elements per batch.
-            top_n: Defines top_n.
+            topn: Defines topn.
             task: Identifies the task.
             model_type: Defines the model type.
             model_tag: Specifies the tag of the model.
@@ -1699,7 +1538,7 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.batch_executor_predict_from_uri_via_job(
                 {
                     "batch_size": 10,
-                    "top_n": 5,
+                    "topn": 5,
                     "task": "",
                     "model_type": "",
                     "model_tag": "",
@@ -1717,7 +1556,7 @@ class RXN4ChemistryWrapper:
 
         data = {
             "batch_size": batch_size,
-            "top_n": top_n,
+            "topn": topn,
             "task": task,
             "model_type": model_type,
             "model_tag": model_tag,
@@ -1728,14 +1567,14 @@ class RXN4ChemistryWrapper:
                 "output_s3_path": output_s3_path,
             },
         }
-        requests.post(
+        response = requests.post(
             self.routes.batch_executor_predict_from_uri_via_job_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
         )
+        return response
 
-    @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
     def batch_executor_job_id_to_time(
         self,
@@ -1761,11 +1600,11 @@ class RXN4ChemistryWrapper:
         if self.routes.batch_executor_base_url is None:
             raise ValueError("Batch executor endpoints are not configured correctly.")
 
-        data = {"job_id_list": job_id_list}
+        params = {"job_id_list": job_id_list}
         response = requests.get(
             self.routes.batch_executor_job_id_to_time_url,
             headers=self.headers,
-            data=json.dumps(data),
+            params=params,
             cookies={},
         )
         return response

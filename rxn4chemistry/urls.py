@@ -126,14 +126,6 @@ class RXN4ChemistryRoutes:
         self.users_id_url = "{}/{}".format(self.users_url, "{user_id}")
         self.users_current_url = "{}/{}".format(self.users_url, "current")
 
-        self.batch_executor_predict_from_request_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/predict-from-request"
-        )
-
-        self.batch_executor_predict_from_uri_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/predict-from-uri"
-        )
-
         self.batch_executor_download_from_uri_url = "{}/{}".format(
             self._batch_executor_base_url, f"rxn/download-from-uri"
         )
