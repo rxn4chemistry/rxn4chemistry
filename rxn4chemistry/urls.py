@@ -127,27 +127,27 @@ class RXN4ChemistryRoutes:
         self.users_current_url = "{}/{}".format(self.users_url, "current")
 
         self.batch_executor_download_from_uri_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/download-from-uri"
+            self._batch_executor_base_url, "download-from-uri"
         )
 
         self.batch_executor_read_from_uri_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/read-from-uri"
+            self._batch_executor_base_url, "read-from-uri"
         )
 
         self.batch_executor_job_id_to_status_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/get-job-status"
+            self._batch_executor_base_url, "list-jobs-status"
         )
 
         self.batch_executor_predict_from_request_via_job_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/predict-from-request-via-job"
+            self._batch_executor_base_url, "predict-from-request-via-job"
         )
 
         self.batch_executor_predict_from_uri_via_job_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/predict-from-uri-via-job"
+            self._batch_executor_base_url, "predict-from-uri-via-job"
         )
 
         self.batch_executor_job_id_to_time_url = "{}/{}".format(
-            self._batch_executor_base_url, f"rxn/get-job-time"
+            self._batch_executor_base_url, "list-jobs-time"
         )
 
     @property
