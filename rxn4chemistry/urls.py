@@ -139,11 +139,11 @@ class RXN4ChemistryRoutes:
         )
 
         self.batch_executor_predict_from_request_via_job_url = "{}/{}".format(
-            self._batch_executor_base_url, "predict-from-request-via-job"
+            self._batch_executor_base_url, "predict-from-request"
         )
 
         self.batch_executor_predict_from_uri_via_job_url = "{}/{}".format(
-            self._batch_executor_base_url, "predict-from-uri-via-job"
+            self._batch_executor_base_url, "predict-from-uri"
         )
 
         self.batch_executor_job_id_to_time_url = "{}/{}".format(
