@@ -1608,3 +1608,8 @@ class RXN4ChemistryWrapper:
             cookies={},
         )
         return response
+
+    @response_handling(success_status_code=200, on_success=prediction_id_on_success)
+    @ibm_rxn_api_limits
+    def predict_reagents(self, reagent=str, product=str) -> requests.models.Response:
+        pass
