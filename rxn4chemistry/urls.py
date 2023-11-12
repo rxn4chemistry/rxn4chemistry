@@ -50,6 +50,13 @@ class RXN4ChemistryRoutes:
         self.models_url = "{}/{}".format(self.api_url, "ai-models")
         self.project_url = "{}/{}".format(self.api_url, "projects")
         self.predictions_url = "{}/{}".format(self.api_url, "predictions")
+        self.reaction_completion_url = "{}/{}/{}".format(
+            self.project_url, "{project_id}", "reaction-completion-predictions"
+        )
+        self.reaction_completion_result_url = "{}/{}".format(
+            self.reaction_completion_url.format(project_id="{project_id}"),
+            "{prediction_id}"
+        )
         self.reaction_properties_predictions_url = "{}/{}".format(
             self.api_url, "reaction-properties-predictions"
         )
@@ -66,7 +73,7 @@ class RXN4ChemistryRoutes:
         self.retrosynthesis_url = "{}/{}".format(self.api_url, "retrosynthesis")
         self.reaction_prediction_url = "{}/{}".format(self.predictions_url, "pr")
         self.reaction_prediction_results_url = "{}/{}".format(
-            self.predictions_url, "{prediction_id}"
+            self.predictions_url.format("{project_id}"), "{prediction_id}"
         )
         self.reaction_prediction_alternative_results_url = "{}/{}".format(
             self.predictions_url, "prb"

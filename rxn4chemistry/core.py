@@ -5,6 +5,7 @@ import copy
 import json
 import logging
 from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
 
 import requests
 
@@ -1611,5 +1612,73 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=prediction_id_on_success)
     @ibm_rxn_api_limits
-    def predict_reagents(self, reagent=str, product=str) -> requests.models.Response:
-        pass
+    def predict_reagents(
+            self,
+            reagent: str,
+            product: str,
+            ai_model: str = "2020-11-24"
+        ) -> requests.models.Response:
+        """
+        Plan and execute a Reaction completion starting from an incomplete formula
+
+        Args:
+            reagent  (str): represents the incomplete reagents in SMILES format
+            product  (str): represents the products of the reactino in SMILES format
+            ai_model (str): model release. Defaults to '2020-10-20'
+
+        Returns:
+            dict: dictionary containing the prediction identifier and the
+            response.
+
+        Raises:
+            ValueError: in case self.project_id is not set.
+
+        Examples:
+            Predict a reaction by providing the reaction SMILES:
+
+            >>> response = rxn4chemistry_wrapper.predict_reagents(
+                '[CH3:1][O:2][C:3]1[CH:9]=[C:8]([CH3:10])[CH:7]=[C:6]([O:11][CH3:12])[C:4]=1[NH2:5]',
+                '[CH3:12][O:11][C:6]1[CH:7]=[C:8]([CH3:10])[CH:9]=[C:3]([O:2][CH3:1])[C:4]=1[NH:5][C:20](=[O:25])[CH2:21][CH:22]([CH3:24])[CH3:23]'
+            )
+        """
+        if self.project_id is None:
+            raise ValueError("Project identifier has to be set first.")
+        data = {"reactants": reagent, "product": product, "aiModel": ai_model}
+        response = requests.post(
+            self.routes.reaction_completion_url.format(project_id=self.project_id),
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={}
+        )
+        return response
+        
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def get_predict_reagents_results(self, prediction_id: str) -> requests.models.Response:
+        """
+        Get the predict reagent results for a prediction_id.
+
+        Args:
+            prediction_id (str): prediction identifier.
+
+        Returns:
+            dict: dictionary containing the prediction results.
+
+        Examples:
+            Get results from a reaction prediction by providing the prediction
+            identifier:
+
+            >>> result = rxn4chemistry_wrapper.get_predict_reaction_results(
+                response['response']['payload']['id']
+                # or response['prediction_id']
+            )
+        """
+        response = requests.get(
+            self.routes.reaction_completion_result_url.format(
+                project_id=self.project_id,
+                prediction_id=prediction_id
+            ),
+            headers=self.headers,
+            cookies={},
+        )
+        return response
