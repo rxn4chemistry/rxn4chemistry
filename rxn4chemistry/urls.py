@@ -60,6 +60,12 @@ class RXN4ChemistryRoutes:
         self.reaction_properties_predictions_url = "{}/{}".format(
             self.api_url, "reaction-properties-predictions"
         )
+        self.file_upload_url = "{}/{}".format(
+            self.api_url, "file-entries/upload"
+        )
+        self.optical_chemical_recognition_url = "{}/{}".format(
+            self.api_url, "optical-chemical-recognition"
+        )
         self.users_url = "{}/{}".format(self.api_url, "users")
         self.all_models_url = "{}/{}".format(self.models_url, "all")
         self.project_models_url = self.models_url

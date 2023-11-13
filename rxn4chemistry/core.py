@@ -4,8 +4,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import copy
 import json
 import logging
+import os
 from typing import Any, Dict, List, Optional, Tuple
 from pathlib import Path
+import mimetypes
 
 import requests
 
@@ -1680,5 +1682,78 @@ class RXN4ChemistryWrapper:
             ),
             headers=self.headers,
             cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def upload_file(self, path: Path) -> requests.models.Response | FileNotFoundError:
+        """
+        Upload (images) to the RXN backend
+
+        Args:
+            path  (Path): location of the file to be uploaded
+
+        Returns:
+            dict: dictionary containing the response.
+
+        Raises:
+            FileNotFoundError: in case the file input does not exist
+
+        Examples:
+            >>> response = rxn4chemistry_wrapper.upload_file(
+                "/home/johnsmith/Downloads/example-data.png"
+            )
+            fileid = response["response"]["payload"]["id"]
+        """
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"{path} does not exist")
+
+        basefilename = os.path.basename(path)
+        mimetype, _ = mimetypes.guess_type(path)
+
+        if mimetype is None:
+            raise Exception(f"Cannot detect mimetype for {path}")
+
+        files=[
+            ('file-0', (basefilename, open(path,'rb'), mimetype))
+        ]
+        headers = self.headers.copy()
+        # Cannot include this header KV when doing a multipart upload
+        headers.pop("Content-Type")
+
+        response = requests.post(
+            self.routes.file_upload_url,
+            headers=headers,
+            files=files
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def digitize_reaction(self, file_id: str) -> requests.models.Response:
+        """
+        Upload (images) to the RXN backend
+
+        Args:
+            path  (Path): location of the file to be uploaded
+
+        Returns:
+            dict: dictionary containing the response.
+
+        Raises:
+            ValueError: in case the file_id is an empty string
+
+        Examples:
+            >>> response = rxn4chemistry_wrapper.digitize_reaction(file_id)
+        """
+        if file_id == "":
+            raise ValueError("file_id is blank")
+
+        data = {"fileId": file_id, "annotations": []}
+        response = requests.post(
+            self.routes.optical_chemical_recognition_url,
+            headers=self.headers,
+            data=json.dumps(data)
         )
         return response
