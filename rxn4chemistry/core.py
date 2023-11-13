@@ -1733,10 +1733,11 @@ class RXN4ChemistryWrapper:
     @ibm_rxn_api_limits
     def digitize_reaction(self, file_id: str) -> requests.models.Response:
         """
-        Upload (images) to the RXN backend
+        After the image has been updated, start the digitization of the reaction
 
         Args:
-            path  (Path): location of the file to be uploaded
+            file_id  (str): string id that was provided by the backend when
+                image was updaloaded
 
         Returns:
             dict: dictionary containing the response.
