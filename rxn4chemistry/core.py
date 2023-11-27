@@ -146,9 +146,13 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def list_all_projects(self) -> requests.models.Response:
+    def list_all_projects(self, page: Optional[int] = None, size: Optional[int] = None) -> requests.models.Response:
         """
         Get a list of all projects.
+
+        Args:
+            page (int): pagination start with 0
+            size (int): size of the pagation
 
         Returns:
             dict: dictionary listing the projects.
@@ -160,8 +164,15 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.list_all_projects()
             {...}
         """
+        params: dict[str, Any] = {"raw": {}}
+        if size is not None:
+            params.update({"size": size})
+        if page is not None:
+            params.update({"page": page})
+
         response = requests.get(
-            self.routes.project_url, headers=self.headers, cookies={}
+            self.routes.project_url, headers=self.headers, cookies={},
+            params=params
         )
         return response
 
