@@ -4,7 +4,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import copy
 import json
 import logging
+import os
 from typing import Any, Dict, List, Optional, Tuple
+from pathlib import Path
+import mimetypes
 
 import requests
 
@@ -143,9 +146,13 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def list_all_projects(self) -> requests.models.Response:
+    def list_all_projects(self, page: Optional[int] = None, size: Optional[int] = None) -> requests.models.Response:
         """
         Get a list of all projects.
+
+        Args:
+            page (int): pagination start with 0
+            size (int): size of the pagation
 
         Returns:
             dict: dictionary listing the projects.
@@ -157,8 +164,15 @@ class RXN4ChemistryWrapper:
             >>> rxn4chemistry_wrapper.list_all_projects()
             {...}
         """
+        params: dict[str, Any] = {"raw": {}}
+        if size is not None:
+            params.update({"size": size})
+        if page is not None:
+            params.update({"page": page})
+
         response = requests.get(
-            self.routes.project_url, headers=self.headers, cookies={}
+            self.routes.project_url, headers=self.headers, cookies={},
+            params=params
         )
         return response
 
@@ -1606,5 +1620,152 @@ class RXN4ChemistryWrapper:
             headers=self.headers,
             params=params,
             cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=prediction_id_on_success)
+    @ibm_rxn_api_limits
+    def predict_reagents(
+            self,
+            reagent: str,
+            product: str,
+            ai_model: str = "2020-11-24"
+        ) -> requests.models.Response:
+        """
+        Plan and execute a Reaction completion starting from an incomplete formula
+
+        Args:
+            reagent  (str): represents the incomplete reagents in SMILES format
+            product  (str): represents the products of the reactino in SMILES format
+            ai_model (str): model release. Defaults to '2020-10-20'
+
+        Returns:
+            dict: dictionary containing the prediction identifier and the
+            response.
+
+        Raises:
+            ValueError: in case self.project_id is not set.
+
+        Examples:
+            Predict a reaction by providing the reaction SMILES:
+
+            >>> response = rxn4chemistry_wrapper.predict_reagents(
+                '[CH3:1][O:2][C:3]1[CH:9]=[C:8]([CH3:10])[CH:7]=[C:6]([O:11][CH3:12])[C:4]=1[NH2:5]',
+                '[CH3:12][O:11][C:6]1[CH:7]=[C:8]([CH3:10])[CH:9]=[C:3]([O:2][CH3:1])[C:4]=1[NH:5][C:20](=[O:25])[CH2:21][CH:22]([CH3:24])[CH3:23]'
+            )
+        """
+        if self.project_id is None:
+            raise ValueError("Project identifier has to be set first.")
+        data = {"reactants": reagent, "product": product, "aiModel": ai_model}
+        response = requests.post(
+            self.routes.reaction_completion_url.format(project_id=self.project_id),
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={}
+        )
+        return response
+        
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def get_predict_reagents_results(self, prediction_id: str) -> requests.models.Response:
+        """
+        Get the predict reagent results for a prediction_id.
+
+        Args:
+            prediction_id (str): prediction identifier.
+
+        Returns:
+            dict: dictionary containing the prediction results.
+
+        Examples:
+            Get results from a reaction prediction by providing the prediction
+            identifier:
+
+            >>> result = rxn4chemistry_wrapper.get_predict_reaction_results(
+                response['response']['payload']['id']
+                # or response['prediction_id']
+            )
+        """
+        response = requests.get(
+            self.routes.reaction_completion_result_url.format(
+                project_id=self.project_id,
+                prediction_id=prediction_id
+            ),
+            headers=self.headers,
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def upload_file(self, path: Path) -> requests.models.Response | FileNotFoundError:
+        """
+        Upload (images) to the RXN backend
+
+        Args:
+            path  (Path): location of the file to be uploaded
+
+        Returns:
+            dict: dictionary containing the response.
+
+        Raises:
+            FileNotFoundError: in case the file input does not exist
+
+        Examples:
+            >>> response = rxn4chemistry_wrapper.upload_file(
+                "/home/johnsmith/Downloads/example-data.png"
+            )
+            fileid = response["response"]["payload"]["id"]
+        """
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"{path} does not exist")
+
+        basefilename = os.path.basename(path)
+        mimetype, _ = mimetypes.guess_type(path)
+
+        if mimetype is None:
+            raise Exception(f"Cannot detect mimetype for {path}")
+
+        files=[
+            ('file-0', (basefilename, open(path,'rb'), mimetype))
+        ]
+        headers = self.headers.copy()
+        # Cannot include this header KV when doing a multipart upload
+        headers.pop("Content-Type")
+
+        response = requests.post(
+            self.routes.file_upload_url,
+            headers=headers,
+            files=files
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def digitize_reaction(self, file_id: str) -> requests.models.Response:
+        """
+        After the image has been updated, start the digitization of the reaction
+
+        Args:
+            file_id  (str): string id that was provided by the backend when
+                image was updaloaded
+
+        Returns:
+            dict: dictionary containing the response.
+
+        Raises:
+            ValueError: in case the file_id is an empty string
+
+        Examples:
+            >>> response = rxn4chemistry_wrapper.digitize_reaction(file_id)
+        """
+        if file_id == "":
+            raise ValueError("file_id is blank")
+
+        data = {"fileId": file_id, "annotations": []}
+        response = requests.post(
+            self.routes.optical_chemical_recognition_url,
+            headers=self.headers,
+            data=json.dumps(data)
         )
         return response
