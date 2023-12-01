@@ -1698,7 +1698,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def upload_file(self, path: Path) -> requests.models.Response | FileNotFoundError:
+    def upload_file(self, path: Path) -> requests.models.Response:
         """
         Upload (images) to the RXN backend
 
