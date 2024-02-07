@@ -588,6 +588,7 @@ class RXN4ChemistryWrapper:
         max_steps: int = 3,
         nbeams: int = 10,
         pruning_steps: int = 2,
+        search_strategy: str = "hyper",
         ai_model: str = "2020-07-01",
     ) -> requests.models.Response:
         """
@@ -622,6 +623,7 @@ class RXN4ChemistryWrapper:
                 hyper-tree. Defaults to 10.
             pruning_steps (int, optional): number of interval steps to prune
                 the explored hyper-tree. Defaults to 2.
+            search_strategy (str, optional): strategy or the search. Defaults to "hyper".
             ai_model (str, optional): model release. Defaults to
                 '2020-07-01'.
 
@@ -641,6 +643,9 @@ class RXN4ChemistryWrapper:
         """
         if self.project_id is None:
             raise ValueError("Project identifier has to be set first.")
+        search_strategy = search_strategy.lower()
+        if search_strategy not in {"neb", "hyper"}:
+            search_strategy = "hyper"
         payload = {"projectId": self.project_id, "aiModel": ai_model}
         data = {
             "aiModel": ai_model,
@@ -655,6 +660,7 @@ class RXN4ChemistryWrapper:
                 "max_steps": max_steps,
                 "nbeams": nbeams,
                 "pruning_steps": pruning_steps,
+                "search_strategy": search_strategy
             },
             "product": product,
         }
