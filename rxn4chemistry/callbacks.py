@@ -16,6 +16,10 @@ MODEL_NAMES_MAPPING = {
     "SMILES2ACTIONS": "sequence-to-actions",
     "REACTION": "reaction-prediction-model",
     "RETROSYNTHESIS": "retrosynthesis-prediction-model",
+    "REACTIONPROPERTYPREDICTOR": "reaction-property-predictor",
+    "ATOMMAPPING": "reaction-property-atom-mapping",
+    "YIELD": "reaction-property-yield",
+    "FINGERPRINT": "reaction-property-fingerprint"
 }
 MODEL_FIELDS_MAPPING = {"name": "name"}
 
@@ -292,6 +296,38 @@ def model_listing_on_success(response: requests.models.Response) -> dict:
         for model_type, model_list in models.items()
         if model_type in MODEL_NAMES_MAPPING
     }
+
+
+def model_listing_by_scope_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning a supported model list.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    models = response_dict["payload"]["models"]
+    return {
+        model["name"]
+        for model in models
+    }
+
+
+def model_categories_on_success(response: requests.models.Response) -> dict:
+    """
+    Process the successful response of requests returning the payload containing the categories.
+
+    Args:
+        response (requests.models.Response): response from an API request.
+
+    Returns:
+        dict: dictionary representing the response.
+    """
+    response_dict = response.json()
+    return response_dict["payload"]
 
 
 def reaction_settings_on_success(response: requests.models.Response) -> dict:

@@ -15,12 +15,13 @@ from .callbacks import (
     automatic_retrosynthesis_results_on_success,
     default_on_success,
     model_listing_on_success,
+    model_listing_by_scope_on_success,
+    model_categories_on_success,
     paragraph_to_actions_on_success,
     predict_reaction_batch_on_success,
     prediction_id_on_success,
     reaction_settings_on_success,
     retrosynthesis_sequence_pdf,
-    synthesis_analysis_report_pdf,
     synthesis_execution_id_on_success,
     synthesis_execution_status_on_success,
     synthesis_id_on_success,
@@ -283,29 +284,86 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=model_listing_on_success)
     @ibm_rxn_api_limits
-    def list_models(self) -> requests.models.Response:
+    def list_models(self, project_id: Optional[str] = None) -> requests.models.Response:
         """
-        Get the models for the project that is currently configured.
+        Get the available models.
+
+        Args:
+            project_id (str, optional): list the models for a specific project.
 
         Returns:
             dict: dictionary containing the available models.
 
-        Raises:
-            ValueError: in case self.project_id is not set.
-
         Examples:
-            Get list of models supported in the project considered:
+            Get list of available models:
 
             >>> rxn4chemistry_wrapper.list_models()
             {...}
         """
-        if self.project_id is None:
-            raise ValueError("Project identifier has to be set first.")
 
         response = requests.get(
-            self.routes.project_models_url,
+            self.routes.models_url,
             headers=self.headers,
-            params={"project_id": self.project_id},
+            params={"projectId": project_id},
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=model_listing_by_scope_on_success)
+    @ibm_rxn_api_limits
+    def list_models_by_scope(self, scope: str, project_id: Optional[str] = None, category_name: Optional[str] = None) -> requests.models.Response:
+        """
+        Get the models available for a given scope.
+
+        Args:
+            scope (str): scope of the models.
+            project_id (str, optional): list the models for a specific project.
+            category_name (str, optional): list the models for a specific category.
+
+        Returns:
+            dict: dictionary containing the available models.
+
+        Examples:
+            Get list of models from the REACTIONPROPERTYPREDICTOR scope:
+
+            >>> rxn4chemistry_wrapper.list_models_by_scope(scope="REACTIONPROPERTYPREDICTOR")
+            {...}
+        """
+
+        response = requests.get(
+            self.routes.models_by_scope_url.format(
+                scope=scope,
+            ),
+            headers=self.headers,
+            params={"projectId": project_id, "categoryName": category_name},
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=model_categories_on_success)
+    @ibm_rxn_api_limits
+    def list_models_categories_by_scope(self, scope: str) -> requests.models.Response:
+        """
+        Get the model categories available for a given scope.
+
+        Args:
+            scope (str): scope of the models.
+
+        Returns:
+            dict: dictionary containing the available model categories.
+
+        Examples:
+            Get list of model categories from the REACTIONPROPERTYPREDICTOR scope:
+
+            >>> rxn4chemistry_wrapper.list_models_categories_by_scope(scope="REACTIONPROPERTYPREDICTOR")
+            {...}
+        """
+
+        response = requests.get(
+            self.routes.models_categories_by_scope_url.format(
+                scope=scope,
+            ),
+            headers=self.headers,
             cookies={},
         )
         return response

@@ -48,6 +48,10 @@ class RXN4ChemistryRoutes:
             self._base_url, f"rxn/api/api/{self._api_version}"
         )
         self.models_url = "{}/{}".format(self.api_url, "ai-models")
+        self.models_by_scope_url = "{}/{}".format(self.models_url, "{scope}")
+        self.models_categories_by_scope_url = "{}/{}".format(self.models_by_scope_url, "categories")
+        #self.all_models_url = "{}/{}".format(self.models_url, "all")
+        #self.project_models_url = self.models_url
         self.project_url = "{}/{}".format(self.api_url, "projects")
         self.predictions_url = "{}/{}".format(self.api_url, "predictions")
         self.reaction_completion_url = "{}/{}/{}".format(
@@ -67,8 +71,6 @@ class RXN4ChemistryRoutes:
             self.api_url, "optical-chemical-recognition"
         )
         self.users_url = "{}/{}".format(self.api_url, "users")
-        self.all_models_url = "{}/{}".format(self.models_url, "all")
-        self.project_models_url = self.models_url
         self.attempts_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "attempts"
         )
