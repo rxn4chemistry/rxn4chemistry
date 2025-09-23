@@ -15,6 +15,7 @@ MODEL_NAMES_MAPPING = {
     "PARAGRAPH2ACTIONS": "paragraph-to-actions",
     "SMILES2ACTIONS": "sequence-to-actions",
     "REACTION": "reaction-prediction-model",
+    "REACTIONCOMPLETION": "reaction-completion-model",
     "RETROSYNTHESIS": "retrosynthesis-prediction-model",
     "REACTIONPROPERTYPREDICTOR": "reaction-property-predictor",
     "ATOMMAPPING": "reaction-property-atom-mapping",
