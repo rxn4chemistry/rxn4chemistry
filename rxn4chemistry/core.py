@@ -1,22 +1,25 @@
 """Core IBM RXN for Chemistry API module."""
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import copy
 import json
 import logging
-import os
-from typing import Any, Dict, List, Optional, Tuple
-from pathlib import Path
 import mimetypes
+import os
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import requests
+from requests.exceptions import JSONDecodeError
 
 from .callbacks import (
     automatic_retrosynthesis_results_on_success,
     default_on_success,
-    model_listing_on_success,
-    model_listing_by_scope_on_success,
     model_categories_on_success,
+    model_listing_by_scope_on_success,
+    model_listing_on_success,
     paragraph_to_actions_on_success,
     predict_reaction_batch_on_success,
     prediction_id_on_success,
@@ -147,7 +150,9 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def list_all_projects(self, page: Optional[int] = None, size: Optional[int] = None) -> requests.models.Response:
+    def list_all_projects(
+        self, page: Optional[int] = None, size: Optional[int] = None
+    ) -> requests.models.Response:
         """
         Get a list of all projects.
 
@@ -172,8 +177,7 @@ class RXN4ChemistryWrapper:
             params.update({"page": page})
 
         response = requests.get(
-            self.routes.project_url, headers=self.headers, cookies={},
-            params=params
+            self.routes.project_url, headers=self.headers, cookies={}, params=params
         )
         return response
 
@@ -286,16 +290,16 @@ class RXN4ChemistryWrapper:
     @ibm_rxn_api_limits
     def list_models(self, project_id: Optional[str] = None) -> requests.models.Response:
         """
-        Get the available models.
+        Get all publicly available models.
 
         Args:
-            project_id (str, optional): list the models for a specific project.
+            project_id (str, optional): aditionally include the models shared within a specific project.
 
         Returns:
-            dict: dictionary containing the available models.
+            dict: dictionary containing the publicly available models.
 
         Examples:
-            Get list of available models:
+            Get list of publicly available models:
 
             >>> rxn4chemistry_wrapper.list_models()
             {...}
@@ -309,9 +313,39 @@ class RXN4ChemistryWrapper:
         )
         return response
 
-    @response_handling(success_status_code=200, on_success=model_listing_by_scope_on_success)
+    @response_handling(success_status_code=200, on_success=model_listing_on_success)
     @ibm_rxn_api_limits
-    def list_models_by_scope(self, scope: str, project_id: Optional[str] = None, category_name: Optional[str] = None) -> requests.models.Response:
+    def list_all_models(self) -> requests.models.Response:
+        """
+        Get all the available models.
+
+        Returns:
+            dict: dictionary containing all the available models.
+
+        Examples:
+            Get a list with all available models:
+
+            >>> rxn4chemistry_wrapper.list_all_models()
+            {...}
+        """
+
+        response = requests.get(
+            self.routes.all_models_url,
+            headers=self.headers,
+            cookies={},
+        )
+        return response
+
+    @response_handling(
+        success_status_code=200, on_success=model_listing_by_scope_on_success
+    )
+    @ibm_rxn_api_limits
+    def list_models_by_scope(
+        self,
+        scope: str,
+        project_id: Optional[str] = None,
+        category_name: Optional[str] = None,
+    ) -> requests.models.Response:
         """
         Get the models available for a given scope.
 
@@ -342,7 +376,9 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=model_categories_on_success)
     @ibm_rxn_api_limits
-    def list_models_categories_by_scope(self, scope: str) -> requests.models.Response:
+    def list_models_categories_by_scope(
+        self, scope: str = "REACTIONPROPERTYPREDICTOR"
+    ) -> requests.models.Response:
         """
         Get the model categories available for a given scope.
 
@@ -718,7 +754,7 @@ class RXN4ChemistryWrapper:
                 "max_steps": max_steps,
                 "nbeams": nbeams,
                 "pruning_steps": pruning_steps,
-                "search_strategy": search_strategy
+                "search_strategy": search_strategy,
             },
             "product": product,
         }
@@ -1191,7 +1227,7 @@ class RXN4ChemistryWrapper:
 
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def predict_reaction_properties(
+    def predict_reaction_properties_from_smiles(
         self,
         reactions: List[str],
         ai_model: str = "atom-mapping-2020",
@@ -1220,6 +1256,333 @@ class RXN4ChemistryWrapper:
         }
         response = requests.post(
             self.routes.reaction_properties_predictions_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def predict_reaction_properties_from_file(
+        self,
+        fileId: str,
+        ai_model: str = "atom-mapping-2020",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given file id.
+
+        Args:
+            fileId: id of file containing reactions smiles to predict reaction properties.
+            ai_model: model flavour and release. "atom-mapping-2020" for the default
+                atom mapping model, "yield-2020-08-10" for the default yield model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict reaction properties by providing the fileId and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.predict_reaction_properties_from_file(
+            ...     fileId="692ecfabc7faf3d04da7d551",
+            ...     ai_model="atom-mapping-2020"
+            ... )
+        """
+        logger.info(f"Getting reaction smiles from file with id {fileId}.")
+        data = {
+            "aiModel": ai_model,
+            "fileId": fileId,
+        }
+        response = requests.post(
+            self.routes.reaction_properties_predictions_from_file_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        try:
+            response_dict = response.json()
+        except JSONDecodeError:
+            logger.error(f"File id {fileId} does not match any existing files.")
+            return response
+        reactions = response_dict["payload"]["reactions"]
+        logger.info(f"Getting reaction properties with file reactions: {reactions}.")
+        time.sleep(3)
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.reaction_properties_predictions_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def atom_mapping_from_smiles(
+        self,
+        reactions: List[str],
+        ai_model: str = "atom-mapping-2020",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given reaction SMILES strings.
+
+        Args:
+            reactions: list of reaction smiles to predict atom mapping property.
+            ai_model: model flavour and release. "atom-mapping-2020" for the default atom mapping model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict atom mapping property by providing the reaction SMILES and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.atom_mapping_from_smiles(
+            ...     reactions=["CCCCCCO>>CCCCCCCO"],
+            ...     ai_model="atom-mapping-2020"
+            ... )
+        """
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.atom_mapping_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def atom_mapping_from_file(
+        self,
+        fileId: str,
+        ai_model: str = "atom-mapping-2020",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given file id.
+
+        Args:
+            fileId: id of file containing reactions smiles to predict atom mapping property.
+            ai_model: model flavour and release. "atom-mapping-2020" for the default atom mapping model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict atom mapping property by providing the fileId and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.atom_mapping_from_file(
+            ...     fileId="692ecfabc7faf3d04da7d551",
+            ...     ai_model="atom-mapping-2020"
+            ... )
+        """
+        logger.info(f"Getting reaction smiles from file with id {fileId}.")
+        data = {
+            "aiModel": ai_model,
+            "fileId": fileId,
+        }
+        response = requests.post(
+            self.routes.atom_mapping_from_file_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        try:
+            response_dict = response.json()
+        except JSONDecodeError:
+            logger.error(f"File id {fileId} does not match any existing files.")
+            return response
+        reactions = response_dict["payload"]["reactions"]
+        logger.info(f"Getting atom mapping with file reactions: {reactions}.")
+        time.sleep(3)
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.atom_mapping_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def yield_from_smiles(
+        self,
+        reactions: List[str],
+        ai_model: str = "yield-2020-08-10",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given reaction SMILES strings.
+
+        Args:
+            reactions: list of reaction smiles to predict yield property.
+            ai_model: model flavour and release. "yield-2020-08-10" for the default yield model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict yield property by providing the reaction SMILES and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.yield_from_smiles(
+            ...     reactions=["CCCCCCO>>CCCCCCCO"],
+            ...     ai_model="yield-2020-08-10"
+            ... )
+        """
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.yield_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def yield_from_file(
+        self,
+        fileId: str,
+        ai_model: str = "yield-2020-08-10",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given file id.
+
+        Args:
+            fileId: id of file containing reactions smiles to predict yield property.
+            ai_model: model flavour and release. "yield-2020-08-10" for the default yield model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict yield property by providing the fileId and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.yield_from_file(
+            ...     fileId="692ecfabc7faf3d04da7d551",
+            ...     ai_model="yield-2020-08-10"
+            ... )
+        """
+        data = {
+            "aiModel": ai_model,
+            "fileId": fileId,
+        }
+        response = requests.post(
+            self.routes.yield_from_file_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        try:
+            response_dict = response.json()
+        except JSONDecodeError:
+            logger.error(f"File id {fileId} does not match any existing files.")
+            return response
+        reactions = response_dict["payload"]["reactions"]
+        logger.info(f"Getting yield with file reactions: {reactions}.")
+        time.sleep(3)
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.yield_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def fingerprint_from_smiles(
+        self,
+        reactions: List[str],
+        ai_model: str = "bert_ft_2021_09_22",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given reaction SMILES strings.
+
+        Args:
+            reactions: list of reaction smiles to predict fingerprint property.
+            ai_model: model flavour and release. "bert_ft_2021_09_22" for the default fingerprint model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict fingerprint property by providing the reaction SMILES and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.fingerprint_from_smiles(
+            ...     reactions=["CCCCCCO>>CCCCCCCO"],
+            ...     ai_model="bert_ft_2021_09_22"
+            ... )
+        """
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.fingerprint_from_smiles_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        return response
+
+    @response_handling(success_status_code=200, on_success=default_on_success)
+    @ibm_rxn_api_limits
+    def fingerprint_from_file(
+        self,
+        fileId: str,
+        ai_model: str = "bert_ft_2021_09_22",
+    ) -> requests.models.Response:
+        """
+        Launch prediction with given file id.
+
+        Args:
+            fileId: id of file containing reactions smiles to predict fingerprint property.
+            ai_model: model flavour and release. "bert_ft_2021_09_22" for the default fingerprint model.
+        Returns:
+            dict: dictionary containing the response.
+
+        Examples:
+            Predict fingerprint property by providing the fileId and aiModel:
+
+            >>> response = rxn4chemistry_wrapper.fingerprint_from_file(
+            ...     fileId="692ecfabc7faf3d04da7d551",
+            ...     ai_model="bert_ft_2021_09_22"
+            ... )
+        """
+        data = {
+            "aiModel": ai_model,
+            "fileId": fileId,
+        }
+        response = requests.post(
+            self.routes.fingerprint_from_file_url,
+            headers=self.headers,
+            data=json.dumps(data),
+            cookies={},
+        )
+        try:
+            response_dict = response.json()
+        except JSONDecodeError:
+            logger.error(f"File id {fileId} does not match any existing files.")
+            return response
+        reactions = response_dict["payload"]["reactions"]
+        logger.info(f"Getting fingerprint with file reactions: {reactions}.")
+        time.sleep(3)
+        data = {
+            "aiModel": ai_model,
+            "reactions": reactions,
+        }
+        response = requests.post(
+            self.routes.fingerprint_from_smiles_url,
             headers=self.headers,
             data=json.dumps(data),
             cookies={},
@@ -1690,11 +2053,8 @@ class RXN4ChemistryWrapper:
     @response_handling(success_status_code=200, on_success=prediction_id_on_success)
     @ibm_rxn_api_limits
     def predict_reagents(
-            self,
-            reagent: str,
-            product: str,
-            ai_model: str = "2020-11-24"
-        ) -> requests.models.Response:
+        self, reagent: str, product: str, ai_model: str = "2020-11-24"
+    ) -> requests.models.Response:
         """
         Plan and execute a Reaction completion starting from an incomplete formula
 
@@ -1725,13 +2085,15 @@ class RXN4ChemistryWrapper:
             self.routes.reaction_completion_url.format(project_id=self.project_id),
             headers=self.headers,
             data=json.dumps(data),
-            cookies={}
+            cookies={},
         )
         return response
-        
+
     @response_handling(success_status_code=200, on_success=default_on_success)
     @ibm_rxn_api_limits
-    def get_predict_reagents_results(self, prediction_id: str) -> requests.models.Response:
+    def get_predict_reagents_results(
+        self, prediction_id: str
+    ) -> requests.models.Response:
         """
         Get the predict reagent results for a prediction_id.
 
@@ -1752,8 +2114,7 @@ class RXN4ChemistryWrapper:
         """
         response = requests.get(
             self.routes.reaction_completion_result_url.format(
-                project_id=self.project_id,
-                prediction_id=prediction_id
+                project_id=self.project_id, prediction_id=prediction_id
             ),
             headers=self.headers,
             cookies={},
@@ -1790,17 +2151,13 @@ class RXN4ChemistryWrapper:
         if mimetype is None:
             raise Exception(f"Cannot detect mimetype for {path}")
 
-        files=[
-            ('file-0', (basefilename, open(path,'rb'), mimetype))
-        ]
+        files = [("file-0", (basefilename, open(path, "rb"), mimetype))]
         headers = self.headers.copy()
         # Cannot include this header KV when doing a multipart upload
         headers.pop("Content-Type")
 
         response = requests.post(
-            self.routes.file_upload_url,
-            headers=headers,
-            files=files
+            self.routes.file_upload_url, headers=headers, files=files
         )
         return response
 
@@ -1830,6 +2187,6 @@ class RXN4ChemistryWrapper:
         response = requests.post(
             self.routes.optical_chemical_recognition_url,
             headers=self.headers,
-            data=json.dumps(data)
+            data=json.dumps(data),
         )
         return response

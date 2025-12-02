@@ -1,4 +1,5 @@
 """Callbacks for IBM RXN for Chemistry API."""
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
@@ -20,7 +21,7 @@ MODEL_NAMES_MAPPING = {
     "REACTIONPROPERTYPREDICTOR": "reaction-property-predictor",
     "ATOMMAPPING": "reaction-property-atom-mapping",
     "YIELD": "reaction-property-yield",
-    "FINGERPRINT": "reaction-property-fingerprint"
+    "FINGERPRINT": "reaction-property-fingerprint",
 }
 MODEL_FIELDS_MAPPING = {"name": "name"}
 
@@ -265,9 +266,9 @@ def predict_reaction_batch_on_success(response: requests.models.Response) -> dic
     if status == "DONE":
         return response_dict["payload"]["result"]
     elif status == "WAITING":
-        return_dict[
-            "message"
-        ] = "Task waiting: either the task is submitted and not running or it does not exists in the queue."
+        return_dict["message"] = (
+            "Task waiting: either the task is submitted and not running or it does not exists in the queue."
+        )
     return_dict["task_id"] = identifier
     return_dict["task_status"] = status
     return return_dict
@@ -311,10 +312,11 @@ def model_listing_by_scope_on_success(response: requests.models.Response) -> dic
     """
     response_dict = response.json()
     models = response_dict["payload"]["models"]
-    return {
-        model["name"]
-        for model in models
-    }
+
+    if not models:
+        return {}
+
+    return {model["name"] for model in models}
 
 
 def model_categories_on_success(response: requests.models.Response) -> dict:
