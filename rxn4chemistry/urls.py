@@ -1,4 +1,5 @@
 """URL routes for IBM RXN for Chemistry API."""
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
@@ -47,36 +48,74 @@ class RXN4ChemistryRoutes:
         self.api_url = "{}/{}".format(
             self._base_url, f"rxn/api/api/{self._api_version}"
         )
+        # model urls
         self.models_url = "{}/{}".format(self.api_url, "ai-models")
+        self.models_by_scope_url = "{}/{}".format(self.models_url, "{scope}")
+        self.models_categories_by_scope_url = "{}/{}".format(
+            self.models_by_scope_url, "categories"
+        )
+        self.all_models_url = "{}/{}".format(self.models_url, "all")
+
+        # reaction properties prediction urls
+        self.reaction_properties_predictions_url = "{}/{}".format(
+            self.api_url, "reaction-properties-predictions"
+        )
+        self.reaction_properties_predictions_from_smiles_url = "{}/{}".format(
+            self.reaction_properties_predictions_url, "from-smiles"
+        )
+        self.reaction_properties_predictions_from_file_url = "{}/{}".format(
+            self.reaction_properties_predictions_url, "from-file"
+        )
+
+        # atom mapping urls
+        self.atom_mapping_url = "{}/{}".format(self.api_url, "atom-mapping")
+        self.atom_mapping_from_smiles_url = "{}/{}".format(
+            self.atom_mapping_url, "from-smiles"
+        )
+        self.atom_mapping_from_file_url = "{}/{}".format(
+            self.atom_mapping_url, "from-file"
+        )
+
+        # yield urls
+        self.yield_url = "{}/{}".format(self.api_url, "yield")
+        self.yield_from_smiles_url = "{}/{}".format(self.yield_url, "from-smiles")
+        self.yield_from_file_url = "{}/{}".format(self.yield_url, "from-file")
+
+        # fingerprint urls
+        self.fingerprint_url = "{}/{}".format(self.api_url, "fingerprint")
+        self.fingerprint_from_smiles_url = "{}/{}".format(
+            self.fingerprint_url, "from-smiles"
+        )
+        self.fingerprint_from_file_url = "{}/{}".format(
+            self.fingerprint_url, "from-file"
+        )
+
+        # file entry urls
+        self.file_upload_url = "{}/{}".format(self.api_url, "file-entries/upload")
+
+        # optical chemical recognition urls
+        self.optical_chemical_recognition_url = "{}/{}".format(
+            self.api_url, "optical-chemical-recognition"
+        )
+
+        # projects urls
         self.project_url = "{}/{}".format(self.api_url, "projects")
-        self.predictions_url = "{}/{}".format(self.api_url, "predictions")
+        self.attempts_url = "{}/{}/{}".format(
+            self.project_url, "{project_id}", "attempts"
+        )
+        self.retro_attempts_url = "{}/{}/{}".format(
+            self.project_url, "{project_id}", "retrosynthesis"
+        )
         self.reaction_completion_url = "{}/{}/{}".format(
             self.project_url, "{project_id}", "reaction-completion-predictions"
         )
         self.reaction_completion_result_url = "{}/{}".format(
             self.reaction_completion_url.format(project_id="{project_id}"),
-            "{prediction_id}"
-        )
-        self.reaction_properties_predictions_url = "{}/{}".format(
-            self.api_url, "reaction-properties-predictions"
-        )
-        self.file_upload_url = "{}/{}".format(
-            self.api_url, "file-entries/upload"
-        )
-        self.optical_chemical_recognition_url = "{}/{}".format(
-            self.api_url, "optical-chemical-recognition"
-        )
-        self.users_url = "{}/{}".format(self.api_url, "users")
-        self.all_models_url = "{}/{}".format(self.models_url, "all")
-        self.project_models_url = self.models_url
-        self.attempts_url = "{}/{}/{}".format(
-            self.project_url, "{project_id}", "attempts"
+            "{prediction_id}",
         )
 
-        self.retro_attempts_url = "{}/{}/{}".format(
-            self.project_url, "{project_id}", "retrosynthesis"
-        )
-        self.retrosynthesis_url = "{}/{}".format(self.api_url, "retrosynthesis")
+        # prediction (forward) urls
+        self.predictions_url = "{}/{}".format(self.api_url, "predictions")
         self.reaction_prediction_url = "{}/{}".format(self.predictions_url, "pr")
         self.reaction_prediction_results_url = "{}/{}".format(
             self.predictions_url.format("{project_id}"), "{prediction_id}"
@@ -96,6 +135,9 @@ class RXN4ChemistryRoutes:
         self.reaction_prediction_batch_topn_results_url = "{}/{}".format(
             self.reaction_prediction_batch_topn_url, "{task_id}"
         )
+
+        # retrosynthesis urls
+        self.retrosynthesis_url = "{}/{}".format(self.api_url, "retrosynthesis")
         self.retrosynthesis_prediction_url = "{}/{}".format(
             self.retrosynthesis_url, "rs"
         )
@@ -105,7 +147,11 @@ class RXN4ChemistryRoutes:
         self.retrosynthesis_sequence_pdf_url = "{}/sequences/{}/download-pdf".format(
             self.retrosynthesis_prediction_results_url, "{sequence_id}"
         )
+
+        # paragraph2actions url
         self.paragraph2actions_url = "{}/{}".format(self.api_url, "paragraph-actions")
+
+        # synthesis urls
         self.synthesis_url = "{}/{}".format(self.api_url, "synthesis")
         self.synthesis_reaction_setting_url = "{}/{}/{}/{}/{}".format(
             self.synthesis_url,
@@ -123,6 +169,8 @@ class RXN4ChemistryRoutes:
         self.synthesis_patch_node_actions_url = "{}/{}/{}/{}".format(
             self.synthesis_url, "{synthesis_id}", "node", "{node_id}"
         )
+
+        # synthesis execution urls
         self.synthesis_execution_url = "{}/{}".format(
             self.api_url, "synthesis-executions"
         )
@@ -132,33 +180,28 @@ class RXN4ChemistryRoutes:
         self.synthesis_start_url = "{}/{}/{}".format(
             self.synthesis_execution_url, "{synthesis_id}", "start"
         )
-        self.reaction_properties_predictions_from_smiles_url = "{}/{}".format(
-            self.reaction_properties_predictions_url, "from-smiles"
-        )
 
+        # user urls
+        self.users_url = "{}/{}".format(self.api_url, "users")
         self.users_id_url = "{}/{}".format(self.users_url, "{user_id}")
         self.users_current_url = "{}/{}".format(self.users_url, "current")
 
+        # batch executor urls
         self.batch_executor_download_from_uri_url = "{}/{}".format(
             self._batch_executor_base_url, "download-from-uri"
         )
-
         self.batch_executor_read_from_uri_url = "{}/{}".format(
             self._batch_executor_base_url, "read-from-uri"
         )
-
         self.batch_executor_job_id_to_status_url = "{}/{}".format(
             self._batch_executor_base_url, "list-jobs-status"
         )
-
         self.batch_executor_predict_from_request_via_job_url = "{}/{}".format(
             self._batch_executor_base_url, "predict-from-request"
         )
-
         self.batch_executor_predict_from_uri_via_job_url = "{}/{}".format(
             self._batch_executor_base_url, "predict-from-uri"
         )
-
         self.batch_executor_job_id_to_time_url = "{}/{}".format(
             self._batch_executor_base_url, "list-jobs-time"
         )

@@ -59,6 +59,40 @@ rxn4chemistry_wrapper.create_project('test_wrapper')
 print(rxn4chemistry_wrapper.project_id)
 ```
 
+### List models
+
+To list available models:
+
+```python
+# all available models
+response = rxn4chemistry_wrapper.list_models()
+print(response)
+
+# available models for a specific project
+response = rxn4chemistry_wrapper.list_models(project_id="<project_id>")
+print(response)
+```
+
+To list models by scope:
+
+```python
+# all models for the REACTIONPROPERTYPREDICTOR scope
+response = rxn4chemistry_wrapper.list_models_by_scope(scope="REACTIONPROPERTYPREDICTOR")
+print(response)
+
+# all models for the REACTIONPROPERTYPREDICTOR scope with category atom-mapping for a specific project
+response = rxn4chemistry_wrapper.list_models_by_scope(scope="REACTIONPROPERTYPREDICTOR", category_name="atom-mapping", project_id="<project_id>")
+print(response)
+```
+
+To list model categories by scope:
+
+```python
+# all model categories for the REACTIONPROPERTYPREDICTOR scope
+response = rxn4chemistry_wrapper.list_models_categories_by_scope(scope="REACTIONPROPERTYPREDICTOR")
+print(response)
+```
+
 ### Reaction outcome prediction
 
 Running a reaction outcome prediction is as simple as:

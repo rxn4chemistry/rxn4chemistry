@@ -122,11 +122,17 @@ class ResponseHandler:
 
         try:
             return self._payload["task_status"]
+        except TypeError:
+            if isinstance(self._payload, list):
+                pass
         except KeyError:
             pass
 
         try:
             return self._payload["task"]["status"]
+        except TypeError:
+            if isinstance(self._payload, list):
+                pass
         except KeyError:
             pass
 
