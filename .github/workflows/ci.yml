@@ -4,34 +4,25 @@ on:
   push:
     branches:
       - main
-      - ci-setup
 
 jobs:
   build-and-publish:
     name: Build and publish rxn4chemistry on PyPI
-    runs-on: ${{ matrix.os }}
-    strategy:
-      max-parallel: 3
-      matrix:
-        python-version:
-        - 3.9
-        - 3.8
-        - 3.7
-        os:
-        - ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
-    - name: Python setup ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+    - name: Python setup 3.9
+      uses: actions/setup-python@v6
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.9
+    - name: Install build package (for packaging)
+      run: pip install --upgrade build
     - name: Build dist
-      run: |
-        python setup.py sdist
+      run: python -m build
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_TOKEN }}
-        skip_existing: true
+        skip-existing: true
