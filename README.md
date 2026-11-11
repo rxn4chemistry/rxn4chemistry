@@ -1,5 +1,5 @@
-> [!WARNING]
-> **RXN for Chemistry** is reaching end of service on **October 28, 2026**. The hosted platform and programmatic APIs will be taken offline on that date. A self-hostable version is available on [GitHub](https://github.com/rxn4chemistry/rxn-sandbox).
+> [!CAUTION]
+> **RXN for Chemistry** reached end of service on **October 28, 2026**. The hosted platform and programmatic APIs are now offline. A self-hostable version is available on [GitHub](https://github.com/rxn4chemistry/rxn-sandbox).
 
 # Python wrapper for the IBM RXN for Chemistry API
 
